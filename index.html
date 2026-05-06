@@ -10,91 +10,104 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f4f4f5;color:#111;-webkit-font-smoothing:antialiased}
-.wrap{max-width:1280px;margin:0 auto;padding:24px}
+html{overflow-x:hidden}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f6f8fa;color:#1a1f36;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+.wrap{max-width:1280px;margin:0 auto;padding:20px;overflow-x:hidden}
 
-.hdr{background:#111;border-radius:8px;padding:20px 28px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
-.hdr h1{font-size:20px;font-weight:800;color:#fff}
-.hdr-sub{font-size:13px;color:#ccc;margin-top:2px}
-.hdr-ts{font-size:12px;color:#bbb}
+.hdr{background:#1a1f36;border-radius:10px;padding:20px 24px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.hdr h1{font-size:19px;font-weight:800;color:#fff}
+.hdr-sub{font-size:12px;color:#e2e8f0;margin-top:2px}
+.hdr-ts{font-size:12px;color:#e2e8f0}
 
-.ctrl{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:20px;flex-wrap:wrap}
-.tabs{display:flex;gap:0;border:2px solid #111;border-radius:6px;overflow:hidden}
-.tab{padding:10px 24px;font-size:13px;font-weight:700;color:#111;background:#fff;border:none;cursor:pointer}
-.tab:not(:last-child){border-right:2px solid #111}
-.tab:hover{background:#eee}
-.tab.on{background:#111;color:#fff}
-
+.ctrl{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:18px;flex-wrap:wrap}
+.tabs{display:flex;gap:0;border:2px solid #1a1f36;border-radius:8px;overflow:hidden}
+.tab{padding:9px 20px;font-size:13px;font-weight:700;color:#1a1f36;background:#fff;border:none;cursor:pointer}
+.tab:not(:last-child){border-right:2px solid #1a1f36}
+.tab:hover{background:#eef0f6}
+.tab.on{background:#1a1f36;color:#fff}
 .date-ctrl{display:flex;align-items:center;gap:4px;flex-wrap:wrap}
-.qbtn{padding:7px 13px;font-size:12px;font-weight:700;color:#111;background:#fff;border:2px solid #ccc;border-radius:6px;cursor:pointer}
-.qbtn:hover{border-color:#111}
-.qbtn.on{background:#111;color:#fff;border-color:#111}
-.date-input{border:2px solid #ccc;background:#fff;color:#111;font-size:12px;font-weight:600;padding:7px 12px;border-radius:6px;width:200px;cursor:pointer;text-align:center}
-.date-input:focus{border-color:#03a687;outline:none}
+.qbtn{padding:7px 12px;font-size:11px;font-weight:700;color:#1a1f36;background:#fff;border:2px solid #d1d5db;border-radius:6px;cursor:pointer;white-space:nowrap}
+.qbtn:hover{border-color:#1a1f36}
+.qbtn.on{background:#1a1f36;color:#fff;border-color:#1a1f36}
+.date-input{border:2px solid #d1d5db;background:#fff;color:#1a1f36;font-size:12px;font-weight:600;padding:6px 10px;border-radius:6px;width:180px;cursor:pointer;text-align:center}
+.date-input:focus{border-color:#5469d4;outline:none}
 
 .pane{display:none}.pane.on{display:block}
 
-.q{margin:28px 0 14px}
-.q-title{font-size:20px;font-weight:900;color:#111}
-.q-desc{font-size:14px;color:#222;margin-top:4px}
+.q{margin:26px 0 12px}
+.q-title{font-size:19px;font-weight:900;color:#1a1f36}
+.q-desc{font-size:14px;color:#3c4257;margin-top:3px}
 
-.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:24px}
-.m{background:#fff;border-radius:8px;padding:22px;border:2px solid #ddd}
-.m-label{font-size:13px;font-weight:800;color:#111;text-transform:uppercase;letter-spacing:.3px;margin-bottom:10px}
-.m-val{font-size:42px;font-weight:900;color:#111;line-height:1;letter-spacing:-2px}
-.m-detail{font-size:13px;color:#222;margin-top:10px;line-height:1.5}
-.m-bar{height:5px;background:#e5e5e5;border-radius:3px;margin-top:14px;overflow:hidden}
-.m-bar-fill{height:100%;border-radius:3px}
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:20px}
+.m{background:#fff;border-radius:10px;padding:20px;border:1px solid #e3e8ee}
+.m-icon{font-size:24px;margin-bottom:8px}
+.m-label{font-size:12px;font-weight:800;color:#1a1f36;text-transform:uppercase;letter-spacing:.3px;margin-bottom:8px}
+.m-val{font-size:38px;font-weight:900;color:#1a1f36;line-height:1;letter-spacing:-1.5px}
+.m-detail{font-size:13px;color:#3c4257;margin-top:10px;line-height:1.5}
 
 .star-row{display:flex;align-items:baseline;gap:8px}
-.stars{color:#b45309;font-size:22px;letter-spacing:2px}
+.stars{color:#c27803;font-size:20px;letter-spacing:2px}
 
-.provs{margin-bottom:16px}
+.provs{margin-bottom:14px}
 .prov-table{width:100%;border-collapse:collapse}
-.prov-table td{padding:14px 16px;border-bottom:1px solid #e5e5e5;vertical-align:middle}
+.prov-table td{padding:12px 10px;border-bottom:1px solid #e3e8ee;vertical-align:middle}
 .prov-table tr:last-child td{border-bottom:none}
-.prov-table tr:hover td{background:#fafafa}
-.prov-photo{width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid #ddd;vertical-align:middle}
-.prov-name{font-size:14px;font-weight:800;color:#111}
-.prov-role{font-size:12px;color:#333}
-.prov-num{font-size:28px;font-weight:900;color:#03a687;text-align:right}
-.prov-num-label{font-size:10px;font-weight:700;color:#333;text-transform:uppercase;text-align:right}
-.prov-barwrap{width:120px}
-.prov-bartrack{height:6px;background:#e5e5e5;border-radius:3px;overflow:hidden}
-.prov-barfill{height:100%;border-radius:3px;background:#03a687}
-.nopref{background:#fff;border:2px solid #ddd;border-radius:8px;padding:14px 20px;margin-bottom:24px;font-size:14px;color:#111}
+.prov-table tr:hover td{background:#f9fafb}
+.prov-photo{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid #e3e8ee;vertical-align:middle}
+.prov-name{font-size:14px;font-weight:800;color:#1a1f36}
+.prov-role{font-size:11px;color:#3c4257}
+.prov-num{font-size:26px;font-weight:900;color:#1a1f36;text-align:right}
+.prov-num-label{font-size:10px;font-weight:700;color:#3c4257;text-transform:uppercase;text-align:right}
+.prov-barwrap{width:100px}
+.prov-bartrack{height:5px;background:#e3e8ee;border-radius:3px;overflow:hidden}
+.prov-barfill{height:100%;border-radius:3px;background:#5469d4}
+.nopref{background:#fff;border:1px solid #e3e8ee;border-radius:10px;padding:14px 20px;margin-bottom:20px;font-size:14px;color:#1a1f36}
 .nopref strong{font-weight:800}
 
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
-.box{background:#fff;border-radius:8px;padding:22px;border:2px solid #ddd}
-.box-title{font-size:15px;font-weight:800;color:#111;margin-bottom:2px}
-.box-desc{font-size:13px;color:#222;margin-bottom:16px}
-.ch{position:relative;height:260px}
-.ch.sm{height:200px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px}
+.box{background:#fff;border-radius:10px;padding:20px;border:1px solid #e3e8ee}
+.box-title{font-size:15px;font-weight:800;color:#1a1f36;margin-bottom:2px}
+.box-desc{font-size:12px;color:#3c4257;margin-bottom:14px}
+.ch{position:relative;height:240px}
+.ch.sm{height:190px}
 
-.stat-row{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:24px}
-.stat-item{background:#fff;border:2px solid #ddd;border-radius:8px;padding:16px 20px;flex:1;min-width:180px}
-.stat-item-label{font-size:12px;font-weight:800;color:#111;text-transform:uppercase;margin-bottom:6px}
-.stat-item-val{font-size:22px;font-weight:900;color:#111}
-.stat-item-note{font-size:12px;color:#222;margin-top:4px}
+.stat-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.stat-item{background:#fff;border:1px solid #e3e8ee;border-radius:10px;padding:16px 18px;flex:1;min-width:140px}
+.stat-item-label{font-size:11px;font-weight:800;color:#1a1f36;text-transform:uppercase;margin-bottom:6px}
+.stat-item-val{font-size:20px;font-weight:900;color:#1a1f36}
+.stat-item-note{font-size:12px;color:#3c4257;margin-top:3px}
 
 .tbl{width:100%;border-collapse:collapse;font-size:13px}
-.tbl th{text-align:left;font-size:12px;font-weight:800;color:#111;padding:12px 14px;border-bottom:2px solid #111;background:#fafafa}
-.tbl td{padding:12px 14px;border-bottom:1px solid #e5e5e5;color:#111}
+.tbl th{text-align:left;font-size:11px;font-weight:800;color:#1a1f36;padding:10px 12px;border-bottom:2px solid #1a1f36;background:#f9fafb}
+.tbl td{padding:10px 12px;border-bottom:1px solid #e3e8ee;color:#1a1f36}
 .tbl tr:last-child td{border-bottom:none}
-.tbl tr:hover td{background:#fafafa}
+.tbl tr:hover td{background:#f9fafb}
 .tbl .r{text-align:right;font-variant-numeric:tabular-nums}
 .tbl .em{font-weight:800}
 .badge{display:inline-block;padding:3px 10px;border-radius:10px;font-size:11px;font-weight:700}
-.b-teal{background:#e0f5ef;color:#047857}
-.b-dark{background:#e5e5e5;color:#222}
-.b-amber{background:#fef3c7;color:#92400e}
+.b-pri{background:#eef0f6;color:#1a1f36}
+.b-sec{background:#e3e8ee;color:#3c4257}
+.b-warn{background:#fef3c7;color:#92400e}
 
-.link{color:#03a687;font-weight:700;text-decoration:none}
+.link{color:#5469d4;font-weight:700;text-decoration:none}
 .link:hover{text-decoration:underline}
-.ftr{text-align:center;padding:32px;font-size:11px;color:#888}
+.ftr{text-align:center;padding:28px;font-size:11px;color:#697386}
+
 @media(max-width:900px){.g2{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:600px){.wrap{padding:12px}.metrics{grid-template-columns:1fr}.ctrl{flex-direction:column;align-items:stretch}.hdr{flex-direction:column;text-align:center}.stat-row{flex-direction:column}}
+@media(max-width:600px){
+  .wrap{padding:12px}
+  .metrics{grid-template-columns:1fr}
+  .ctrl{flex-direction:column;align-items:stretch}
+  .date-ctrl{justify-content:flex-start}
+  .hdr{flex-direction:column;text-align:center}
+  .stat-row{flex-direction:column}
+  .prov-barwrap{width:60px}
+  .prov-table td{padding:10px 6px}
+  .tbl{font-size:12px}
+  .tbl th,.tbl td{padding:8px 6px}
+  .tabs{width:100%}
+  .tab{flex:1;text-align:center;padding:9px 10px}
+}
 </style>
 </head>
 <body>
@@ -125,13 +138,13 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
 
 <div class="q"><div class="q-title">Are our campaigns generating patient interest?</div><div class="q-desc">Total inquiries from online appointment requests and tracked phone calls since campaign launch.</div></div>
 
-<div class="metrics">
-<div class="m"><div class="m-label">Total Patient Inquiries</div><div class="m-val">49</div><div class="m-detail">37 online appointment requests + 12 phone calls from campaign activity</div><div class="m-bar"><div class="m-bar-fill" style="width:100%;background:#03a687"></div></div></div>
-<div class="m"><div class="m-label">Online Requests</div><div class="m-val">37</div><div class="m-detail">Submitted via hhs.hurleymc.com appointment form</div><div class="m-bar"><div class="m-bar-fill" style="width:76%;background:#03a687"></div></div></div>
-<div class="m"><div class="m-label">Phone Calls</div><div class="m-val">12</div><div class="m-detail">Calls driven by ads and landing pages</div><div class="m-bar"><div class="m-bar-fill" style="width:24%;background:#1e3a5f"></div></div></div>
+<div class="metrics" style="grid-template-columns:repeat(3,1fr)">
+<div class="m"><div class="m-icon">&#128203;</div><div class="m-label">Total Patient Inquiries</div><div class="m-val">49</div><div class="m-detail">37 online requests + 12 phone calls from campaign activity</div></div>
+<div class="m"><div class="m-icon">&#128187;</div><div class="m-label">Online Appointment Requests</div><div class="m-val">37</div><div class="m-detail">Submitted via hhs.hurleymc.com appointment form</div></div>
+<div class="m"><div class="m-icon">&#128222;</div><div class="m-label">Phone Calls from Campaigns</div><div class="m-val">12</div><div class="m-detail">Calls driven by ads and landing pages</div></div>
 </div>
 
-<div class="box" style="margin-bottom:24px"><div class="box-title">Inquiries by Week</div><div class="box-desc">Online requests and phone calls since campaign launch on April 13</div><div class="ch sm"><canvas id="ch-trend"></canvas></div></div>
+<div class="box" style="margin-bottom:20px"><div class="box-title">Inquiries by Week</div><div class="box-desc">Online requests and phone calls since campaign launch on April 13</div><div class="ch sm"><canvas id="ch-trend"></canvas></div></div>
 
 <div class="q"><div class="q-title">Which providers are patients requesting?</div><div class="q-desc">From 37 online appointment submissions. Helps with scheduling and capacity planning.</div></div>
 
@@ -139,27 +152,27 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
 <div class="box" style="padding:0;overflow:hidden">
 <table class="prov-table">
 <tr>
-<td style="width:60px"><img class="prov-photo" src="data:image/jpeg;base64,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" alt="Dr. Clever"></td>
+<td style="width:56px"><img class="prov-photo" src="data:image/jpeg;base64,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" alt="Dr. Clever"></td>
 <td><div class="prov-name">Dr. Lauren Clever, MD</div><div class="prov-role">OB/GYN Physician</div></td>
-<td style="width:140px"><div class="prov-barwrap"><div class="prov-bartrack"><div class="prov-barfill" style="width:100%"></div></div></div></td>
-<td style="width:80px"><div class="prov-num">18</div><div class="prov-num-label">requests</div></td>
+<td class="prov-barwrap"><div class="prov-bartrack"><div class="prov-barfill" style="width:100%"></div></div></td>
+<td style="width:70px"><div class="prov-num">18</div><div class="prov-num-label">requests</div></td>
 </tr>
 <tr>
 <td><img class="prov-photo" src="data:image/jpeg;base64,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" alt="J. Smiley"></td>
 <td><div class="prov-name">Jacqueline Smiley, NP</div><div class="prov-role">Nurse Practitioner</div></td>
-<td><div class="prov-barwrap"><div class="prov-bartrack"><div class="prov-barfill" style="width:44%"></div></div></div></td>
+<td class="prov-barwrap"><div class="prov-bartrack"><div class="prov-barfill" style="width:44%"></div></div></td>
 <td><div class="prov-num">8</div><div class="prov-num-label">requests</div></td>
 </tr>
 <tr>
 <td><img class="prov-photo" src="data:image/jpeg;base64,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" alt="Dr. Pyatt"></td>
 <td><div class="prov-name">Dr. David Pyatt, DO</div><div class="prov-role">OB/GYN Physician</div></td>
-<td><div class="prov-barwrap"><div class="prov-bartrack"><div class="prov-barfill" style="width:6%"></div></div></div></td>
+<td class="prov-barwrap"><div class="prov-bartrack"><div class="prov-barfill" style="width:6%"></div></div></td>
 <td><div class="prov-num">1</div><div class="prov-num-label">requests</div></td>
 </tr>
 <tr>
 <td><img class="prov-photo" src="data:image/jpeg;base64,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" alt="Dr. Wiggins"></td>
 <td><div class="prov-name">Dr. Shawn Wiggins, MD</div><div class="prov-role">OB/GYN Physician</div></td>
-<td><div class="prov-barwrap"><div class="prov-bartrack"><div class="prov-barfill" style="width:6%"></div></div></div></td>
+<td class="prov-barwrap"><div class="prov-bartrack"><div class="prov-barfill" style="width:6%"></div></div></td>
 <td><div class="prov-num">1</div><div class="prov-num-label">requests</div></td>
 </tr>
 </table>
@@ -170,18 +183,17 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
 <div class="q"><div class="q-title">How are patients finding us?</div><div class="q-desc">Website traffic to hhs.hurleymc.com. 90% of visitors are on mobile devices.</div></div>
 
 <div class="metrics" style="grid-template-columns:1fr 1fr">
-<div class="m"><div class="m-label">Website Sessions</div><div class="m-val">1,100</div><div class="m-detail">All sources combined. 96% are first-time visitors — the campaign is reaching new people.</div></div>
-<div class="m"><div class="m-label">Top Traffic Source</div><div class="m-val" style="font-size:28px">Google Ads</div><div class="m-detail">700 sessions (64%) from paid search. Organic: 53. Direct: 37. Referral: 14.</div></div>
+<div class="m"><div class="m-icon">&#127760;</div><div class="m-label">Website Sessions</div><div class="m-val">1,100</div><div class="m-detail">All sources combined. 96% are first-time visitors — the campaign is reaching new people.</div></div>
+<div class="m"><div class="m-icon">&#128269;</div><div class="m-label">Top Traffic Source</div><div class="m-val" style="font-size:26px">Google Ads</div><div class="m-detail">700 sessions (64%) from paid search. Organic: 53. Direct: 37. Referral: 14.</div></div>
 </div>
 
 <div class="q"><div class="q-title">What does our online reputation look like?</div><div class="q-desc">Google reviews and Business Profile activity for both OB/GYN clinic locations.</div></div>
 
 <div class="metrics" style="grid-template-columns:1fr 1fr 1fr">
-<div class="m"><div class="m-label">Google Rating</div><div class="star-row"><div class="m-val">3.6</div><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span></div><div class="m-detail">28 total reviews across both locations. 2 new reviews this period.</div></div>
-<div class="m"><div class="m-label">Profile Views</div><div class="m-val">500</div><div class="m-detail">People who viewed the clinic on Google Search or Maps.</div></div>
-<div class="m"><div class="m-label">Actions from Profile</div><div class="m-val">226</div><div class="m-detail">46 phone calls. 77 direction requests. 103 website clicks.</div></div>
+<div class="m"><div class="m-icon">&#11088;</div><div class="m-label">Google Rating</div><div class="star-row"><div class="m-val">3.6</div><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span></div><div class="m-detail">28 total reviews across both locations. 2 new reviews this period.</div></div>
+<div class="m"><div class="m-icon">&#128065;</div><div class="m-label">Profile Views</div><div class="m-val">500</div><div class="m-detail">People who viewed the clinic on Google Search or Maps.</div></div>
+<div class="m"><div class="m-icon">&#128073;</div><div class="m-label">Actions from Profile</div><div class="m-val">226</div><div class="m-detail">46 phone calls. 77 direction requests. 103 website clicks.</div></div>
 </div>
-
 </div>
 
 <!-- CHANNELS -->
@@ -194,11 +206,10 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
 <div class="stat-item"><div class="stat-item-label">Conversions</div><div class="stat-item-val">41.7</div></div>
 <div class="stat-item"><div class="stat-item-label">Conversion Rate</div><div class="stat-item-val">2.1%</div></div>
 </div>
-
 <div class="q"><div class="q-title">Landing Page Results</div><div class="q-desc">Which pages convert visitors into appointment requests.</div></div>
-<div class="box" style="margin-bottom:24px">
+<div class="box" style="margin-bottom:20px;overflow-x:auto">
 <table class="tbl">
-<thead><tr><th>Page</th><th class="r">Visits</th><th class="r">Bounce</th><th class="r">Time</th><th class="r">Appointments</th><th class="r">Conv. Rate</th></tr></thead>
+<thead><tr><th>Page</th><th class="r">Visits</th><th class="r">Bounce</th><th class="r">Time</th><th class="r">Appts</th><th class="r">Conv.</th></tr></thead>
 <tbody>
 <tr><td><strong>Women's Health &amp; OB/GYN</strong></td><td class="r em">431</td><td class="r">62%</td><td class="r">1:42</td><td class="r em">19</td><td class="r em">4.4%</td></tr>
 <tr><td><strong>Menopause &amp; Perimenopause</strong></td><td class="r">120</td><td class="r">71%</td><td class="r">1:18</td><td class="r em">8</td><td class="r em">6.7%</td></tr>
@@ -207,42 +218,39 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
 </tbody>
 </table>
 </div>
-
 <div class="q"><div class="q-title">Budget Split</div><div class="q-desc">How ad spend is weighted across service lines.</div></div>
 <div class="stat-row">
 <div class="stat-item"><div class="stat-item-label">Women's Health</div><div class="stat-item-val">60%</div><div class="stat-item-note">Primary focus — highest patient demand</div></div>
 <div class="stat-item"><div class="stat-item-label">Menopause</div><div class="stat-item-val">30%</div><div class="stat-item-note">Strong conversion at 6.7%</div></div>
 <div class="stat-item"><div class="stat-item-label">Genetic Counseling</div><div class="stat-item-val">10%</div><div class="stat-item-note">High traffic, low conversion — LP needs work</div></div>
 </div>
-
 <div class="q"><div class="q-title">Google Business Profile by Location</div><div class="q-desc">Comparing the two OB/GYN clinic locations in local search.</div></div>
-<div class="box" style="margin-bottom:24px"><div class="ch"><canvas id="ch-gbp"></canvas></div></div>
+<div class="box" style="margin-bottom:20px"><div class="ch"><canvas id="ch-gbp"></canvas></div></div>
 </div>
 
 <!-- DETAIL -->
 <div id="p-deep" class="pane">
 <div class="q"><div class="q-title">Appointment Request Log</div><div class="q-desc">Individual submissions — most recent first.</div></div>
-<div class="box" style="margin-bottom:24px">
+<div class="box" style="margin-bottom:20px;overflow-x:auto">
 <table class="tbl">
 <thead><tr><th>Date</th><th>Patient</th><th>Provider</th><th>Notes</th></tr></thead>
 <tbody>
-<tr><td>May 4</td><td>Nicole S.</td><td><span class="badge b-teal">Dr. Clever</span></td><td>—</td></tr>
-<tr><td>May 4</td><td>Hannah W.</td><td><span class="badge b-dark">No preference</span></td><td>—</td></tr>
-<tr><td>May 1</td><td>Alexis M.</td><td><span class="badge b-teal">Dr. Clever</span></td><td>Breast cancer screening, positive pregnancy test</td></tr>
-<tr><td>Apr 30</td><td>Mia W.</td><td><span class="badge b-teal">Dr. Clever</span></td><td>Gynecological care</td></tr>
-<tr><td>Apr 30</td><td>Renyada M.</td><td><span class="badge b-dark">No preference</span></td><td>Fibroids, heavy bleeding, seeking surgery</td></tr>
-<tr><td>Apr 30</td><td>Mariana M.</td><td><span class="badge b-teal">J. Smiley, NP</span></td><td>Pregnancy test</td></tr>
-<tr><td>Apr 30</td><td>Torri</td><td><span class="badge b-teal">Dr. Clever</span></td><td>—</td></tr>
-<tr><td>Apr 30</td><td>Elizabeth W.</td><td><span class="badge b-teal">Dr. Clever</span></td><td>Follow-up, ultrasound, IUD</td></tr>
-<tr><td>Apr 29</td><td>Maesie H.</td><td><span class="badge b-teal">Dr. Clever</span></td><td>7 weeks pregnant, new OB</td></tr>
-<tr><td>Apr 28</td><td>Jacklyn G.</td><td><span class="badge b-teal">Dr. Clever</span></td><td>18 weeks pregnant, prenatal care</td></tr>
+<tr><td>May 4</td><td>Nicole S.</td><td><span class="badge b-pri">Dr. Clever</span></td><td>—</td></tr>
+<tr><td>May 4</td><td>Hannah W.</td><td><span class="badge b-sec">No preference</span></td><td>—</td></tr>
+<tr><td>May 1</td><td>Alexis M.</td><td><span class="badge b-pri">Dr. Clever</span></td><td>Breast cancer screening, positive pregnancy test</td></tr>
+<tr><td>Apr 30</td><td>Mia W.</td><td><span class="badge b-pri">Dr. Clever</span></td><td>Gynecological care</td></tr>
+<tr><td>Apr 30</td><td>Renyada M.</td><td><span class="badge b-sec">No preference</span></td><td>Fibroids, heavy bleeding, seeking surgery</td></tr>
+<tr><td>Apr 30</td><td>Mariana M.</td><td><span class="badge b-pri">J. Smiley, NP</span></td><td>Pregnancy test</td></tr>
+<tr><td>Apr 30</td><td>Torri</td><td><span class="badge b-pri">Dr. Clever</span></td><td>—</td></tr>
+<tr><td>Apr 30</td><td>Elizabeth W.</td><td><span class="badge b-pri">Dr. Clever</span></td><td>Follow-up, ultrasound, IUD</td></tr>
+<tr><td>Apr 29</td><td>Maesie H.</td><td><span class="badge b-pri">Dr. Clever</span></td><td>7 weeks pregnant, new OB</td></tr>
+<tr><td>Apr 28</td><td>Jacklyn G.</td><td><span class="badge b-pri">Dr. Clever</span></td><td>18 weeks pregnant, prenatal care</td></tr>
 </tbody>
 </table>
-<div style="padding:14px;text-align:center;font-size:13px;color:#222">10 of 37 shown · <a class="link" href="https://app.alchemer.com/explorer/responses/id/8781626">View all in Alchemer →</a></div>
+<div style="padding:12px;text-align:center;font-size:13px;color:#3c4257">10 of 37 shown · <a class="link" href="https://app.alchemer.com/explorer/responses/id/8781626">View all in Alchemer →</a></div>
 </div>
-
 <div class="q"><div class="q-title">Review Link Clicks</div><div class="q-desc">hmc.gg short links — QR codes distributed in clinics.</div></div>
-<div class="box" style="margin-bottom:24px">
+<div class="box" style="margin-bottom:20px;overflow-x:auto">
 <table class="tbl">
 <thead><tr><th>Link</th><th>Goes To</th><th class="r">Clicks</th></tr></thead>
 <tbody>
@@ -254,18 +262,17 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
 <tr><td><strong>hmc.gg/wiggins</strong></td><td>Healthgrades — Dr. Wiggins</td><td class="r">1</td></tr>
 </tbody>
 </table>
-<div style="padding:14px;text-align:center;font-size:13px;color:#222">TrustHero NFC review stands arriving this week</div>
+<div style="padding:12px;text-align:center;font-size:13px;color:#3c4257">TrustHero NFC review stands arriving this week</div>
 </div>
-
 <div class="q"><div class="q-title">Healthgrades Provider Profiles</div><div class="q-desc">Paid promotion — reports delivered monthly by Healthgrades.</div></div>
-<div class="box" style="margin-bottom:24px">
+<div class="box" style="margin-bottom:20px;overflow-x:auto">
 <table class="tbl">
 <thead><tr><th>Provider</th><th class="r">Views</th><th class="r">Calls</th><th class="r">Appt Clicks</th><th>Status</th></tr></thead>
 <tbody>
-<tr><td><strong>Dr. David Pyatt, DO</strong></td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td><span class="badge b-amber">Awaiting report</span></td></tr>
-<tr><td><strong>Jacqueline Smiley, NP</strong></td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td><span class="badge b-amber">Awaiting report</span></td></tr>
-<tr><td><strong>Dr. Lauren Clever, MD</strong></td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td><span class="badge b-amber">Awaiting report</span></td></tr>
-<tr><td><strong>Dr. Shawn Wiggins, MD</strong></td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td><span class="badge b-amber">Awaiting report</span></td></tr>
+<tr><td><strong>Dr. David Pyatt, DO</strong></td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td><span class="badge b-warn">Awaiting report</span></td></tr>
+<tr><td><strong>Jacqueline Smiley, NP</strong></td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td><span class="badge b-warn">Awaiting report</span></td></tr>
+<tr><td><strong>Dr. Lauren Clever, MD</strong></td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td><span class="badge b-warn">Awaiting report</span></td></tr>
+<tr><td><strong>Dr. Shawn Wiggins, MD</strong></td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td><span class="badge b-warn">Awaiting report</span></td></tr>
 </tbody>
 </table>
 </div>
@@ -276,21 +283,21 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
 
 <script>
 function go(id){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));document.querySelectorAll('.pane').forEach(p=>p.classList.remove('on'));event.target.classList.add('on');document.getElementById('p-'+id).classList.add('on')}
-function pre(b,k){b.parentElement.querySelectorAll('.qbtn').forEach(x=>x.classList.remove('on'));b.classList.add('on');const e=new Date(),s=new Date();if(k==='7d')s.setDate(e.getDate()-7);else if(k==='30d')s.setDate(e.getDate()-30);else if(k==='lm'){s.setMonth(e.getMonth()-1);s.setDate(1);e.setDate(0)}else if(k==='90d')s.setDate(e.getDate()-90);else{s.setFullYear(2026);s.setMonth(3);s.setDate(13)}fp.setDate([s,e])}
-const fp=flatpickr('#dr',{mode:'range',dateFormat:'M j, Y',defaultDate:[new Date(new Date().setDate(new Date().getDate()-30)),new Date()]});
+function pre(b,k){b.parentElement.querySelectorAll('.qbtn').forEach(x=>x.classList.remove('on'));b.classList.add('on');var e=new Date(),s=new Date();if(k==='7d')s.setDate(e.getDate()-7);else if(k==='30d')s.setDate(e.getDate()-30);else if(k==='lm'){s.setMonth(e.getMonth()-1);s.setDate(1);e.setDate(0)}else if(k==='90d')s.setDate(e.getDate()-90);else{s=new Date(2026,3,13)}fp.setDate([s,e])}
+var fp=flatpickr('#dr',{mode:'range',dateFormat:'M j, Y',defaultDate:[new Date(new Date().setDate(new Date().getDate()-30)),new Date()]});
 document.getElementById('ts').textContent=new Date().toLocaleString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'});
 
 Chart.defaults.font.family="'Inter',-apple-system,sans-serif";
-Chart.defaults.font.size=13;
-Chart.defaults.color='#111';
+Chart.defaults.font.size=12;
+Chart.defaults.color='#1a1f36';
 Chart.defaults.plugins.legend.labels.usePointStyle=true;
-Chart.defaults.plugins.legend.labels.padding=16;
-Chart.defaults.plugins.legend.labels.font={size:13,weight:'700'};
+Chart.defaults.plugins.legend.labels.padding=14;
+Chart.defaults.plugins.legend.labels.font={size:12,weight:'700'};
 Chart.defaults.elements.bar.borderRadius=4;
 
-new Chart(document.getElementById('ch-trend'),{type:'bar',data:{labels:['Apr 14–20','Apr 21–27','Apr 28–May 4','May 5–6'],datasets:[{label:'Online Requests',data:[6,10,14,7],backgroundColor:'#03a687',barPercentage:.6},{label:'Phone Calls',data:[2,3,4,3],backgroundColor:'#1e3a5f',barPercentage:.6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top'}},scales:{x:{stacked:true,grid:{display:false},ticks:{font:{weight:'600'}}},y:{stacked:true,grid:{color:'#e5e5e5'},beginAtZero:true,ticks:{font:{weight:'600'}}}}}});
+new Chart(document.getElementById('ch-trend'),{type:'bar',data:{labels:['Apr 14–20','Apr 21–27','Apr 28–May 4','May 5–6'],datasets:[{label:'Online Requests',data:[6,10,14,7],backgroundColor:'#5469d4',barPercentage:.6},{label:'Phone Calls',data:[2,3,4,3],backgroundColor:'#a4cdfe',barPercentage:.6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top'}},scales:{x:{stacked:true,grid:{display:false},ticks:{font:{weight:'600'}}},y:{stacked:true,grid:{color:'#e3e8ee'},beginAtZero:true,ticks:{font:{weight:'600'}}}}}});
 
-new Chart(document.getElementById('ch-gbp'),{type:'bar',data:{labels:['Search Appearances','Profile Views','Direction Requests','Phone Calls','Website Clicks'],datasets:[{label:'Hurley Plaza',data:[420,310,45,28,62],backgroundColor:'#1e3a5f'},{label:'Dort Hwy',data:[280,190,32,18,41],backgroundColor:'#03a687'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top'}},scales:{x:{grid:{display:false},ticks:{font:{weight:'600'}}},y:{grid:{color:'#e5e5e5'},beginAtZero:true,ticks:{font:{weight:'600'}}}}}});
+new Chart(document.getElementById('ch-gbp'),{type:'bar',data:{labels:['Search Appearances','Profile Views','Direction Requests','Phone Calls','Website Clicks'],datasets:[{label:'Hurley Plaza',data:[420,310,45,28,62],backgroundColor:'#5469d4'},{label:'Dort Hwy',data:[280,190,32,18,41],backgroundColor:'#a4cdfe'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top'}},scales:{x:{grid:{display:false},ticks:{font:{weight:'600'}}},y:{grid:{color:'#e3e8ee'},beginAtZero:true,ticks:{font:{weight:'600'}}}}}});
 </script>
 </body>
 </html>
