@@ -39,7 +39,7 @@ a{color:#03826C;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 .pane{display:none}.pane.on{display:block}
 
 /* Section Headers */
-.sh{margin:32px 0 10px;font-size:22px;font-weight:900;color:#142E4F;letter-spacing:-.3px;border-bottom:3px solid #03826C;padding-bottom:8px;display:block;text-align:left}
+.sh{margin:32px 0 10px;font-size:22px;font-weight:900;color:#142E4F;letter-spacing:-.3px;border-bottom:1.5px solid #8fc4b7;padding-bottom:8px;display:block;text-align:left}
 .sh-desc{font-size:14px;color:#3c4257;margin:-2px 0 16px;font-weight:500}
 
 /* Metric Cards */
@@ -95,6 +95,14 @@ a{color:#03826C;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 .b2{background:#e3e8ee;color:#3c4257}
 .b3{background:#fef3c7;color:#92400e}
 
+.acc{margin-bottom:16px}
+.acc-toggle{width:100%;text-align:left;background:#fff;border:1px solid #dde2e9;border-radius:10px;padding:16px 20px;font-size:16px;font-weight:800;color:#142E4F;cursor:pointer;display:flex;align-items:center;justify-content:space-between}
+.acc-toggle:hover{background:#f9fafb}
+.acc-arrow{font-size:14px;color:#697386;transition:transform .2s}
+.acc-body{display:none;border:1px solid #dde2e9;border-top:none;border-radius:0 0 10px 10px;background:#fff;padding:0;margin-top:-1px;overflow-x:auto}
+.acc.open .acc-body{display:block}
+.acc.open .acc-toggle{border-radius:10px 10px 0 0}
+.acc.open .acc-arrow{transform:rotate(180deg)}
 .ftr{text-align:center;padding:24px;font-size:11px;color:#697386}
 @media(max-width:900px){.g2{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:600px){.wrap{padding:12px}.metrics{grid-template-columns:1fr}.ctrl{flex-direction:column;align-items:stretch}.date-ctrl{justify-content:flex-start}.hdr{flex-direction:column;text-align:center}.stat-row{flex-direction:column}.prov-barwrap{width:50px}.tabs{width:100%}.tab{flex:1;text-align:center;padding:8px 8px;font-size:12px}.tbl{font-size:11px}.tbl th,.tbl td{padding:8px 5px}.box{overflow-x:auto}}
@@ -261,9 +269,10 @@ a{color:#03826C;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 
 <!-- DETAIL -->
 <div id="p-deep" class="pane">
-<div class="sh">Appointment Request Log</div>
-<div class="sh-desc">Individual submissions — most recent first.</div>
-<div class="box" style="margin-bottom:20px;overflow-x:auto">
+
+<div class="acc open">
+<button class="acc-toggle" onclick="this.parentElement.classList.toggle('open')">Appointment Request Log <span class="acc-arrow">&#9660;</span></button>
+<div class="acc-body">
 <table class="tbl">
 <thead><tr><th>Date</th><th>Provider Requested</th><th>Service Type</th></tr></thead>
 <tbody>
@@ -281,9 +290,11 @@ a{color:#03826C;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 </table>
 <div style="padding:12px;text-align:center;font-size:12px;color:#3c4257">10 of 37 · <a href="https://app.alchemer.com/explorer/responses/id/8781626">View all in Alchemer &rarr;</a></div>
 </div>
-<div class="sh">Review Link Clicks</div>
-<div class="sh-desc">hmc.gg short links distributed via QR codes in clinics.</div>
-<div class="box" style="margin-bottom:20px;overflow-x:auto">
+</div>
+
+<div class="acc">
+<button class="acc-toggle" onclick="this.parentElement.classList.toggle('open')">Review Link Clicks (hmc.gg) <span class="acc-arrow">&#9660;</span></button>
+<div class="acc-body">
 <table class="tbl">
 <thead><tr><th>Link</th><th>Goes To</th><th class="r">Clicks</th></tr></thead>
 <tbody>
@@ -297,9 +308,11 @@ a{color:#03826C;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 </table>
 <div style="padding:12px;text-align:center;font-size:12px;color:#3c4257">TrustHero NFC stands arriving this week</div>
 </div>
-<div class="sh">Healthgrades Profiles</div>
-<div class="sh-desc">Paid promotion program — monthly NPI-level reporting.</div>
-<div class="box" style="margin-bottom:20px;overflow-x:auto">
+</div>
+
+<div class="acc">
+<button class="acc-toggle" onclick="this.parentElement.classList.toggle('open')">Healthgrades Provider Profiles <span class="acc-arrow">&#9660;</span></button>
+<div class="acc-body">
 <table class="tbl">
 <thead><tr><th>Provider</th><th class="r">Views</th><th class="r">Calls</th><th class="r">Appt Clicks</th><th>Status</th></tr></thead>
 <tbody>
@@ -312,11 +325,16 @@ a{color:#03826C;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 </div>
 </div>
 
-<div style="background:#fff;border:1px solid #dde2e9;border-radius:10px;padding:16px 20px;margin-bottom:16px;font-size:12px;color:#3c4257;line-height:1.6">
-<strong style="color:#1a1f36">Data Notes</strong><br>
+<div class="acc">
+<button class="acc-toggle" onclick="this.parentElement.classList.toggle('open')">Data Notes &amp; Methodology <span class="acc-arrow">&#9660;</span></button>
+<div class="acc-body" style="padding:16px 20px">
+<div style="font-size:12px;color:#3c4257;line-height:1.6">
+<strong style="color:#1a1f36">Data Sources</strong><br>
 <strong>Verified from platforms:</strong> Appointment requests (37, Alchemer), Google Ads clicks/conversions/cost (GA4/Ads), traffic sources (GA4), short link clicks (Short.io), provider request breakdown (Alchemer).<br>
 <strong>Estimated:</strong> GBP profile activity (searches/views/calls/directions — awaiting Supermetrics connection), phone call count (12 — from GA4 conversion tracking, verify in Google Ads), sessions-over-time weekly breakdown, paid vs organic inquiry split.<br>
 <strong>Date controls:</strong> Currently static. Will filter live data once connected to Google Sheets data layer.
+</div>
+</div>
 </div>
 <div class="ftr">HHS Women's Health Campaign Dashboard &middot; Connected Technologies</div>
 </div>
@@ -343,7 +361,7 @@ new Chart(document.getElementById('ch-paid'),{type:'doughnut',data:{labels:['Fro
 
 new Chart(document.getElementById('ch-sessions'),{type:'line',data:{labels:['Apr 14','Apr 21','Apr 28','May 5'],datasets:[{label:'Sessions',data:[180,290,380,250],borderColor:T,backgroundColor:T+'20',fill:true,pointRadius:4,pointBackgroundColor:T,tension:.3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},datalabels:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'#e3e8ee'},beginAtZero:true}}}});
 
-new Chart(document.getElementById('ch-sources'),{type:'bar',data:{labels:['Paid Search','Organic','Direct','Referral'],datasets:[{data:[700,53,37,14],backgroundColor:[T,N,LT,LN],borderRadius:5}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},datalabels:{color:'#fff',font:{weight:'700',size:12},anchor:'end',align:'start',offset:8,display:function(ctx){return ctx.dataset.data[ctx.dataIndex]>20}}},scales:{x:{grid:{color:'#e3e8ee'},beginAtZero:true},y:{grid:{display:false}}}}});
+new Chart(document.getElementById('ch-sources'),{type:'bar',data:{labels:['Paid Search','Organic','Direct','Referral'],datasets:[{data:[697,53,37,14],backgroundColor:[T,N,LT,LN],borderRadius:5}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},datalabels:{color:'#fff',font:{weight:'700',size:12},anchor:'end',align:'start',offset:8,display:function(ctx){return ctx.dataset.data[ctx.dataIndex]>20}}},scales:{x:{grid:{color:'#e3e8ee'},beginAtZero:true},y:{grid:{display:false}}}}});
 </script>
 </body>
 </html>
