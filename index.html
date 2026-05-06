@@ -190,8 +190,8 @@ a{color:#03826C;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 <div class="sh-desc">Sessions and sources for hhs.hurleymc.com.</div>
 
 <div class="metrics" style="grid-template-columns:1fr 1fr">
-<div class="m"><div class="m-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div><div class="m-label">Total Sessions</div><div class="m-val">1,403</div><div class="m-detail">98% first-time visitors</div></div>
-<div class="m"><div class="m-icon"><svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div><div class="m-label">Mobile Traffic</div><div class="m-val">79%</div><div class="m-detail">Smartphone users</div></div>
+<div class="m"><div class="m-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div><div class="m-label">Total Sessions</div><div class="m-val" id="live-sessions">1,403</div><div class="m-detail" id="live-newpct">98% first-time visitors</div></div>
+<div class="m"><div class="m-icon"><svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div><div class="m-label">Mobile Traffic</div><div class="m-val" id="live-mobile">79%</div><div class="m-detail">Smartphone users</div></div>
 </div>
 
 <div class="g2">
@@ -360,9 +360,77 @@ new Chart(document.getElementById('ch-trend'),{type:'bar',data:{labels:['Apr 14-
 
 new Chart(document.getElementById('ch-paid'),{type:'doughnut',data:{labels:['From Paid Campaigns — 38','From Organic / Direct — 11'],datasets:[{data:[38,11],backgroundColor:[T70,N40],borderWidth:0,hoverOffset:4}]},options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{position:'bottom',labels:{font:{size:13,weight:'700'},padding:16}},datalabels:{color:'#fff',font:{weight:'800',size:16},formatter:function(v){return v}}}}});
 
-new Chart(document.getElementById('ch-sessions'),{type:'line',data:{labels:['Apr 7','Apr 14','Apr 21','Apr 28','May 5'],datasets:[{label:'Sessions',data:[146,171,190,814,82],borderColor:T,backgroundColor:T+'20',fill:true,pointRadius:4,pointBackgroundColor:T,tension:.3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},datalabels:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'#e3e8ee'},beginAtZero:true}}}});
+window.sessionsChart=new Chart(document.getElementById('ch-sessions'),{type:'line',data:{labels:['Apr 7','Apr 14','Apr 21','Apr 28','May 5'],datasets:[{label:'Sessions',data:[146,171,190,814,82],borderColor:T,backgroundColor:T+'20',fill:true,pointRadius:4,pointBackgroundColor:T,tension:.3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},datalabels:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'#e3e8ee'},beginAtZero:true}}}});
 
-new Chart(document.getElementById('ch-sources'),{type:'bar',data:{labels:['Paid Search','Organic Search','Direct','Referral','Cross-network'],datasets:[{data:[904,299,152,22,16],backgroundColor:[T70,N70,T40,N40,LN],borderRadius:5}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},datalabels:{color:'#fff',font:{weight:'700',size:12},anchor:'end',align:'start',offset:8,display:function(ctx){return ctx.dataset.data[ctx.dataIndex]>20}}},scales:{x:{grid:{color:'#e3e8ee'},beginAtZero:true},y:{grid:{display:false}}}}});
+window.sourcesChart=new Chart(document.getElementById('ch-sources'),{type:'bar',data:{labels:['Paid Search','Organic Search','Direct','Referral','Cross-network'],datasets:[{data:[904,299,152,22,16],backgroundColor:[T70,N70,T40,N40,LN],borderRadius:5}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},datalabels:{color:'#fff',font:{weight:'700',size:12},anchor:'end',align:'start',offset:8,display:function(ctx){return ctx.dataset.data[ctx.dataIndex]>20}}},scales:{x:{grid:{color:'#e3e8ee'},beginAtZero:true},y:{grid:{display:false}}}}});
+// ─── LIVE DATA FETCH ───────────────────────
+var GA4_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRD3Yq2IiyRJk3BIbY_cPBBWGZ2hvM9TuW94IHk-Km6y4BdSi_dBOGjKZSjMzmHHp0H5T43NF_g7kJv/pub?gid=1506320842&single=true&output=csv';
+var LINKS_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRD3Yq2IiyRJk3BIbY_cPBBWGZ2hvM9TuW94IHk-Km6y4BdSi_dBOGjKZSjMzmHHp0H5T43NF_g7kJv/pub?gid=1330028358&single=true&output=csv';
+
+function parseCSV(text) {
+  return text.trim().split('\n').map(function(row) {
+    return row.split(',').map(function(c) { return c.trim(); });
+  });
+}
+
+function parseGA4(rows) {
+  var data = {summary:{}, channels:[], pages:[], weeks:[], devices:[]};
+  var section = 'summary';
+  for (var i = 1; i < rows.length; i++) {
+    var r = rows[i];
+    if (r[0] === '---') { section = 'next'; continue; }
+    if (section === 'next') {
+      if (r[0] === 'Channel') section = 'channels';
+      else if (r[0] === 'Page') section = 'pages';
+      else if (r[0] === 'Week') section = 'weeks';
+      else if (r[0] === 'Device') section = 'devices';
+      continue;
+    }
+    if (section === 'summary') data.summary[r[0]] = r[1];
+    else if (section === 'channels') data.channels.push({name: r[0], sessions: parseInt(r[1])});
+    else if (section === 'pages') data.pages.push({path: r[0], views: parseInt(r[1]), bounce: r[2], duration: r[3]});
+    else if (section === 'weeks') data.weeks.push({week: r[0], sessions: parseInt(r[1])});
+    else if (section === 'devices') data.devices.push({device: r[0], sessions: parseInt(r[1])});
+  }
+  return data;
+}
+
+function updateDashboard(ga4) {
+  // Update summary cards
+  var sessEl = document.querySelector('#live-sessions');
+  if (sessEl) sessEl.textContent = parseInt(ga4.summary['Sessions']).toLocaleString();
+  var mobileTotal = 0, allDevices = 0;
+  ga4.devices.forEach(function(d) { allDevices += d.sessions; if (d.device === 'mobile') mobileTotal = d.sessions; });
+  var mobilePct = Math.round(mobileTotal / allDevices * 100);
+  var mobileEl = document.querySelector('#live-mobile');
+  if (mobileEl) mobileEl.textContent = mobilePct + '%';
+  var newPctEl = document.querySelector('#live-newpct');
+  if (newPctEl) newPctEl.textContent = ga4.summary['New User Pct'] + '% first-time visitors';
+
+  // Update sessions over time chart
+  if (window.sessionsChart) {
+    var weekLabels = ga4.weeks.map(function(w) { return 'W' + w.week.substring(4); });
+    var weekData = ga4.weeks.map(function(w) { return w.sessions; });
+    window.sessionsChart.data.labels = weekLabels;
+    window.sessionsChart.data.datasets[0].data = weekData;
+    window.sessionsChart.update();
+  }
+
+  // Update traffic sources chart
+  if (window.sourcesChart) {
+    var srcLabels = ga4.channels.slice(0, 5).map(function(c) { return c.name; });
+    var srcData = ga4.channels.slice(0, 5).map(function(c) { return c.sessions; });
+    window.sourcesChart.data.labels = srcLabels;
+    window.sourcesChart.data.datasets[0].data = srcData;
+    window.sourcesChart.update();
+  }
+}
+
+// Fetch and apply live data
+fetch(GA4_CSV).then(function(r) { return r.text(); }).then(function(csv) {
+  var ga4 = parseGA4(parseCSV(csv));
+  updateDashboard(ga4);
+}).catch(function(e) { console.log('GA4 fetch error:', e); });
 </script>
 </body>
 </html>
