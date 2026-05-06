@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HHS Women's Health — Campaign Dashboard</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -38,8 +39,8 @@ a{color:#03826C;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 .pane{display:none}.pane.on{display:block}
 
 /* Section Headers */
-.sh{margin:24px 0 10px;font-size:16px;font-weight:900;color:#142E4F;text-transform:uppercase;letter-spacing:.4px;border-bottom:2px solid #03826C;padding-bottom:6px;display:inline-block}
-.sh-desc{font-size:13px;color:#3c4257;margin:-4px 0 14px;font-weight:500}
+.sh{margin:32px 0 10px;font-size:22px;font-weight:900;color:#142E4F;letter-spacing:-.3px;border-bottom:3px solid #03826C;padding-bottom:8px;display:inline-block}
+.sh-desc{font-size:14px;color:#3c4257;margin:-2px 0 16px;font-weight:500}
 
 /* Metric Cards */
 .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:20px}
@@ -191,7 +192,7 @@ a{color:#03826C;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 </div>
 
 <div class="sh">Online Reputation</div>
-<div class="sh-desc" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+<div class="sh-desc" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:14px">
 <svg viewBox="0 0 24 24" style="width:18px;height:18px;flex-shrink:0"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
 <span>Google Business Profile — reviews and listing activity by clinic location.</span>
 </div>
@@ -326,6 +327,7 @@ function pre(b,k){b.parentElement.querySelectorAll('.qbtn').forEach(function(x){
 var fp=flatpickr('#dr',{mode:'range',dateFormat:'M j, Y',defaultDate:[new Date(new Date().setDate(new Date().getDate()-30)),new Date()]});
 /* timestamp removed */
 
+Chart.register(ChartDataLabels);
 Chart.defaults.font.family="'Inter',-apple-system,sans-serif";
 Chart.defaults.font.size=12;
 Chart.defaults.color='#1a1f36';
@@ -335,13 +337,13 @@ Chart.defaults.plugins.legend.labels.font={size:12,weight:'700'};
 Chart.defaults.elements.bar.borderRadius=4;
 var T='#03826C',N='#142E4F',LT='#6dbfae',LN='#7a9cc6';
 
-new Chart(document.getElementById('ch-trend'),{type:'bar',data:{labels:['Apr 14-20','Apr 21-27','Apr 28-May 4','May 5-6'],datasets:[{label:'Online Requests',data:[6,10,14,7],backgroundColor:T,barPercentage:.6},{label:'Phone Calls',data:[2,3,4,3],backgroundColor:N,barPercentage:.6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top'}},scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:'#e3e8ee'},beginAtZero:true}}}});
+new Chart(document.getElementById('ch-trend'),{type:'bar',data:{labels:['Apr 14-20','Apr 21-27','Apr 28-May 4','May 5-6'],datasets:[{label:'Online Requests',data:[6,10,14,7],backgroundColor:T,barPercentage:.6},{label:'Phone Calls',data:[2,3,4,3],backgroundColor:N,barPercentage:.6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top'},datalabels:{color:'#fff',font:{weight:'700',size:11},display:function(ctx){return ctx.dataset.data[ctx.dataIndex]>2},anchor:'center'}},scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:'#e3e8ee'},beginAtZero:true}}}});
 
-new Chart(document.getElementById('ch-paid'),{type:'doughnut',data:{labels:['From Paid Campaigns — 38','From Organic / Direct — 11'],datasets:[{data:[38,11],backgroundColor:[T,LN],borderWidth:0,hoverOffset:4}]},options:{responsive:true,maintainAspectRatio:false,cutout:'68%',plugins:{legend:{position:'bottom',labels:{font:{size:13,weight:'700'},padding:16}}}}});
+new Chart(document.getElementById('ch-paid'),{type:'doughnut',data:{labels:['From Paid Campaigns — 38','From Organic / Direct — 11'],datasets:[{data:[38,11],backgroundColor:[T,LN],borderWidth:0,hoverOffset:4}]},options:{responsive:true,maintainAspectRatio:false,cutout:'68%',plugins:{legend:{position:'bottom',labels:{font:{size:13,weight:'700'},padding:16}},datalabels:{display:false}}}});
 
-new Chart(document.getElementById('ch-sessions'),{type:'line',data:{labels:['Apr 14','Apr 21','Apr 28','May 5'],datasets:[{label:'Sessions',data:[180,290,380,250],borderColor:T,backgroundColor:T+'20',fill:true,pointRadius:4,pointBackgroundColor:T,tension:.3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'#e3e8ee'},beginAtZero:true}}}});
+new Chart(document.getElementById('ch-sessions'),{type:'line',data:{labels:['Apr 14','Apr 21','Apr 28','May 5'],datasets:[{label:'Sessions',data:[180,290,380,250],borderColor:T,backgroundColor:T+'20',fill:true,pointRadius:4,pointBackgroundColor:T,tension:.3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},datalabels:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'#e3e8ee'},beginAtZero:true}}}});
 
-new Chart(document.getElementById('ch-sources'),{type:'bar',data:{labels:['Paid Search','Organic','Direct','Referral'],datasets:[{data:[700,53,37,14],backgroundColor:[T,N,LT,LN],borderRadius:5}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:'#e3e8ee'},beginAtZero:true},y:{grid:{display:false}}}}});
+new Chart(document.getElementById('ch-sources'),{type:'bar',data:{labels:['Paid Search','Organic','Direct','Referral'],datasets:[{data:[700,53,37,14],backgroundColor:[T,N,LT,LN],borderRadius:5}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},datalabels:{color:'#fff',font:{weight:'700',size:12},anchor:'end',align:'start',offset:8,display:function(ctx){return ctx.dataset.data[ctx.dataIndex]>20}}},scales:{x:{grid:{color:'#e3e8ee'},beginAtZero:true},y:{grid:{display:false}}}}});
 </script>
 </body>
 </html>
