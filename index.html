@@ -16,7 +16,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
 a{color:#03826C;font-weight:700;text-decoration:none}a:hover{text-decoration:underline}
 
 /* Header */
-.hdr{background:#142E4F;border-radius:10px;padding:18px 24px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.hdr{background:#03826C;border-radius:10px;padding:18px 24px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
 .hdr h1{font-size:18px;font-weight:800;color:#fff}
 .hdr-sub{font-size:12px;color:#e2e8f0;margin-top:1px}
 .hdr-ts{font-size:12px;color:#e2e8f0}
@@ -44,7 +44,10 @@ a{color:#03826C;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 /* Metric Cards */
 .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:20px}
 .m{background:#fff;border-radius:10px;padding:18px;border:1px solid #dde2e9}
-.m-icon{font-size:22px;margin-bottom:6px}
+.m-icon{margin-bottom:6px;display:flex;align-items:center;height:28px}
+.m-icon svg{width:24px;height:24px;stroke:#03826C;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.gbp-hdr{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.gbp-logo{height:20px}
 .m-label{font-size:12px;font-weight:800;color:#142E4F;text-transform:uppercase;letter-spacing:.3px;margin-bottom:8px}
 .m-val{font-size:36px;font-weight:900;color:#1a1f36;line-height:1;letter-spacing:-1.5px}
 .m-detail{font-size:12px;color:#3c4257;margin-top:8px;line-height:1.4}
@@ -126,9 +129,9 @@ a{color:#03826C;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 <div class="sh-desc">Online appointment requests and tracked phone calls across all channels.</div>
 
 <div class="metrics" style="grid-template-columns:repeat(3,1fr)">
-<div class="m"><div class="m-icon">&#128203;</div><div class="m-label">Total Inquiries</div><div class="m-val">49</div><div class="m-detail">37 online + 12 phone</div></div>
-<div class="m"><div class="m-icon">&#128187;</div><div class="m-label">Online Requests</div><div class="m-val">37</div><div class="m-detail">Via appointment form</div></div>
-<div class="m"><div class="m-icon">&#128222;</div><div class="m-label">Phone Calls</div><div class="m-val">12</div><div class="m-detail">From ads and landing pages</div></div>
+<div class="m"><div class="m-icon"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div class="m-label">Total Inquiries</div><div class="m-val">49</div><div class="m-detail">37 online + 12 phone</div></div>
+<div class="m"><div class="m-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div><div class="m-label">Online Requests</div><div class="m-val">37</div><div class="m-detail">Via appointment form</div></div>
+<div class="m"><div class="m-icon"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div><div class="m-label">Phone Calls</div><div class="m-val">12</div><div class="m-detail">From ads and landing pages</div></div>
 </div>
 
 <div class="g2">
@@ -178,8 +181,8 @@ a{color:#03826C;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 <div class="sh-desc">Sessions and sources for hhs.hurleymc.com.</div>
 
 <div class="metrics" style="grid-template-columns:1fr 1fr">
-<div class="m"><div class="m-icon">&#127760;</div><div class="m-label">Total Sessions</div><div class="m-val">1,100</div><div class="m-detail">96% first-time visitors</div></div>
-<div class="m"><div class="m-icon">&#128241;</div><div class="m-label">Mobile Traffic</div><div class="m-val">90%</div><div class="m-detail">Smartphone users</div></div>
+<div class="m"><div class="m-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div><div class="m-label">Total Sessions</div><div class="m-val">1,100</div><div class="m-detail">96% first-time visitors</div></div>
+<div class="m"><div class="m-icon"><svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div><div class="m-label">Mobile Traffic</div><div class="m-val">90%</div><div class="m-detail">Smartphone users</div></div>
 </div>
 
 <div class="g2">
@@ -188,11 +191,15 @@ a{color:#03826C;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 </div>
 
 <div class="sh">Online Reputation</div>
-<div class="sh-desc">Google reviews and Business Profile activity by clinic location.</div>
+<div class="sh-desc" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+<svg viewBox="0 0 24 24" style="width:18px;height:18px;flex-shrink:0"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+<span>Google Business Profile — reviews and listing activity by clinic location.</span>
+</div>
 
 <div class="g2">
 <div class="box">
 <div class="box-title">Hurley Plaza Location</div>
+<div style="font-size:11px;font-weight:700;color:#3c4257;margin-bottom:4px">GOOGLE REVIEWS</div>
 <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:12px"><span style="font-size:28px;font-weight:900">3.8</span><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span><span style="font-size:12px;color:#3c4257">18 reviews</span></div>
 <div class="stat-row" style="margin-bottom:0">
 <div class="stat-item"><div class="stat-item-label">Searches</div><div class="stat-item-val">420</div></div>
@@ -203,6 +210,7 @@ a{color:#03826C;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 </div>
 <div class="box">
 <div class="box-title">Dort Highway Location</div>
+<div style="font-size:11px;font-weight:700;color:#3c4257;margin-bottom:4px">GOOGLE REVIEWS</div>
 <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:12px"><span style="font-size:28px;font-weight:900">3.4</span><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span><span style="font-size:12px;color:#3c4257">10 reviews</span></div>
 <div class="stat-row" style="margin-bottom:0">
 <div class="stat-item"><div class="stat-item-label">Searches</div><div class="stat-item-val">280</div></div>
@@ -254,18 +262,18 @@ a{color:#03826C;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 <div class="sh-desc">Individual submissions — most recent first.</div>
 <div class="box" style="margin-bottom:20px;overflow-x:auto">
 <table class="tbl">
-<thead><tr><th>Date</th><th>Patient</th><th>Provider</th><th>Notes</th></tr></thead>
+<thead><tr><th>Date</th><th>Provider Requested</th><th>Service Type</th></tr></thead>
 <tbody>
-<tr><td>May 4</td><td>Nicole S.</td><td><span class="badge b1">Dr. Clever</span></td><td>—</td></tr>
-<tr><td>May 4</td><td>Hannah W.</td><td><span class="badge b2">No preference</span></td><td>—</td></tr>
-<tr><td>May 1</td><td>Alexis M.</td><td><span class="badge b1">Dr. Clever</span></td><td>Breast cancer screening, positive pregnancy test</td></tr>
-<tr><td>Apr 30</td><td>Mia W.</td><td><span class="badge b1">Dr. Clever</span></td><td>Gynecological care</td></tr>
-<tr><td>Apr 30</td><td>Renyada M.</td><td><span class="badge b2">No preference</span></td><td>Fibroids, heavy bleeding, seeking surgery</td></tr>
-<tr><td>Apr 30</td><td>Mariana M.</td><td><span class="badge b1">J. Smiley, NP</span></td><td>Pregnancy test</td></tr>
-<tr><td>Apr 30</td><td>Torri</td><td><span class="badge b1">Dr. Clever</span></td><td>—</td></tr>
-<tr><td>Apr 30</td><td>Elizabeth W.</td><td><span class="badge b1">Dr. Clever</span></td><td>Follow-up, ultrasound, IUD</td></tr>
-<tr><td>Apr 29</td><td>Maesie H.</td><td><span class="badge b1">Dr. Clever</span></td><td>7 weeks pregnant, new OB</td></tr>
-<tr><td>Apr 28</td><td>Jacklyn G.</td><td><span class="badge b1">Dr. Clever</span></td><td>18 weeks pregnant, prenatal care</td></tr>
+<tr><td>May 4</td><td><span class="badge b1">Dr. Clever</span></td><td>General OB/GYN</td></tr>
+<tr><td>May 4</td><td><span class="badge b2">No preference</span></td><td>General OB/GYN</td></tr>
+<tr><td>May 1</td><td><span class="badge b1">Dr. Clever</span></td><td>Screening &amp; prenatal</td></tr>
+<tr><td>Apr 30</td><td><span class="badge b1">Dr. Clever</span></td><td>Gynecological care</td></tr>
+<tr><td>Apr 30</td><td><span class="badge b2">No preference</span></td><td>Surgical consultation</td></tr>
+<tr><td>Apr 30</td><td><span class="badge b1">J. Smiley, NP</span></td><td>Pregnancy testing</td></tr>
+<tr><td>Apr 30</td><td><span class="badge b1">Dr. Clever</span></td><td>General OB/GYN</td></tr>
+<tr><td>Apr 30</td><td><span class="badge b1">Dr. Clever</span></td><td>Follow-up / IUD</td></tr>
+<tr><td>Apr 29</td><td><span class="badge b1">Dr. Clever</span></td><td>New OB patient</td></tr>
+<tr><td>Apr 28</td><td><span class="badge b1">Dr. Clever</span></td><td>Prenatal care</td></tr>
 </tbody>
 </table>
 <div style="padding:12px;text-align:center;font-size:12px;color:#3c4257">10 of 37 · <a href="https://app.alchemer.com/explorer/responses/id/8781626">View all in Alchemer &rarr;</a></div>
