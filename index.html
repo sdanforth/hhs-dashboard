@@ -190,8 +190,8 @@ a{color:#03826C;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 <div class="sh-desc">Sessions and sources for hhs.hurleymc.com.</div>
 
 <div class="metrics" style="grid-template-columns:1fr 1fr">
-<div class="m"><div class="m-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div><div class="m-label">Total Sessions</div><div class="m-val">1,100</div><div class="m-detail">96% first-time visitors</div></div>
-<div class="m"><div class="m-icon"><svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div><div class="m-label">Mobile Traffic</div><div class="m-val">90%</div><div class="m-detail">Smartphone users</div></div>
+<div class="m"><div class="m-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div><div class="m-label">Total Sessions</div><div class="m-val">1,403</div><div class="m-detail">98% first-time visitors</div></div>
+<div class="m"><div class="m-icon"><svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div><div class="m-label">Mobile Traffic</div><div class="m-val">79%</div><div class="m-detail">Smartphone users</div></div>
 </div>
 
 <div class="g2">
@@ -251,10 +251,10 @@ a{color:#03826C;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 <table class="tbl">
 <thead><tr><th>Page</th><th class="r">Visits</th><th class="r">Bounce</th><th class="r">Time</th><th class="r">Appts</th><th class="r">Conv.</th></tr></thead>
 <tbody>
-<tr><td><strong>Women's Health &amp; OB/GYN</strong></td><td class="r em">431</td><td class="r">62%</td><td class="r">1:42</td><td class="r em">19</td><td class="r em">4.4%</td></tr>
-<tr><td><strong>Menopause &amp; Perimenopause</strong></td><td class="r">120</td><td class="r">71%</td><td class="r">1:18</td><td class="r em">8</td><td class="r em">6.7%</td></tr>
-<tr><td><strong>Genetic Counseling</strong></td><td class="r">303</td><td class="r">81%</td><td class="r">0:54</td><td class="r">4</td><td class="r">1.3%</td></tr>
-<tr><td><strong>Appointment Form</strong></td><td class="r">28</td><td class="r">—</td><td class="r">3:12</td><td class="r em">6</td><td class="r em">21.4%</td></tr>
+<tr><td><strong>Women's Health &amp; OB/GYN</strong></td><td class="r em">529</td><td class="r">81.8%</td><td class="r">0:55</td><td class="r em">—</td><td class="r em">—</td></tr>
+<tr><td><strong>Genetic Counseling</strong></td><td class="r">369</td><td class="r">83.8%</td><td class="r">0:40</td><td class="r">—</td><td class="r">—</td></tr>
+<tr><td><strong>Appointment Form</strong></td><td class="r">134</td><td class="r">20%</td><td class="r">2:09</td><td class="r em">37</td><td class="r em">27.6%</td></tr>
+<tr><td><strong>Menopause &amp; Perimenopause</strong></td><td class="r">83</td><td class="r">57.3%</td><td class="r">1:00</td><td class="r">—</td><td class="r">—</td></tr>
 </tbody>
 </table>
 </div>
@@ -354,15 +354,15 @@ Chart.defaults.plugins.legend.labels.padding=14;
 Chart.defaults.plugins.legend.labels.font={size:12,weight:'700'};
 Chart.defaults.elements.bar.borderRadius=4;
 var T='#03826C',N='#142E4F',LT='#6dbfae',LN='#7a9cc6';
-var T70='rgba(3,130,108,0.65)',N70='rgba(20,46,79,0.65)',T40='rgba(3,130,108,0.35)',N40='rgba(20,46,79,0.35)';
+var T70='rgba(3,130,108,0.82)',N70='rgba(20,46,79,0.82)',T40='rgba(3,130,108,0.55)',N40='rgba(20,46,79,0.55)';
 
 new Chart(document.getElementById('ch-trend'),{type:'bar',data:{labels:['Apr 14-20','Apr 21-27','Apr 28-May 4','May 5-6'],datasets:[{label:'Appointment Requests',data:[6,10,14,7],backgroundColor:T70,barPercentage:.6},{label:'Phone Calls',data:[2,3,4,3],backgroundColor:N70,barPercentage:.6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top'},datalabels:{color:'#fff',font:{weight:'700',size:11},display:function(ctx){return ctx.dataset.data[ctx.dataIndex]>2},anchor:'center'}},scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:'#e3e8ee'},beginAtZero:true}}}});
 
 new Chart(document.getElementById('ch-paid'),{type:'doughnut',data:{labels:['From Paid Campaigns — 38','From Organic / Direct — 11'],datasets:[{data:[38,11],backgroundColor:[T70,N40],borderWidth:0,hoverOffset:4}]},options:{responsive:true,maintainAspectRatio:false,cutout:'68%',plugins:{legend:{position:'bottom',labels:{font:{size:13,weight:'700'},padding:16}},datalabels:{display:false}}}});
 
-new Chart(document.getElementById('ch-sessions'),{type:'line',data:{labels:['Apr 14','Apr 21','Apr 28','May 5'],datasets:[{label:'Sessions',data:[180,290,380,250],borderColor:T,backgroundColor:T+'20',fill:true,pointRadius:4,pointBackgroundColor:T,tension:.3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},datalabels:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'#e3e8ee'},beginAtZero:true}}}});
+new Chart(document.getElementById('ch-sessions'),{type:'line',data:{labels:['Apr 7','Apr 14','Apr 21','Apr 28','May 5'],datasets:[{label:'Sessions',data:[146,171,190,814,82],borderColor:T,backgroundColor:T+'20',fill:true,pointRadius:4,pointBackgroundColor:T,tension:.3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},datalabels:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'#e3e8ee'},beginAtZero:true}}}});
 
-new Chart(document.getElementById('ch-sources'),{type:'bar',data:{labels:['Paid Search','Organic','Direct','Referral'],datasets:[{data:[697,53,37,14],backgroundColor:[T70,N70,T40,N40],borderRadius:5}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},datalabels:{color:'#fff',font:{weight:'700',size:12},anchor:'end',align:'start',offset:8,display:function(ctx){return ctx.dataset.data[ctx.dataIndex]>20}}},scales:{x:{grid:{color:'#e3e8ee'},beginAtZero:true},y:{grid:{display:false}}}}});
+new Chart(document.getElementById('ch-sources'),{type:'bar',data:{labels:['Paid Search','Organic Search','Direct','Referral','Cross-network'],datasets:[{data:[904,299,152,22,16],backgroundColor:[T70,N70,T40,N40,LN],borderRadius:5}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},datalabels:{color:'#fff',font:{weight:'700',size:12},anchor:'end',align:'start',offset:8,display:function(ctx){return ctx.dataset.data[ctx.dataIndex]>20}}},scales:{x:{grid:{color:'#e3e8ee'},beginAtZero:true},y:{grid:{display:false}}}}});
 </script>
 </body>
 </html>
