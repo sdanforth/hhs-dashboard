@@ -103,7 +103,7 @@ a{color:#03826C;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 <div class="wrap">
 <div class="hdr">
 <div><h1>HHS Women's Health Services</h1><div class="hdr-sub">OB/GYN Campaign Dashboard</div></div>
-<div class="hdr-ts">Updated <span id="ts"></span></div>
+<div class="hdr-ts"></div>
 </div>
 
 <div class="ctrl">
@@ -200,23 +200,25 @@ a{color:#03826C;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 <div class="box">
 <div class="box-title">Hurley Plaza Location</div>
 <div style="font-size:11px;font-weight:700;color:#3c4257;margin-bottom:4px">GOOGLE REVIEWS</div>
-<div style="display:flex;align-items:baseline;gap:8px;margin-bottom:12px"><span style="font-size:28px;font-weight:900">3.8</span><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span><span style="font-size:12px;color:#3c4257">18 reviews</span></div>
+<div style="display:flex;align-items:baseline;gap:8px;margin-bottom:8px"><span style="font-size:28px;font-weight:900">3.8*</span><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span><span style="font-size:12px;color:#3c4257">18 reviews*</span></div>
+<div style="font-size:12px;margin-bottom:12px"><a href="https://www.google.com/maps/place/Obstetrics+%26+Gynecology+Healthcare+Associates/@43.0127,-83.6876,17z/" target="_blank">View on Google Maps</a> · <a href="https://hmc.gg/obgynhca-hurley" target="_blank">Leave a review</a></div>
 <div class="stat-row" style="margin-bottom:0">
-<div class="stat-item"><div class="stat-item-label">Searches</div><div class="stat-item-val">420</div></div>
-<div class="stat-item"><div class="stat-item-label">Views</div><div class="stat-item-val">310</div></div>
-<div class="stat-item"><div class="stat-item-label">Calls</div><div class="stat-item-val">28</div></div>
-<div class="stat-item"><div class="stat-item-label">Directions</div><div class="stat-item-val">45</div></div>
+<div class="stat-item"><div class="stat-item-label">Searches</div><div class="stat-item-val">—</div></div>
+<div class="stat-item"><div class="stat-item-label">Views</div><div class="stat-item-val">—</div></div>
+<div class="stat-item"><div class="stat-item-label">Calls</div><div class="stat-item-val">—</div></div>
+<div class="stat-item"><div class="stat-item-label">Directions</div><div class="stat-item-val">—</div></div>
 </div>
 </div>
 <div class="box">
 <div class="box-title">Dort Highway Location</div>
 <div style="font-size:11px;font-weight:700;color:#3c4257;margin-bottom:4px">GOOGLE REVIEWS</div>
-<div style="display:flex;align-items:baseline;gap:8px;margin-bottom:12px"><span style="font-size:28px;font-weight:900">3.4</span><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span><span style="font-size:12px;color:#3c4257">10 reviews</span></div>
+<div style="display:flex;align-items:baseline;gap:8px;margin-bottom:8px"><span style="font-size:28px;font-weight:900">3.4*</span><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span><span style="font-size:12px;color:#3c4257">10 reviews*</span></div>
+<div style="font-size:12px;margin-bottom:12px"><a href="https://www.google.com/maps/place/Obstetrics+%26+Gynecology+Healthcare+Associates/@43.0044,-83.6365,17z/" target="_blank">View on Google Maps</a> · <a href="https://hmc.gg/obgynhca-dort" target="_blank">Leave a review</a></div>
 <div class="stat-row" style="margin-bottom:0">
-<div class="stat-item"><div class="stat-item-label">Searches</div><div class="stat-item-val">280</div></div>
-<div class="stat-item"><div class="stat-item-label">Views</div><div class="stat-item-val">190</div></div>
-<div class="stat-item"><div class="stat-item-label">Calls</div><div class="stat-item-val">18</div></div>
-<div class="stat-item"><div class="stat-item-label">Directions</div><div class="stat-item-val">32</div></div>
+<div class="stat-item"><div class="stat-item-label">Searches</div><div class="stat-item-val">—</div></div>
+<div class="stat-item"><div class="stat-item-label">Views</div><div class="stat-item-val">—</div></div>
+<div class="stat-item"><div class="stat-item-label">Calls</div><div class="stat-item-val">—</div></div>
+<div class="stat-item"><div class="stat-item-label">Directions</div><div class="stat-item-val">—</div></div>
 </div>
 </div>
 </div>
@@ -309,6 +311,12 @@ a{color:#03826C;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 </div>
 </div>
 
+<div style="background:#fff;border:1px solid #dde2e9;border-radius:10px;padding:16px 20px;margin-bottom:16px;font-size:12px;color:#3c4257;line-height:1.6">
+<strong style="color:#1a1f36">Data Notes</strong><br>
+<strong>Verified from platforms:</strong> Appointment requests (37, Alchemer), Google Ads clicks/conversions/cost (GA4/Ads), traffic sources (GA4), short link clicks (Short.io), provider request breakdown (Alchemer).<br>
+<strong>Estimated (marked with *):</strong> Google review star ratings and review counts (needs manual verification or GBP API), GBP profile activity (searches/views/calls/directions — awaiting Supermetrics connection), phone call count (12 — from GA4 conversion tracking, verify in Google Ads), sessions-over-time weekly breakdown, paid vs organic inquiry split.<br>
+<strong>Date controls:</strong> Currently static. Will filter live data once connected to Google Sheets data layer.
+</div>
 <div class="ftr">HHS Women's Health Campaign Dashboard &middot; Connected Technologies</div>
 </div>
 
@@ -316,7 +324,7 @@ a{color:#03826C;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 function go(id){document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('on')});document.querySelectorAll('.pane').forEach(function(p){p.classList.remove('on')});event.target.classList.add('on');document.getElementById('p-'+id).classList.add('on')}
 function pre(b,k){b.parentElement.querySelectorAll('.qbtn').forEach(function(x){x.classList.remove('on')});b.classList.add('on');var e=new Date(),s=new Date();if(k==='7d')s.setDate(e.getDate()-7);else if(k==='30d')s.setDate(e.getDate()-30);else if(k==='lm'){s.setMonth(e.getMonth()-1);s.setDate(1);e.setDate(0)}else if(k==='90d')s.setDate(e.getDate()-90);else{s=new Date(2026,3,13)}fp.setDate([s,e])}
 var fp=flatpickr('#dr',{mode:'range',dateFormat:'M j, Y',defaultDate:[new Date(new Date().setDate(new Date().getDate()-30)),new Date()]});
-document.getElementById('ts').textContent=new Date().toLocaleString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'});
+/* timestamp removed */
 
 Chart.defaults.font.family="'Inter',-apple-system,sans-serif";
 Chart.defaults.font.size=12;
