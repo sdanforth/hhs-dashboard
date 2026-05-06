@@ -17,9 +17,9 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
 a{color:#03826C;font-weight:700;text-decoration:none}a:hover{text-decoration:underline}
 
 /* Header */
-.hdr{background:#03826C;border-radius:10px;padding:18px 24px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
-.hdr h1{font-size:18px;font-weight:800;color:#fff}
-.hdr-sub{font-size:12px;color:#e2e8f0;margin-top:1px}
+.hdr{background:#03826C;border-radius:10px;padding:24px 28px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.hdr h1{font-size:26px;font-weight:900;color:#fff;letter-spacing:-.5px}
+.hdr-sub{font-size:14px;color:#e2e8f0;margin-top:2px}
 .hdr-ts{font-size:12px;color:#e2e8f0}
 
 /* Controls */
@@ -139,7 +139,7 @@ a{color:#03826C;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 
 <div class="metrics" style="grid-template-columns:repeat(3,1fr)">
 <div class="m"><div class="m-icon"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div class="m-label">Total Inquiries</div><div class="m-val">49</div><div class="m-detail">37 online + 12 phone</div></div>
-<div class="m"><div class="m-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div><div class="m-label">Online Requests</div><div class="m-val">37</div><div class="m-detail">Via appointment form</div></div>
+<div class="m"><div class="m-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div><div class="m-label">Appointment Requests</div><div class="m-val">37</div><div class="m-detail">Via appointment form</div></div>
 <div class="m"><div class="m-icon"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div><div class="m-label">Phone Calls</div><div class="m-val">12</div><div class="m-detail">From ads and landing pages</div></div>
 </div>
 
@@ -354,14 +354,15 @@ Chart.defaults.plugins.legend.labels.padding=14;
 Chart.defaults.plugins.legend.labels.font={size:12,weight:'700'};
 Chart.defaults.elements.bar.borderRadius=4;
 var T='#03826C',N='#142E4F',LT='#6dbfae',LN='#7a9cc6';
+var T70='rgba(3,130,108,0.65)',N70='rgba(20,46,79,0.65)',T40='rgba(3,130,108,0.35)',N40='rgba(20,46,79,0.35)';
 
-new Chart(document.getElementById('ch-trend'),{type:'bar',data:{labels:['Apr 14-20','Apr 21-27','Apr 28-May 4','May 5-6'],datasets:[{label:'Online Requests',data:[6,10,14,7],backgroundColor:T,barPercentage:.6},{label:'Phone Calls',data:[2,3,4,3],backgroundColor:N,barPercentage:.6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top'},datalabels:{color:'#fff',font:{weight:'700',size:11},display:function(ctx){return ctx.dataset.data[ctx.dataIndex]>2},anchor:'center'}},scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:'#e3e8ee'},beginAtZero:true}}}});
+new Chart(document.getElementById('ch-trend'),{type:'bar',data:{labels:['Apr 14-20','Apr 21-27','Apr 28-May 4','May 5-6'],datasets:[{label:'Appointment Requests',data:[6,10,14,7],backgroundColor:T70,barPercentage:.6},{label:'Phone Calls',data:[2,3,4,3],backgroundColor:N70,barPercentage:.6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top'},datalabels:{color:'#fff',font:{weight:'700',size:11},display:function(ctx){return ctx.dataset.data[ctx.dataIndex]>2},anchor:'center'}},scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:'#e3e8ee'},beginAtZero:true}}}});
 
-new Chart(document.getElementById('ch-paid'),{type:'doughnut',data:{labels:['From Paid Campaigns — 38','From Organic / Direct — 11'],datasets:[{data:[38,11],backgroundColor:[T,LN],borderWidth:0,hoverOffset:4}]},options:{responsive:true,maintainAspectRatio:false,cutout:'68%',plugins:{legend:{position:'bottom',labels:{font:{size:13,weight:'700'},padding:16}},datalabels:{display:false}}}});
+new Chart(document.getElementById('ch-paid'),{type:'doughnut',data:{labels:['From Paid Campaigns — 38','From Organic / Direct — 11'],datasets:[{data:[38,11],backgroundColor:[T70,N40],borderWidth:0,hoverOffset:4}]},options:{responsive:true,maintainAspectRatio:false,cutout:'68%',plugins:{legend:{position:'bottom',labels:{font:{size:13,weight:'700'},padding:16}},datalabels:{display:false}}}});
 
 new Chart(document.getElementById('ch-sessions'),{type:'line',data:{labels:['Apr 14','Apr 21','Apr 28','May 5'],datasets:[{label:'Sessions',data:[180,290,380,250],borderColor:T,backgroundColor:T+'20',fill:true,pointRadius:4,pointBackgroundColor:T,tension:.3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},datalabels:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'#e3e8ee'},beginAtZero:true}}}});
 
-new Chart(document.getElementById('ch-sources'),{type:'bar',data:{labels:['Paid Search','Organic','Direct','Referral'],datasets:[{data:[697,53,37,14],backgroundColor:[T,N,LT,LN],borderRadius:5}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},datalabels:{color:'#fff',font:{weight:'700',size:12},anchor:'end',align:'start',offset:8,display:function(ctx){return ctx.dataset.data[ctx.dataIndex]>20}}},scales:{x:{grid:{color:'#e3e8ee'},beginAtZero:true},y:{grid:{display:false}}}}});
+new Chart(document.getElementById('ch-sources'),{type:'bar',data:{labels:['Paid Search','Organic','Direct','Referral'],datasets:[{data:[697,53,37,14],backgroundColor:[T70,N70,T40,N40],borderRadius:5}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},datalabels:{color:'#fff',font:{weight:'700',size:12},anchor:'end',align:'start',offset:8,display:function(ctx){return ctx.dataset.data[ctx.dataIndex]>20}}},scales:{x:{grid:{color:'#e3e8ee'},beginAtZero:true},y:{grid:{display:false}}}}});
 </script>
 </body>
 </html>
