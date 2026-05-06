@@ -341,8 +341,8 @@ a{color:#03826C;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 
 <script>
 function go(id){document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('on')});document.querySelectorAll('.pane').forEach(function(p){p.classList.remove('on')});event.target.classList.add('on');document.getElementById('p-'+id).classList.add('on')}
-function pre(b,k){b.parentElement.querySelectorAll('.qbtn').forEach(function(x){x.classList.remove('on')});b.classList.add('on');var e=new Date(),s=new Date();if(k==='7d')s.setDate(e.getDate()-7);else if(k==='30d')s.setDate(e.getDate()-30);else if(k==='lm'){s.setMonth(e.getMonth()-1);s.setDate(1);e.setDate(0)}else if(k==='90d')s.setDate(e.getDate()-90);else{s=new Date(2026,3,13)}fp.setDate([s,e])}
-var fp=flatpickr('#dr',{mode:'range',dateFormat:'M j, Y',defaultDate:[new Date(new Date().setDate(new Date().getDate()-30)),new Date()]});
+function pre(b,k){b.parentElement.querySelectorAll('.qbtn').forEach(function(x){x.classList.remove('on')});b.classList.add('on');var e=new Date(),s=new Date();if(k==='7d')s.setDate(e.getDate()-7);else if(k==='30d')s.setDate(e.getDate()-30);else if(k==='lm'){s.setMonth(e.getMonth()-1);s.setDate(1);e.setDate(0)}else if(k==='90d')s.setDate(e.getDate()-90);else{s=new Date(2026,3,13)}fp.setDate([s,e]);if(window._ga4data)updateDashboard(window._ga4data)}
+var fp=flatpickr('#dr',{mode:'range',dateFormat:'M j, Y',defaultDate:[new Date(new Date().setDate(new Date().getDate()-30)),new Date()],onChange:function(){if(window._ga4data)setTimeout(function(){updateDashboard(window._ga4data)},100)}});
 /* timestamp removed */
 
 Chart.register(ChartDataLabels);
@@ -396,30 +396,62 @@ function parseGA4(rows) {
 }
 
 function updateDashboard(ga4) {
+  window._ga4data = ga4;
+
+  // Get selected date range from flatpickr
+  var dates = fp.selectedDates;
+  var startDate = dates[0] || new Date(2026, 3, 13);
+  var endDate = dates[1] || new Date();
+
+  // Helper: convert ISO week "202618" to approximate date
+  function weekToDate(w) {
+    var year = parseInt(w.substring(0, 4));
+    var week = parseInt(w.substring(4));
+    var d = new Date(year, 0, 1);
+    d.setDate(d.getDate() + (week - 1) * 7);
+    return d;
+  }
+
+  // Filter weeks by date range
+  var filteredWeeks = ga4.weeks.filter(function(w) {
+    var d = weekToDate(w.week);
+    return d >= startDate && d <= endDate;
+  });
+
+  // Calculate filtered totals
+  var filteredSessions = 0;
+  filteredWeeks.forEach(function(w) { filteredSessions += w.sessions; });
+  // If no weeks match (range too narrow), show all
+  if (filteredWeeks.length === 0) { filteredWeeks = ga4.weeks; filteredSessions = parseInt(ga4.summary['Sessions']); }
+
   // Update summary cards
   var sessEl = document.querySelector('#live-sessions');
-  if (sessEl) sessEl.textContent = parseInt(ga4.summary['Sessions']).toLocaleString();
+  if (sessEl) sessEl.textContent = filteredSessions.toLocaleString();
+
   var mobileTotal = 0, allDevices = 0;
   ga4.devices.forEach(function(d) { allDevices += d.sessions; if (d.device === 'mobile') mobileTotal = d.sessions; });
   var mobilePct = Math.round(mobileTotal / allDevices * 100);
   var mobileEl = document.querySelector('#live-mobile');
   if (mobileEl) mobileEl.textContent = mobilePct + '%';
+
   var newPctEl = document.querySelector('#live-newpct');
   if (newPctEl) newPctEl.textContent = ga4.summary['New User Pct'] + '% first-time visitors';
 
   // Update sessions over time chart
   if (window.sessionsChart) {
-    var weekLabels = ga4.weeks.map(function(w) { return 'W' + w.week.substring(4); });
-    var weekData = ga4.weeks.map(function(w) { return w.sessions; });
+    var weekLabels = filteredWeeks.map(function(w) { return 'W' + w.week.substring(4); });
+    var weekData = filteredWeeks.map(function(w) { return w.sessions; });
     window.sessionsChart.data.labels = weekLabels;
     window.sessionsChart.data.datasets[0].data = weekData;
     window.sessionsChart.update();
   }
 
-  // Update traffic sources chart
+  // Filter channels proportionally (rough estimate based on filtered vs total sessions ratio)
   if (window.sourcesChart) {
     var srcLabels = ga4.channels.slice(0, 5).map(function(c) { return c.name; });
-    var srcData = ga4.channels.slice(0, 5).map(function(c) { return c.sessions; });
+    var totalSess = parseInt(ga4.summary['Sessions']) || 1;
+    var ratio = filteredSessions / totalSess;
+    var srcData = ga4.channels.slice(0, 5).map(function(c) { return Math.round(c.sessions * ratio); });
     window.sourcesChart.data.labels = srcLabels;
     window.sourcesChart.data.datasets[0].data = srcData;
     window.sourcesChart.update();
