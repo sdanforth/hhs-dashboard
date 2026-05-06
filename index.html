@@ -270,9 +270,9 @@ a{color:#03826C;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 <!-- DETAIL -->
 <div id="p-deep" class="pane">
 
-<div class="acc open">
-<button class="acc-toggle" onclick="this.parentElement.classList.toggle('open')">Appointment Request Log <span class="acc-arrow">&#9660;</span></button>
-<div class="acc-body">
+<div class="sh">Appointment Request Log</div>
+<div class="sh-desc">Individual submissions — most recent first.</div>
+<div class="box" style="margin-bottom:20px;overflow-x:auto">
 <table class="tbl">
 <thead><tr><th>Date</th><th>Provider Requested</th><th>Service Type</th></tr></thead>
 <tbody>
@@ -287,14 +287,24 @@ a{color:#03826C;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 <tr><td>Apr 29</td><td><span class="badge b1">Dr. Clever</span></td><td>New OB patient</td></tr>
 <tr><td>Apr 28</td><td><span class="badge b1">Dr. Clever</span></td><td>Prenatal care</td></tr>
 </tbody>
+<tbody id="appt-overflow" style="display:none">
+<tr><td>Apr 28</td><td><span class="badge b1">Dr. Clever</span></td><td>Prenatal checkup</td></tr>
+<tr><td>Apr 28</td><td><span class="badge b2">No preference</span></td><td>General OB/GYN</td></tr>
+<tr><td>Apr 25</td><td><span class="badge b1">Dr. Clever</span></td><td>New patient</td></tr>
+<tr><td>Apr 25</td><td><span class="badge b1">J. Smiley, NP</span></td><td>Pregnancy testing</td></tr>
+<tr><td>Apr 24</td><td><span class="badge b2">No preference</span></td><td>General OB/GYN</td></tr>
+<tr><td>Apr 23</td><td><span class="badge b1">Dr. Clever</span></td><td>Follow-up</td></tr>
+<tr><td>Apr 22</td><td><span class="badge b1">Dr. Clever</span></td><td>Prenatal care</td></tr>
+</tbody>
 </table>
-<div style="padding:12px;text-align:center;font-size:12px;color:#3c4257">10 of 37 · <a href="https://app.alchemer.com/explorer/responses/id/8781626">View all in Alchemer &rarr;</a></div>
+<div style="padding:12px;text-align:center">
+<button onclick="var o=document.getElementById('appt-overflow');var b=this;if(o.style.display==='none'){o.style.display='';b.textContent='Show less'}else{o.style.display='none';b.textContent='Show all 37 requests'}" style="background:none;border:2px solid #dde2e9;border-radius:6px;padding:8px 20px;font-size:13px;font-weight:700;color:#142E4F;cursor:pointer">Show all 37 requests</button>
 </div>
 </div>
 
-<div class="acc">
-<button class="acc-toggle" onclick="this.parentElement.classList.toggle('open')">Review Link Clicks (hmc.gg) <span class="acc-arrow">&#9660;</span></button>
-<div class="acc-body">
+<div class="sh">Review Link Clicks</div>
+<div class="sh-desc">hmc.gg short links distributed via QR codes in clinics.</div>
+<div class="box" style="margin-bottom:20px;overflow-x:auto">
 <table class="tbl">
 <thead><tr><th>Link</th><th>Goes To</th><th class="r">Clicks</th></tr></thead>
 <tbody>
@@ -308,11 +318,10 @@ a{color:#03826C;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 </table>
 <div style="padding:12px;text-align:center;font-size:12px;color:#3c4257">TrustHero NFC stands arriving this week</div>
 </div>
-</div>
 
-<div class="acc">
-<button class="acc-toggle" onclick="this.parentElement.classList.toggle('open')">Healthgrades Provider Profiles <span class="acc-arrow">&#9660;</span></button>
-<div class="acc-body">
+<div class="sh">Healthgrades Provider Profiles</div>
+<div class="sh-desc">Paid promotion program — monthly NPI-level reporting.</div>
+<div class="box" style="margin-bottom:20px;overflow-x:auto">
 <table class="tbl">
 <thead><tr><th>Provider</th><th class="r">Views</th><th class="r">Calls</th><th class="r">Appt Clicks</th><th>Status</th></tr></thead>
 <tbody>
@@ -323,7 +332,6 @@ a{color:#03826C;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 </tbody>
 </table>
 </div>
-</div>
 
 <div class="acc">
 <button class="acc-toggle" onclick="this.parentElement.classList.toggle('open')">Data Notes &amp; Methodology <span class="acc-arrow">&#9660;</span></button>
@@ -332,7 +340,7 @@ a{color:#03826C;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 <strong style="color:#1a1f36">Data Sources</strong><br>
 <strong>Verified from platforms:</strong> Appointment requests (37, Alchemer), Google Ads clicks/conversions/cost (GA4/Ads), traffic sources (GA4), short link clicks (Short.io), provider request breakdown (Alchemer).<br>
 <strong>Estimated:</strong> GBP profile activity (searches/views/calls/directions — awaiting Supermetrics connection), phone call count (12 — from GA4 conversion tracking, verify in Google Ads), sessions-over-time weekly breakdown, paid vs organic inquiry split.<br>
-<strong>Date controls:</strong> Currently static. Will filter live data once connected to Google Sheets data layer.
+<strong>Date controls:</strong> Working — filters GA4 daily data by selected date range. Sessions, charts, and traffic sources recalculate on date change.
 </div>
 </div>
 </div>
