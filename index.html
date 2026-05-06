@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HHS Women's Health — Campaign Dashboard</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"><\/script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"><\/script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -291,6 +291,6 @@ Chart.defaults.elements.bar.borderRadius=4;
 new Chart(document.getElementById('ch-trend'),{type:'bar',data:{labels:['Apr 14–20','Apr 21–27','Apr 28–May 4','May 5–6'],datasets:[{label:'Online Requests',data:[6,10,14,7],backgroundColor:'#03a687',barPercentage:.6},{label:'Phone Calls',data:[2,3,4,3],backgroundColor:'#1e3a5f',barPercentage:.6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top'}},scales:{x:{stacked:true,grid:{display:false},ticks:{font:{weight:'600'}}},y:{stacked:true,grid:{color:'#e5e5e5'},beginAtZero:true,ticks:{font:{weight:'600'}}}}}});
 
 new Chart(document.getElementById('ch-gbp'),{type:'bar',data:{labels:['Search Appearances','Profile Views','Direction Requests','Phone Calls','Website Clicks'],datasets:[{label:'Hurley Plaza',data:[420,310,45,28,62],backgroundColor:'#1e3a5f'},{label:'Dort Hwy',data:[280,190,32,18,41],backgroundColor:'#03a687'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top'}},scales:{x:{grid:{display:false},ticks:{font:{weight:'600'}}},y:{grid:{color:'#e5e5e5'},beginAtZero:true,ticks:{font:{weight:'600'}}}}}});
-<\/script>
+</script>
 </body>
 </html>
