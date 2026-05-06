@@ -9,128 +9,143 @@
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
   :root {
-    --bg: #f1f3f7;
-    --surface: #ffffff;
-    --border: #d4dae3;
-    --text: #111827;
-    --text-2: #374151;
-    --text-3: #6b7280;
-    --navy: #1e3a5f;
-    --navy-light: #e8edf4;
+    --white: #ffffff;
+    --offwhite: #f7f7f8;
+    --black: #111111;
+    --dark: #222222;
+    --mid: #555555;
+    --light-border: #dddddd;
     --teal: #03a687;
-    --teal-bg: #e0f5ef;
+    --navy: #1e3a5f;
     --blue: #2563eb;
     --amber: #b45309;
-    --amber-bg: #fef3c7;
-    --slate: #475569;
-    --shadow: 0 1px 3px rgba(0,0,0,.05);
-    --shadow-md: 0 4px 12px rgba(0,0,0,.08);
-    --r: 10px;
+    --red: #c0392b;
     --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   }
-  body { font-family: var(--font); background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; }
-  .wrap { max-width: 1380px; margin: 0 auto; padding: 20px; }
 
-  /* ── Header ─────────────────── */
+  body { font-family: var(--font); background: var(--offwhite); color: var(--black); -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 1300px; margin: 0 auto; padding: 24px; }
+
+  /* ── Header: dark bg, bright text ── */
   .hdr {
-    background: var(--navy); border-radius: var(--r); padding: 22px 28px; margin-bottom: 14px;
-    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+    background: var(--black); color: var(--white); border-radius: 8px;
+    padding: 20px 28px; margin-bottom: 16px;
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
   }
-  .hdr h1 { font-size: 20px; font-weight: 800; color: #fff; letter-spacing: -.3px; }
-  .hdr-sub { font-size: 12px; color: #94a3b8; margin-top: 2px; }
-  .live-badge { font-size: 11px; color: #94a3b8; background: rgba(255,255,255,.08); padding: 5px 12px; border-radius: 16px; display: flex; align-items: center; gap: 6px; }
-  .live-dot { width: 6px; height: 6px; border-radius: 50%; background: #34d399; animation: pulse 2s infinite; }
-  @keyframes pulse { 0%,100%{opacity:1}50%{opacity:.3} }
+  .hdr h1 { font-size: 20px; font-weight: 800; color: var(--white); }
+  .hdr-sub { font-size: 13px; color: #aaaaaa; margin-top: 2px; }
+  .hdr-ts { font-size: 11px; color: #999999; }
 
-  /* ── Controls ───────────────── */
-  .ctrl { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
-  .tabs { display: flex; gap: 2px; background: var(--surface); border-radius: 8px; padding: 3px; border: 1px solid var(--border); }
-  .tab { padding: 9px 20px; font-size: 13px; font-weight: 600; color: var(--text-3); border: none; background: none; border-radius: 6px; cursor: pointer; transition: .12s; }
-  .tab:hover { background: var(--bg); color: var(--text); }
-  .tab.on { background: var(--navy); color: #e2e8f0; }
-  .date-ctrl { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-  .qbtn { padding: 6px 12px; font-size: 11px; font-weight: 600; color: var(--text-2); background: var(--surface); border: 1px solid var(--border); border-radius: 6px; cursor: pointer; transition: .12s; }
-  .qbtn:hover { border-color: var(--navy); color: var(--navy); }
-  .qbtn.on { background: var(--navy); color: #e2e8f0; border-color: var(--navy); }
-  .date-input { border: 1px solid var(--border); background: var(--surface); color: var(--text); font-size: 12px; font-weight: 600; padding: 7px 12px; border-radius: 6px; width: 195px; cursor: pointer; text-align: center; }
-  .date-input:focus { outline: 2px solid var(--teal); outline-offset: 1px; }
-
-  .pane { display: none; } .pane.on { display: block; animation: fadeUp .2s ease; }
-  @keyframes fadeUp { from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none} }
-
-  /* ── Section Labels ─────────── */
-  .sec { margin: 28px 0 14px; }
-  .sec-title { font-size: 18px; font-weight: 800; color: var(--text); margin-bottom: 2px; }
-  .sec-desc { font-size: 13px; color: var(--text-3); line-height: 1.4; }
-
-  /* ── Scorecards ─────────────── */
-  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-bottom: 24px; }
-  .c {
-    background: var(--surface); border-radius: var(--r); padding: 22px;
-    border: 1px solid var(--border); box-shadow: var(--shadow);
+  /* ── Controls ── */
+  .ctrl { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+  .tabs { display: flex; gap: 0; border: 2px solid var(--black); border-radius: 6px; overflow: hidden; }
+  .tab {
+    padding: 10px 24px; font-size: 13px; font-weight: 700; color: var(--black);
+    background: var(--white); border: none; cursor: pointer; transition: .1s;
   }
-  .c-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-  .c-label { font-size: 13px; font-weight: 700; color: var(--text-2); }
-  .c-period { font-size: 11px; color: var(--text-3); }
-  .c-val { font-size: 38px; font-weight: 900; letter-spacing: -1.5px; line-height: 1; color: var(--text); }
-  .c-note { font-size: 12px; color: var(--text-3); margin-top: 8px; line-height: 1.4; }
-  .c-bar { height: 4px; background: var(--bg); border-radius: 2px; margin-top: 12px; overflow: hidden; }
-  .c-bar-fill { height: 100%; border-radius: 2px; }
+  .tab:not(:last-child) { border-right: 2px solid var(--black); }
+  .tab:hover { background: #f0f0f0; }
+  .tab.on { background: var(--black); color: var(--white); }
 
-  /* Stars */
-  .stars { color: var(--amber); letter-spacing: 2px; }
+  .date-ctrl { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+  .qbtn {
+    padding: 8px 14px; font-size: 12px; font-weight: 700; color: var(--dark);
+    background: var(--white); border: 2px solid var(--light-border); border-radius: 6px; cursor: pointer; transition: .1s;
+  }
+  .qbtn:hover { border-color: var(--black); }
+  .qbtn.on { background: var(--black); color: var(--white); border-color: var(--black); }
+  .date-input {
+    border: 2px solid var(--light-border); background: var(--white); color: var(--black);
+    font-size: 12px; font-weight: 600; padding: 7px 12px; border-radius: 6px; width: 200px; cursor: pointer; text-align: center;
+  }
+  .date-input:focus { border-color: var(--teal); outline: none; }
 
-  /* ── Provider Cards ─────────── */
-  .prov-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; margin-bottom: 24px; }
+  .pane { display: none; } .pane.on { display: block; }
+
+  /* ── Section Question ── */
+  .q { margin: 32px 0 16px; }
+  .q-title { font-size: 20px; font-weight: 900; color: var(--black); line-height: 1.2; }
+  .q-desc { font-size: 14px; color: var(--mid); margin-top: 4px; }
+
+  /* ── Metric Cards: WHITE bg, BLACK text, zero ambiguity ── */
+  .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 24px; }
+  .m {
+    background: var(--white); border-radius: 8px; padding: 20px 22px;
+    border: 2px solid var(--light-border);
+  }
+  .m-label { font-size: 13px; font-weight: 800; color: var(--dark); text-transform: uppercase; letter-spacing: .3px; margin-bottom: 8px; }
+  .m-val { font-size: 42px; font-weight: 900; color: var(--black); line-height: 1; letter-spacing: -2px; }
+  .m-detail { font-size: 13px; color: var(--mid); margin-top: 10px; line-height: 1.5; }
+  .m-bar { height: 5px; background: #eeeeee; border-radius: 3px; margin-top: 12px; overflow: hidden; }
+  .m-bar-fill { height: 100%; border-radius: 3px; }
+
+  /* Star rating */
+  .star-row { display: flex; align-items: baseline; gap: 8px; }
+  .stars { color: var(--amber); font-size: 22px; letter-spacing: 2px; }
+
+  /* ── Provider Cards ── */
+  .provs { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-bottom: 16px; }
   .prov {
-    background: var(--surface); border-radius: var(--r); padding: 20px;
-    border: 1px solid var(--border); box-shadow: var(--shadow);
+    background: var(--white); border-radius: 8px; padding: 18px 20px;
+    border: 2px solid var(--light-border); display: flex; align-items: center; gap: 14px;
   }
-  .prov-top { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
-  .prov-photo { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; border: 2px solid var(--border); flex-shrink: 0; }
-  .prov-name { font-size: 15px; font-weight: 700; color: var(--text); }
-  .prov-title { font-size: 12px; color: var(--text-3); }
-  .prov-num { margin-left: auto; text-align: right; }
-  .prov-num-val { font-size: 28px; font-weight: 900; color: var(--teal); line-height: 1; }
-  .prov-num-label { font-size: 10px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: .4px; }
-  .prov-bar { height: 6px; background: #eef1f5; border-radius: 3px; overflow: hidden; }
-  .prov-bar-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--teal), #06d6a0); }
+  .prov-img { width: 52px; height: 52px; border-radius: 50%; object-fit: cover; border: 2px solid var(--light-border); flex-shrink: 0; }
+  .prov-info { flex: 1; }
+  .prov-name { font-size: 14px; font-weight: 800; color: var(--black); }
+  .prov-role { font-size: 12px; color: var(--mid); }
+  .prov-count { text-align: right; }
+  .prov-num { font-size: 32px; font-weight: 900; color: var(--teal); line-height: 1; }
+  .prov-num-label { font-size: 10px; font-weight: 700; color: var(--mid); text-transform: uppercase; }
+  .prov-bar { height: 5px; background: #eeeeee; border-radius: 3px; margin-top: 10px; overflow: hidden; }
+  .prov-bar-fill { height: 100%; border-radius: 3px; background: var(--teal); }
+  .nopreference { background: var(--offwhite); border: 2px dashed var(--light-border); padding: 14px 20px; border-radius: 8px; margin-bottom: 24px; font-size: 13px; color: var(--dark); }
+  .nopreference strong { color: var(--black); }
 
-  /* ── Charts ─────────────────── */
+  /* ── Simple stat row (no chart) ── */
+  .stat-row { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 24px; }
+  .stat-item { background: var(--white); border: 2px solid var(--light-border); border-radius: 8px; padding: 14px 18px; flex: 1; min-width: 180px; }
+  .stat-item-label { font-size: 12px; font-weight: 700; color: var(--dark); margin-bottom: 4px; }
+  .stat-item-val { font-size: 20px; font-weight: 900; color: var(--black); }
+  .stat-item-note { font-size: 11px; color: var(--mid); margin-top: 2px; }
+
+  /* ── Charts ── */
   .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
-  .g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 24px; }
-  .box { background: var(--surface); border-radius: var(--r); padding: 22px; border: 1px solid var(--border); box-shadow: var(--shadow); }
-  .box-title { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
-  .box-desc { font-size: 12px; color: var(--text-3); margin-bottom: 16px; }
+  .box { background: var(--white); border-radius: 8px; padding: 22px; border: 2px solid var(--light-border); }
+  .box-title { font-size: 15px; font-weight: 800; color: var(--black); margin-bottom: 2px; }
+  .box-desc { font-size: 12px; color: var(--mid); margin-bottom: 16px; }
   .ch { position: relative; height: 260px; }
-  .ch.sm { height: 190px; }
+  .ch.sm { height: 200px; }
 
-  /* ── Tables ─────────────────── */
+  /* ── Tables ── */
   .tbl { width: 100%; border-collapse: collapse; font-size: 13px; }
-  .tbl th { text-align: left; font-size: 11px; font-weight: 700; color: var(--text-2); text-transform: uppercase; letter-spacing: .3px; padding: 10px 14px; border-bottom: 2px solid var(--border); background: #f9fafb; }
-  .tbl td { padding: 12px 14px; border-bottom: 1px solid #eef1f5; color: var(--text-2); }
+  .tbl th { text-align: left; font-size: 12px; font-weight: 800; color: var(--dark); padding: 12px 14px; border-bottom: 2px solid var(--black); }
+  .tbl td { padding: 12px 14px; border-bottom: 1px solid #eeeeee; color: var(--dark); }
   .tbl tr:last-child td { border-bottom: none; }
-  .tbl tr:hover td { background: #f9fafb; }
+  .tbl tr:hover td { background: #fafafa; }
   .tbl .r { text-align: right; font-variant-numeric: tabular-nums; }
-  .tbl .em { font-weight: 700; color: var(--text); }
+  .tbl .em { font-weight: 800; color: var(--black); }
   .badge { display: inline-block; padding: 3px 10px; border-radius: 10px; font-size: 11px; font-weight: 700; }
-  .b-teal { background: var(--teal-bg); color: #047857; }
-  .b-navy { background: var(--navy-light); color: var(--navy); }
-  .b-amber { background: var(--amber-bg); color: var(--amber); }
+  .b-teal { background: #e0f5ef; color: #047857; }
+  .b-dark { background: #e8e8e8; color: var(--dark); }
+  .b-amber { background: #fef3c7; color: var(--amber); }
 
-  .ftr { text-align: center; padding: 28px; font-size: 11px; color: var(--text-3); }
-  @media (max-width:900px) { .g2,.g3 { grid-template-columns: 1fr; } .cards { grid-template-columns: repeat(2,1fr); } }
-  @media (max-width:600px) { .wrap{padding:10px;} .cards,.prov-grid{grid-template-columns:1fr;} .ctrl{flex-direction:column;align-items:stretch;} .hdr{flex-direction:column;text-align:center;} }
+  .link { color: var(--teal); font-weight: 600; text-decoration: none; }
+  .link:hover { text-decoration: underline; }
+  .ftr { text-align: center; padding: 32px; font-size: 11px; color: #999; }
+
+  @media (max-width:900px) { .g2{grid-template-columns:1fr;} .metrics{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:600px) { .wrap{padding:12px;} .metrics,.provs{grid-template-columns:1fr;} .ctrl{flex-direction:column;align-items:stretch;} .hdr{flex-direction:column;text-align:center;} .stat-row{flex-direction:column;} }
 </style>
 </head>
 <body>
 <div class="wrap">
 
   <div class="hdr">
-    <div><h1>HHS Women's Health Services</h1><div class="hdr-sub">OB/GYN Campaign Performance Dashboard</div></div>
-    <div class="live-badge"><span class="live-dot"></span> Updated <span id="ts"></span></div>
+    <div><h1>HHS Women's Health Services</h1><div class="hdr-sub">OB/GYN Campaign Dashboard</div></div>
+    <div class="hdr-ts">Updated <span id="ts"></span></div>
   </div>
 
   <div class="ctrl">
@@ -140,323 +155,246 @@
       <button class="tab" onclick="go('deep')">Detail</button>
     </div>
     <div class="date-ctrl">
-      <button class="qbtn" onclick="preset(this,'7d')">This Week</button>
-      <button class="qbtn on" onclick="preset(this,'30d')">This Month</button>
-      <button class="qbtn" onclick="preset(this,'lm')">Last Month</button>
-      <button class="qbtn" onclick="preset(this,'90d')">Last 90 Days</button>
-      <button class="qbtn" onclick="preset(this,'all')">Since Launch</button>
-      <input type="text" id="daterange" class="date-input" placeholder="Custom range…">
+      <button class="qbtn" onclick="pre(this,'7d')">This Week</button>
+      <button class="qbtn on" onclick="pre(this,'30d')">This Month</button>
+      <button class="qbtn" onclick="pre(this,'lm')">Last Month</button>
+      <button class="qbtn" onclick="pre(this,'90d')">90 Days</button>
+      <button class="qbtn" onclick="pre(this,'all')">Since Launch</button>
+      <input type="text" id="dr" class="date-input" placeholder="Custom range…">
     </div>
   </div>
 
-  <!-- ═══════════════════════════════════════════════════════
-       OVERVIEW
-       ═══════════════════════════════════════════════════════ -->
+  <!-- ═══ OVERVIEW ═══ -->
   <div id="p-exec" class="pane on">
 
-    <div class="sec">
-      <div class="sec-title">Are our campaigns generating patient interest?</div>
-      <div class="sec-desc">Total patient inquiries from all digital channels — online appointment requests plus tracked phone calls.</div>
+    <div class="q">
+      <div class="q-title">Are our campaigns generating patient interest?</div>
+      <div class="q-desc">Total inquiries from online appointment requests and tracked phone calls.</div>
     </div>
 
-    <div class="cards">
-      <div class="c">
-        <div class="c-top"><div class="c-label">Total Patient Inquiries</div><div class="c-period">This period</div></div>
-        <div class="c-val">49</div>
-        <div class="c-note">Combined: 37 online appointment requests + 12 phone calls from campaign activity</div>
-        <div class="c-bar"><div class="c-bar-fill" style="width:100%;background:var(--teal)"></div></div>
+    <div class="metrics">
+      <div class="m">
+        <div class="m-label">Total Patient Inquiries</div>
+        <div class="m-val">49</div>
+        <div class="m-detail">37 online appointment requests<br>12 phone calls from campaigns</div>
+        <div class="m-bar"><div class="m-bar-fill" style="width:100%;background:var(--teal)"></div></div>
       </div>
-      <div class="c">
-        <div class="c-top"><div class="c-label">Online Appointment Requests</div><div class="c-period">Alchemer form</div></div>
-        <div class="c-val">37</div>
-        <div class="c-note">Submitted through hhs.hurleymc.com/request-appointment</div>
-        <div class="c-bar"><div class="c-bar-fill" style="width:76%;background:var(--teal)"></div></div>
+      <div class="m">
+        <div class="m-label">Online Requests</div>
+        <div class="m-val">37</div>
+        <div class="m-detail">Submitted via hhs.hurleymc.com appointment form</div>
+        <div class="m-bar"><div class="m-bar-fill" style="width:76%;background:var(--teal)"></div></div>
       </div>
-      <div class="c">
-        <div class="c-top"><div class="c-label">Phone Calls from Campaigns</div><div class="c-period">GA4 conversion</div></div>
-        <div class="c-val">12</div>
-        <div class="c-note">Calls driven by Google Ads and landing pages since campaign launch</div>
-        <div class="c-bar"><div class="c-bar-fill" style="width:24%;background:var(--navy)"></div></div>
-      </div>
-    </div>
-
-    <div class="g2">
-      <div class="box">
-        <div class="box-title">Patient Inquiries by Week</div>
-        <div class="box-desc">Stacked view of online requests and phone calls — shows momentum since launch</div>
-        <div class="ch"><canvas id="ch-inquiries"></canvas></div>
-      </div>
-      <div class="box">
-        <div class="box-title">How Patients Are Reaching Out</div>
-        <div class="box-desc">76% submit the online form, 24% call — both driven by campaign activity</div>
-        <div class="ch"><canvas id="ch-contact"></canvas></div>
-      </div>
-    </div>
-
-    <div class="sec">
-      <div class="sec-title">Which providers are patients asking for?</div>
-      <div class="sec-desc">Appointment requests by named provider — shows patient demand and helps with scheduling and capacity decisions.</div>
-    </div>
-
-    <div class="prov-grid">
-      <div class="prov">
-        <div class="prov-top">
-          <img class="prov-photo" src="https://hhs.hurleymc.com/images/doctors/2024082804.jpg" alt="Dr. Clever">
-          <div><div class="prov-name">Dr. Lauren Clever, MD</div><div class="prov-title">OB/GYN Physician</div></div>
-          <div class="prov-num"><div class="prov-num-val">18</div><div class="prov-num-label">requests</div></div>
-        </div>
-        <div class="prov-bar"><div class="prov-bar-fill" style="width:100%"></div></div>
-      </div>
-      <div class="prov">
-        <div class="prov-top">
-          <img class="prov-photo" src="https://hhs.hurleymc.com/images/cancer/jacqueline-smiley-cancer-genetic-counselor.jpg" alt="J. Smiley">
-          <div><div class="prov-name">Jacqueline Smiley, NP</div><div class="prov-title">Nurse Practitioner</div></div>
-          <div class="prov-num"><div class="prov-num-val">8</div><div class="prov-num-label">requests</div></div>
-        </div>
-        <div class="prov-bar"><div class="prov-bar-fill" style="width:44%"></div></div>
-      </div>
-      <div class="prov">
-        <div class="prov-top">
-          <img class="prov-photo" src="https://hhs.hurleymc.com/images/doctors/824243.jpg" alt="Dr. Pyatt">
-          <div><div class="prov-name">Dr. David Pyatt, DO</div><div class="prov-title">OB/GYN Physician</div></div>
-          <div class="prov-num"><div class="prov-num-val">1</div><div class="prov-num-label">requests</div></div>
-        </div>
-        <div class="prov-bar"><div class="prov-bar-fill" style="width:6%"></div></div>
-      </div>
-      <div class="prov">
-        <div class="prov-top">
-          <img class="prov-photo" src="https://hhs.hurleymc.com/images/doctors/596105.jpg" alt="Dr. Wiggins">
-          <div><div class="prov-name">Dr. Shawn Wiggins, MD</div><div class="prov-title">OB/GYN Physician</div></div>
-          <div class="prov-num"><div class="prov-num-val">1</div><div class="prov-num-label">requests</div></div>
-        </div>
-        <div class="prov-bar"><div class="prov-bar-fill" style="width:6%"></div></div>
-      </div>
-    </div>
-    <div class="box" style="margin-bottom:24px;padding:14px 18px;background:#f9fafb;">
-      <span style="font-size:13px;color:var(--text-2);"><strong>9 requests</strong> had no provider preference — these patients are open to the first available appointment.</span>
-    </div>
-
-    <div class="sec">
-      <div class="sec-title">How are patients finding us?</div>
-      <div class="sec-desc">Website traffic to hhs.hurleymc.com — where visitors originate before they request an appointment.</div>
-    </div>
-
-    <div class="cards" style="grid-template-columns: repeat(2, 1fr);">
-      <div class="c">
-        <div class="c-top"><div class="c-label">Total Website Sessions</div><div class="c-period">hhs.hurleymc.com</div></div>
-        <div class="c-val">1,100</div>
-        <div class="c-note">All traffic sources combined — 90% of visitors are on mobile devices</div>
-      </div>
-      <div class="c">
-        <div class="c-top"><div class="c-label">New Visitors</div><div class="c-period">First-time to site</div></div>
-        <div class="c-val">1,056</div>
-        <div class="c-note">96% of visitors are new — campaign is reaching people who haven't been to the site before</div>
-      </div>
-    </div>
-
-    <div class="g2">
-      <div class="box">
-        <div class="box-title">Traffic Sources</div>
-        <div class="box-desc">Paid search (Google Ads) drives the vast majority of traffic to HHS right now</div>
-        <div class="ch"><canvas id="ch-traffic"></canvas></div>
-      </div>
-      <div class="box">
-        <div class="box-title">Most Visited Pages</div>
-        <div class="box-desc">Which pages patients visit most — landing pages are performing as designed</div>
-        <div class="ch"><canvas id="ch-pages"></canvas></div>
-      </div>
-    </div>
-
-    <div class="sec">
-      <div class="sec-title">What's our online reputation?</div>
-      <div class="sec-desc">Google Business Profile performance and review health for the two OB/GYN clinic locations.</div>
-    </div>
-
-    <div class="cards" style="grid-template-columns: repeat(3, 1fr);">
-      <div class="c">
-        <div class="c-top"><div class="c-label">Google Rating</div><div class="c-period">Both locations</div></div>
-        <div class="c-val" style="display:flex;align-items:baseline;gap:6px;">3.6 <span class="stars" style="font-size:20px">&#9733;&#9733;&#9733;&#9734;&#9734;</span></div>
-        <div class="c-note">28 total reviews across both locations &middot; 2 new reviews this period</div>
-      </div>
-      <div class="c">
-        <div class="c-top"><div class="c-label">Google Profile Views</div><div class="c-period">Both locations</div></div>
-        <div class="c-val">500</div>
-        <div class="c-note">People who viewed the clinic listing on Google Search or Maps</div>
-      </div>
-      <div class="c">
-        <div class="c-top"><div class="c-label">Actions from Google Profile</div><div class="c-period">Calls + directions + clicks</div></div>
-        <div class="c-val">226</div>
-        <div class="c-note">46 phone calls, 77 direction requests, 103 website clicks from GBP</div>
+      <div class="m">
+        <div class="m-label">Phone Calls</div>
+        <div class="m-val">12</div>
+        <div class="m-detail">Calls driven by ads and landing pages</div>
+        <div class="m-bar"><div class="m-bar-fill" style="width:24%;background:var(--navy)"></div></div>
       </div>
     </div>
 
     <div class="box" style="margin-bottom:24px;">
-      <div class="box-title">Google Business Profile — Location Comparison</div>
-      <div class="box-desc">Side-by-side performance of the two clinic locations in Google Search and Maps</div>
+      <div class="box-title">Inquiries by Week</div>
+      <div class="box-desc">Online requests and phone calls since campaign launch on April 13</div>
+      <div class="ch sm"><canvas id="ch-trend"></canvas></div>
+    </div>
+
+    <div class="q">
+      <div class="q-title">Which providers are patients requesting?</div>
+      <div class="q-desc">From 37 online appointment submissions — helps with scheduling and capacity planning.</div>
+    </div>
+
+    <div class="provs">
+      <div class="prov">
+        <img class="prov-img" src="https://hhs.hurleymc.com/images/doctors/2024082804.jpg" alt="">
+        <div class="prov-info"><div class="prov-name">Dr. Lauren Clever, MD</div><div class="prov-role">OB/GYN</div></div>
+        <div class="prov-count"><div class="prov-num">18</div><div class="prov-num-label">requests</div></div>
+      </div>
+      <div class="prov">
+        <img class="prov-img" src="https://hhs.hurleymc.com/images/cancer/jacqueline-smiley-cancer-genetic-counselor.jpg" alt="">
+        <div class="prov-info"><div class="prov-name">Jacqueline Smiley, NP</div><div class="prov-role">Nurse Practitioner</div></div>
+        <div class="prov-count"><div class="prov-num">8</div><div class="prov-num-label">requests</div></div>
+      </div>
+      <div class="prov">
+        <img class="prov-img" src="https://hhs.hurleymc.com/images/doctors/824243.jpg" alt="">
+        <div class="prov-info"><div class="prov-name">Dr. David Pyatt, DO</div><div class="prov-role">OB/GYN</div></div>
+        <div class="prov-count"><div class="prov-num">1</div><div class="prov-num-label">requests</div></div>
+      </div>
+      <div class="prov">
+        <img class="prov-img" src="https://hhs.hurleymc.com/images/doctors/596105.jpg" alt="">
+        <div class="prov-info"><div class="prov-name">Dr. Shawn Wiggins, MD</div><div class="prov-role">OB/GYN</div></div>
+        <div class="prov-count"><div class="prov-num">1</div><div class="prov-num-label">requests</div></div>
+      </div>
+    </div>
+    <div class="nopreference"><strong>9 patients</strong> had no provider preference — open to the first available appointment.</div>
+
+    <div class="q">
+      <div class="q-title">How are patients finding us?</div>
+      <div class="q-desc">Website traffic to hhs.hurleymc.com — 90% of visitors are on mobile.</div>
+    </div>
+
+    <div class="metrics" style="grid-template-columns: repeat(2, 1fr);">
+      <div class="m">
+        <div class="m-label">Website Sessions</div>
+        <div class="m-val">1,100</div>
+        <div class="m-detail">All sources combined. 96% are first-time visitors — the campaign is reaching new people.</div>
+      </div>
+      <div class="m">
+        <div class="m-label">Top Traffic Source</div>
+        <div class="m-val" style="font-size:28px;">Google Ads</div>
+        <div class="m-detail">700 sessions (64%) from paid search. Organic: 53, Direct: 37, Referral: 14.</div>
+      </div>
+    </div>
+
+    <div class="q">
+      <div class="q-title">What does our online reputation look like?</div>
+      <div class="q-desc">Google reviews and Business Profile activity for both OB/GYN clinic locations.</div>
+    </div>
+
+    <div class="metrics" style="grid-template-columns: repeat(3, 1fr);">
+      <div class="m">
+        <div class="m-label">Google Rating</div>
+        <div class="star-row">
+          <div class="m-val">3.6</div>
+          <span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span>
+        </div>
+        <div class="m-detail">28 total reviews across both locations.<br>2 new reviews this period.</div>
+      </div>
+      <div class="m">
+        <div class="m-label">Profile Views</div>
+        <div class="m-val">500</div>
+        <div class="m-detail">People who viewed the clinic on Google Search or Maps.</div>
+      </div>
+      <div class="m">
+        <div class="m-label">Actions from Profile</div>
+        <div class="m-val">226</div>
+        <div class="m-detail">46 phone calls<br>77 direction requests<br>103 website clicks</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══ CHANNELS ═══ -->
+  <div id="p-chan" class="pane">
+
+    <div class="q"><div class="q-title">Google Ads Performance</div><div class="q-desc">PMax: HHS Women's Clinics — campaign results across Google's ad network.</div></div>
+
+    <div class="stat-row">
+      <div class="stat-item"><div class="stat-item-label">Impressions</div><div class="stat-item-val">18,200</div></div>
+      <div class="stat-item"><div class="stat-item-label">Clicks</div><div class="stat-item-val">1,940</div></div>
+      <div class="stat-item"><div class="stat-item-label">Click-Through Rate</div><div class="stat-item-val">10.7%</div></div>
+      <div class="stat-item"><div class="stat-item-label">Conversions</div><div class="stat-item-val">41.7</div></div>
+      <div class="stat-item"><div class="stat-item-label">Conversion Rate</div><div class="stat-item-val">2.1%</div></div>
+    </div>
+
+    <div class="q"><div class="q-title">Landing Page Results</div><div class="q-desc">Which pages are converting visitors into appointment requests.</div></div>
+
+    <div class="box" style="margin-bottom:24px;">
+      <table class="tbl">
+        <thead><tr><th>Page</th><th class="r">Visits</th><th class="r">Bounce</th><th class="r">Time</th><th class="r">Appointments</th><th class="r">Conv. Rate</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Women's Health &amp; OB/GYN</strong></td><td class="r em">431</td><td class="r">62%</td><td class="r">1:42</td><td class="r em">19</td><td class="r em">4.4%</td></tr>
+          <tr><td><strong>Menopause &amp; Perimenopause</strong></td><td class="r">120</td><td class="r">71%</td><td class="r">1:18</td><td class="r em">8</td><td class="r em">6.7%</td></tr>
+          <tr><td><strong>Genetic Counseling</strong></td><td class="r">303</td><td class="r">81%</td><td class="r">0:54</td><td class="r">4</td><td class="r">1.3%</td></tr>
+          <tr><td><strong>Appointment Form (direct)</strong></td><td class="r">28</td><td class="r">—</td><td class="r">3:12</td><td class="r em">6</td><td class="r em">21.4%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="q"><div class="q-title">Budget Split</div><div class="q-desc">How ad spend is weighted across the three service lines.</div></div>
+
+    <div class="stat-row">
+      <div class="stat-item"><div class="stat-item-label">Women's Health</div><div class="stat-item-val">60%</div><div class="stat-item-note">Primary focus — highest patient demand</div></div>
+      <div class="stat-item"><div class="stat-item-label">Menopause</div><div class="stat-item-val">30%</div><div class="stat-item-note">Strong conversion rate at 6.7%</div></div>
+      <div class="stat-item"><div class="stat-item-label">Genetic Counseling</div><div class="stat-item-val">10%</div><div class="stat-item-note">Lower conversion — may need LP optimization</div></div>
+    </div>
+
+    <div class="q"><div class="q-title">Google Business Profile by Location</div><div class="q-desc">Comparing the two OB/GYN clinic locations in local search.</div></div>
+
+    <div class="box" style="margin-bottom:24px;">
       <div class="ch"><canvas id="ch-gbp"></canvas></div>
     </div>
 
   </div>
 
-  <!-- ═══════════════════════════════════════════════════════
-       CHANNELS
-       ═══════════════════════════════════════════════════════ -->
-  <div id="p-chan" class="pane">
-
-    <div class="sec"><div class="sec-title">Google Ads Performance</div><div class="sec-desc">PMax: HHS Women's Clinics campaign — how the paid advertising is performing across Google's network.</div></div>
-
-    <div class="cards" style="grid-template-columns: repeat(5, 1fr);">
-      <div class="c"><div class="c-label" style="margin-bottom:8px">Impressions</div><div class="c-val" style="font-size:26px">18,200</div></div>
-      <div class="c"><div class="c-label" style="margin-bottom:8px">Clicks</div><div class="c-val" style="font-size:26px">1,940</div></div>
-      <div class="c"><div class="c-label" style="margin-bottom:8px">Click-Through Rate</div><div class="c-val" style="font-size:26px">10.7%</div></div>
-      <div class="c"><div class="c-label" style="margin-bottom:8px">Conversions</div><div class="c-val" style="font-size:26px">41.7</div></div>
-      <div class="c"><div class="c-label" style="margin-bottom:8px">Conversion Rate</div><div class="c-val" style="font-size:26px">2.1%</div></div>
-    </div>
-
-    <div class="g2">
-      <div class="box">
-        <div class="box-title">Budget Allocation by Service Line</div>
-        <div class="box-desc">How ad spend is weighted — Women's Health gets the most investment</div>
-        <div class="ch sm"><canvas id="ch-budget"></canvas></div>
-      </div>
-      <div class="box">
-        <div class="box-title">Traffic by Device Type</div>
-        <div class="box-desc">Patients overwhelmingly search for care on their phones</div>
-        <div class="ch sm"><canvas id="ch-device"></canvas></div>
-      </div>
-    </div>
-
-    <div class="sec"><div class="sec-title">Landing Page Performance</div><div class="sec-desc">How each campaign landing page converts visitors into appointment requests.</div></div>
-
-    <div class="box" style="margin-bottom:24px;">
-      <table class="tbl">
-        <thead><tr><th>Landing Page</th><th class="r">Visits</th><th class="r">Bounce Rate</th><th class="r">Time on Page</th><th class="r">Appointments</th><th class="r">Conversion Rate</th></tr></thead>
-        <tbody>
-          <tr><td><strong>Women's Health &amp; OB/GYN</strong><br><span style="font-size:11px;color:var(--text-3)">/lp/womens-health</span></td><td class="r em">431</td><td class="r">62%</td><td class="r">1m 42s</td><td class="r em">19</td><td class="r em">4.4%</td></tr>
-          <tr><td><strong>Menopause &amp; Perimenopause</strong><br><span style="font-size:11px;color:var(--text-3)">/lp/menopause</span></td><td class="r">120</td><td class="r">71%</td><td class="r">1m 18s</td><td class="r em">8</td><td class="r em">6.7%</td></tr>
-          <tr><td><strong>Genetic Counseling</strong><br><span style="font-size:11px;color:var(--text-3)">/lp/genetic-counseling</span></td><td class="r">303</td><td class="r">81%</td><td class="r">54s</td><td class="r">4</td><td class="r">1.3%</td></tr>
-          <tr><td><strong>Appointment Request Form</strong><br><span style="font-size:11px;color:var(--text-3)">/request-appointment</span></td><td class="r">28</td><td class="r">—</td><td class="r">3m 12s</td><td class="r em">6</td><td class="r em">21.4%</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="sec"><div class="sec-title">Review &amp; Reputation Channels</div><div class="sec-desc">QR code and short link activity driving review submissions for Google and Healthgrades.</div></div>
-
-    <div class="box" style="margin-bottom:24px;">
-      <div class="box-title">Review Link Clicks (hmc.gg short links)</div>
-      <div class="box-desc">Early activity — TrustHero NFC review stands arriving this week will accelerate these numbers significantly</div>
-      <div class="ch sm"><canvas id="ch-qr"></canvas></div>
-    </div>
-
-  </div>
-
-  <!-- ═══════════════════════════════════════════════════════
-       DETAIL
-       ═══════════════════════════════════════════════════════ -->
+  <!-- ═══ DETAIL ═══ -->
   <div id="p-deep" class="pane">
 
-    <div class="sec"><div class="sec-title">Appointment Request Log</div><div class="sec-desc">Individual submissions from the HHS appointment request form — most recent first.</div></div>
+    <div class="q"><div class="q-title">Appointment Request Log</div><div class="q-desc">Individual submissions — most recent first.</div></div>
 
     <div class="box" style="margin-bottom:24px;">
       <table class="tbl">
-        <thead><tr><th>Date</th><th>Patient</th><th>Provider Requested</th><th>Reason / Notes</th></tr></thead>
+        <thead><tr><th>Date</th><th>Patient</th><th>Provider</th><th>Notes</th></tr></thead>
         <tbody>
           <tr><td>May 4</td><td>Nicole S.</td><td><span class="badge b-teal">Dr. Clever</span></td><td>—</td></tr>
-          <tr><td>May 4</td><td>Hannah W.</td><td><span class="badge b-navy">No preference</span></td><td>—</td></tr>
+          <tr><td>May 4</td><td>Hannah W.</td><td><span class="badge b-dark">No preference</span></td><td>—</td></tr>
           <tr><td>May 1</td><td>Alexis M.</td><td><span class="badge b-teal">Dr. Clever</span></td><td>Breast cancer screening, positive pregnancy test</td></tr>
           <tr><td>Apr 30</td><td>Mia W.</td><td><span class="badge b-teal">Dr. Clever</span></td><td>Gynecological care</td></tr>
-          <tr><td>Apr 30</td><td>Renyada M.</td><td><span class="badge b-navy">No preference</span></td><td>Fibroids, heavy bleeding, seeking surgery</td></tr>
+          <tr><td>Apr 30</td><td>Renyada M.</td><td><span class="badge b-dark">No preference</span></td><td>Fibroids, heavy bleeding, seeking surgery</td></tr>
           <tr><td>Apr 30</td><td>Mariana M.</td><td><span class="badge b-teal">J. Smiley, NP</span></td><td>Pregnancy test</td></tr>
           <tr><td>Apr 30</td><td>Torri</td><td><span class="badge b-teal">Dr. Clever</span></td><td>—</td></tr>
-          <tr><td>Apr 30</td><td>Elizabeth W.</td><td><span class="badge b-teal">Dr. Clever</span></td><td>Follow-up, ultrasound, IUD consultation</td></tr>
-          <tr><td>Apr 29</td><td>Maesie H.</td><td><span class="badge b-teal">Dr. Clever</span></td><td>7 weeks pregnant, looking for new OB</td></tr>
+          <tr><td>Apr 30</td><td>Elizabeth W.</td><td><span class="badge b-teal">Dr. Clever</span></td><td>Follow-up, ultrasound, IUD</td></tr>
+          <tr><td>Apr 29</td><td>Maesie H.</td><td><span class="badge b-teal">Dr. Clever</span></td><td>7 weeks pregnant, new OB</td></tr>
           <tr><td>Apr 28</td><td>Jacklyn G.</td><td><span class="badge b-teal">Dr. Clever</span></td><td>18 weeks pregnant, prenatal care</td></tr>
         </tbody>
       </table>
-      <div style="padding:14px;text-align:center;font-size:12px;color:var(--text-3);">Showing 10 of 37 &middot; <a href="https://app.alchemer.com/explorer/responses/id/8781626" style="color:var(--teal);font-weight:600">View all in Alchemer &rarr;</a></div>
+      <div style="padding:14px;text-align:center;font-size:13px;color:var(--mid);">10 of 37 shown &middot; <a class="link" href="https://app.alchemer.com/explorer/responses/id/8781626">View all in Alchemer &rarr;</a></div>
     </div>
 
-    <div class="sec"><div class="sec-title">Short Link Performance</div><div class="sec-desc">Click tracking for hmc.gg review links — distributed via QR codes in clinics and on printed materials.</div></div>
+    <div class="q"><div class="q-title">Review Link Clicks</div><div class="q-desc">hmc.gg short links for Healthgrades and Google reviews — QR codes in clinics.</div></div>
 
     <div class="box" style="margin-bottom:24px;">
       <table class="tbl">
-        <thead><tr><th>Short Link</th><th>Destination</th><th>Type</th><th class="r">Clicks</th></tr></thead>
+        <thead><tr><th>Link</th><th>Goes To</th><th class="r">Clicks</th></tr></thead>
         <tbody>
-          <tr><td><strong>hmc.gg/clever</strong></td><td>Healthgrades — Dr. Lauren Clever</td><td><span class="badge b-teal">Healthgrades</span></td><td class="r em">3</td></tr>
-          <tr><td><strong>hmc.gg/obgynhca-hurley</strong></td><td>Google Review — Hurley location</td><td><span class="badge b-amber">Google</span></td><td class="r">1</td></tr>
-          <tr><td><strong>hmc.gg/obgynhca-dort</strong></td><td>Google Review — Dort Hwy</td><td><span class="badge b-amber">Google</span></td><td class="r">1</td></tr>
-          <tr><td><strong>hmc.gg/pyatt</strong></td><td>Healthgrades — Dr. Pyatt</td><td><span class="badge b-teal">Healthgrades</span></td><td class="r">1</td></tr>
-          <tr><td><strong>hmc.gg/smiley</strong></td><td>Healthgrades — J. Smiley</td><td><span class="badge b-teal">Healthgrades</span></td><td class="r">1</td></tr>
-          <tr><td><strong>hmc.gg/wiggins</strong></td><td>Healthgrades — Dr. Wiggins</td><td><span class="badge b-teal">Healthgrades</span></td><td class="r">1</td></tr>
+          <tr><td><strong>hmc.gg/clever</strong></td><td>Healthgrades — Dr. Clever</td><td class="r em">3</td></tr>
+          <tr><td><strong>hmc.gg/obgynhca-hurley</strong></td><td>Google Review — Hurley</td><td class="r">1</td></tr>
+          <tr><td><strong>hmc.gg/obgynhca-dort</strong></td><td>Google Review — Dort Hwy</td><td class="r">1</td></tr>
+          <tr><td><strong>hmc.gg/pyatt</strong></td><td>Healthgrades — Dr. Pyatt</td><td class="r">1</td></tr>
+          <tr><td><strong>hmc.gg/smiley</strong></td><td>Healthgrades — J. Smiley</td><td class="r">1</td></tr>
+          <tr><td><strong>hmc.gg/wiggins</strong></td><td>Healthgrades — Dr. Wiggins</td><td class="r">1</td></tr>
         </tbody>
       </table>
-      <div style="padding:14px;text-align:center;font-size:12px;color:var(--text-3);">TrustHero NFC stands arriving this week — tap-to-review will drive this activity significantly</div>
+      <div style="padding:14px;text-align:center;font-size:13px;color:var(--mid);">TrustHero NFC review stands arriving this week</div>
     </div>
 
-    <div class="sec"><div class="sec-title">Healthgrades Provider Profiles</div><div class="sec-desc">Paid Healthgrades promotion program — NPI-level reporting arrives monthly from Healthgrades.</div></div>
+    <div class="q"><div class="q-title">Healthgrades Provider Profiles</div><div class="q-desc">Paid promotion program — NPI-level reports delivered monthly by Healthgrades.</div></div>
 
     <div class="box" style="margin-bottom:24px;">
       <table class="tbl">
-        <thead><tr><th>Provider</th><th class="r">Profile Views</th><th class="r">Calls (30s+)</th><th class="r">Appt Clicks</th><th>Status</th></tr></thead>
+        <thead><tr><th>Provider</th><th class="r">Views</th><th class="r">Calls</th><th class="r">Appt Clicks</th><th>Status</th></tr></thead>
         <tbody>
-          <tr><td>Dr. David Pyatt, DO</td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td><span class="badge b-amber">Awaiting first report</span></td></tr>
-          <tr><td>Jacqueline Smiley, NP</td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td><span class="badge b-amber">Awaiting first report</span></td></tr>
-          <tr><td>Dr. Lauren Clever, MD</td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td><span class="badge b-amber">Awaiting first report</span></td></tr>
-          <tr><td>Dr. Shawn Wiggins, MD</td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td><span class="badge b-amber">Awaiting first report</span></td></tr>
+          <tr><td><strong>Dr. David Pyatt, DO</strong></td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td><span class="badge b-amber">Awaiting report</span></td></tr>
+          <tr><td><strong>Jacqueline Smiley, NP</strong></td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td><span class="badge b-amber">Awaiting report</span></td></tr>
+          <tr><td><strong>Dr. Lauren Clever, MD</strong></td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td><span class="badge b-amber">Awaiting report</span></td></tr>
+          <tr><td><strong>Dr. Shawn Wiggins, MD</strong></td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td><span class="badge b-amber">Awaiting report</span></td></tr>
         </tbody>
       </table>
     </div>
-
   </div>
 
-  <div class="ftr">HHS Women's Health Campaign Dashboard &middot; Connected Technologies &middot; Sources: GA4, Google Ads, GBP, Piwik Pro, Alchemer, Short.io, Healthgrades</div>
+  <div class="ftr">HHS Women's Health Campaign Dashboard &middot; Connected Technologies</div>
 </div>
 
 <script>
-function go(id) {
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
-  document.querySelectorAll('.pane').forEach(p=>p.classList.remove('on'));
-  event.target.classList.add('on');
-  document.getElementById('p-'+id).classList.add('on');
-}
-function preset(btn, key) {
-  btn.parentElement.querySelectorAll('.qbtn').forEach(b=>b.classList.remove('on'));
-  btn.classList.add('on');
-  const e=new Date(), s=new Date();
-  if(key==='7d'){s.setDate(e.getDate()-7)}
-  else if(key==='30d'){s.setDate(e.getDate()-30)}
-  else if(key==='lm'){s.setMonth(e.getMonth()-1);s.setDate(1);e.setDate(0);}
-  else if(key==='90d'){s.setDate(e.getDate()-90)}
-  else{s.setFullYear(2026);s.setMonth(3);s.setDate(13);}
-  fp.setDate([s,e]);
-}
-const fp=flatpickr('#daterange',{mode:'range',dateFormat:'M j, Y',defaultDate:[new Date(new Date().setDate(new Date().getDate()-30)),new Date()]});
+function go(id){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));document.querySelectorAll('.pane').forEach(p=>p.classList.remove('on'));event.target.classList.add('on');document.getElementById('p-'+id).classList.add('on');}
+function pre(b,k){b.parentElement.querySelectorAll('.qbtn').forEach(x=>x.classList.remove('on'));b.classList.add('on');const e=new Date(),s=new Date();if(k==='7d')s.setDate(e.getDate()-7);else if(k==='30d')s.setDate(e.getDate()-30);else if(k==='lm'){s.setMonth(e.getMonth()-1);s.setDate(1);e.setDate(0);}else if(k==='90d')s.setDate(e.getDate()-90);else{s.setFullYear(2026);s.setMonth(3);s.setDate(13);}fp.setDate([s,e]);}
+const fp=flatpickr('#dr',{mode:'range',dateFormat:'M j, Y',defaultDate:[new Date(new Date().setDate(new Date().getDate()-30)),new Date()]});
 document.getElementById('ts').textContent=new Date().toLocaleString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'});
 
 Chart.defaults.font.family="'Inter',-apple-system,sans-serif";
-Chart.defaults.font.size=12;
-Chart.defaults.color='#374151';
+Chart.defaults.font.size=13;
+Chart.defaults.color='#222222';
 Chart.defaults.plugins.legend.labels.usePointStyle=true;
-Chart.defaults.plugins.legend.labels.padding=14;
-Chart.defaults.elements.bar.borderRadius=5;
-Chart.defaults.elements.line.tension=.35;
-const N='#1e3a5f',T='#03a687',B='#2563eb',A='#d97706',S='#475569';
+Chart.defaults.plugins.legend.labels.padding=16;
+Chart.defaults.plugins.legend.labels.font={size:13,weight:'700'};
+Chart.defaults.elements.bar.borderRadius=4;
 
-new Chart(document.getElementById('ch-inquiries'),{type:'bar',data:{labels:['Apr 14–20','Apr 21–27','Apr 28–May 4','May 5–6'],datasets:[{label:'Online Requests',data:[6,10,14,7],backgroundColor:T,barPercentage:.65},{label:'Phone Calls',data:[2,3,4,3],backgroundColor:N,barPercentage:.65}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top'}},scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:'#eef1f5'},beginAtZero:true,title:{display:true,text:'Patient inquiries',font:{size:11,weight:'600'}}}}}});
+/* Only 2 charts in the whole dashboard — each earns its space */
 
-new Chart(document.getElementById('ch-contact'),{type:'doughnut',data:{labels:['Online Form — 37 (76%)','Phone Call — 12 (24%)'],datasets:[{data:[37,12],backgroundColor:[T,N],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,cutout:'68%',plugins:{legend:{position:'bottom',labels:{font:{size:13,weight:'600'},padding:20}}}}});
+new Chart(document.getElementById('ch-trend'),{type:'bar',data:{labels:['Apr 14–20','Apr 21–27','Apr 28–May 4','May 5–6'],datasets:[{label:'Online Requests',data:[6,10,14,7],backgroundColor:'#03a687',barPercentage:.6},{label:'Phone Calls',data:[2,3,4,3],backgroundColor:'#1e3a5f',barPercentage:.6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top'}},scales:{x:{stacked:true,grid:{display:false},ticks:{font:{weight:'600'}}},y:{stacked:true,grid:{color:'#eeeeee'},beginAtZero:true,ticks:{font:{weight:'600'}},title:{display:true,text:'Patient Inquiries',font:{size:12,weight:'700'},color:'#222'}}}}});
 
-new Chart(document.getElementById('ch-traffic'),{type:'bar',data:{labels:['Paid Search (Google Ads)','Organic Search','Direct','Referral','Other'],datasets:[{data:[700,53,37,14,12],backgroundColor:[T,N,B,A,S],borderRadius:6}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:'#eef1f5'},beginAtZero:true,title:{display:true,text:'Sessions',font:{size:11,weight:'600'}}},y:{grid:{display:false},ticks:{font:{size:12,weight:'600'}}}}}});
-
-new Chart(document.getElementById('ch-pages'),{type:'bar',data:{labels:['Women\'s Health LP','Genetic Counseling LP','Menopause LP','Appointment Form','Homepage'],datasets:[{data:[431,303,120,28,19],backgroundColor:[T,N,B,A,S],borderRadius:6}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:'#eef1f5'},beginAtZero:true,title:{display:true,text:'Page views',font:{size:11,weight:'600'}}},y:{grid:{display:false},ticks:{font:{size:12,weight:'600'}}}}}});
-
-new Chart(document.getElementById('ch-gbp'),{type:'bar',data:{labels:['Search Appearances','Profile Views','Direction Requests','Phone Calls','Website Clicks'],datasets:[{label:'Hurley Plaza',data:[420,310,45,28,62],backgroundColor:N,borderRadius:4},{label:'Dort Hwy',data:[280,190,32,18,41],backgroundColor:T,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top'}},scales:{x:{grid:{display:false},ticks:{font:{weight:'600'}}},y:{grid:{color:'#eef1f5'},beginAtZero:true}}}});
-
-new Chart(document.getElementById('ch-budget'),{type:'doughnut',data:{labels:["Women's Health — 60%",'Menopause — 30%','Genetic Counseling — 10%'],datasets:[{data:[60,30,10],backgroundColor:[T,N,B],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,cutout:'65%',plugins:{legend:{position:'bottom',labels:{font:{size:12,weight:'600'}}}}}});
-
-new Chart(document.getElementById('ch-device'),{type:'doughnut',data:{labels:['Mobile — 90%','Desktop — 8%','Tablet — 2%'],datasets:[{data:[90,8,2],backgroundColor:[N,T,A],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,cutout:'65%',plugins:{legend:{position:'bottom',labels:{font:{size:12,weight:'600'}}}}}});
-
-new Chart(document.getElementById('ch-qr'),{type:'bar',data:{labels:['Dr. Clever (HG)','Dr. Pyatt (HG)','J. Smiley (HG)','Dr. Wiggins (HG)','OB/GYN Hurley (Google)','OB/GYN Dort (Google)'],datasets:[{label:'Clicks',data:[3,1,1,1,1,1],backgroundColor:[T,N,B,A,T+'90',N+'90'],borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{font:{size:11,weight:'600'}}},y:{grid:{color:'#eef1f5'},beginAtZero:true,ticks:{stepSize:1}}}}});
+new Chart(document.getElementById('ch-gbp'),{type:'bar',data:{labels:['Search Appearances','Profile Views','Direction Requests','Phone Calls','Website Clicks'],datasets:[{label:'Hurley Plaza',data:[420,310,45,28,62],backgroundColor:'#1e3a5f'},{label:'Dort Hwy',data:[280,190,32,18,41],backgroundColor:'#03a687'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top'}},scales:{x:{grid:{display:false},ticks:{font:{weight:'600'}}},y:{grid:{color:'#eeeeee'},beginAtZero:true,ticks:{font:{weight:'600'}}}}}});
 </script>
 </body>
 </html>
