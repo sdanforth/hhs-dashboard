@@ -12,92 +12,92 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html,body{overflow-x:hidden}
-body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f0eb;color:#3d2817;-webkit-font-smoothing:antialiased}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f3f5f7;color:#1a1f36;-webkit-font-smoothing:antialiased}
 .wrap{max-width:1280px;margin:0 auto;padding:20px;overflow-x:hidden}
-a{color:#c97a3e;font-weight:700;text-decoration:none}a:hover{text-decoration:underline}
+a{color:#03826C;font-weight:700;text-decoration:none}a:hover{text-decoration:underline}
 
 /* Header */
-.hdr{background:#9c4a2d;border-radius:10px;padding:24px 28px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.hdr{background:#03826C;border-radius:10px;padding:24px 28px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
 .hdr h1{font-size:26px;font-weight:900;color:#fff;letter-spacing:-.5px}
-.hdr-sub{font-size:14px;color:#e8d5c8;margin-top:2px}
-.hdr-ts{font-size:12px;color:#e8d5c8}
+.hdr-sub{font-size:14px;color:#e2e8f0;margin-top:2px}
+.hdr-ts{font-size:12px;color:#e2e8f0}
 
 /* Controls */
 .ctrl{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:16px;flex-wrap:wrap}
-.tabs{display:flex;border:2px solid #7d3f24;border-radius:8px;overflow:hidden}
-.tab{padding:8px 20px;font-size:13px;font-weight:700;color:#7d3f24;background:#fff;border:none;cursor:pointer}
-.tab:not(:last-child){border-right:2px solid #7d3f24}
-.tab:hover{background:#fef2ed}
-.tab.on{background:#7d3f24;color:#fff}
+.tabs{display:flex;border:2px solid #142E4F;border-radius:8px;overflow:hidden}
+.tab{padding:8px 20px;font-size:13px;font-weight:700;color:#142E4F;background:#fff;border:none;cursor:pointer}
+.tab:not(:last-child){border-right:2px solid #142E4F}
+.tab:hover{background:#edf1f7}
+.tab.on{background:#142E4F;color:#fff}
 .date-ctrl{display:flex;align-items:center;gap:4px;flex-wrap:wrap}
-.qbtn{padding:6px 11px;font-size:11px;font-weight:700;color:#7d3f24;background:#fff;border:1px solid #d4b5a0;border-radius:6px;cursor:pointer;white-space:nowrap}
-.qbtn:hover{border-color:#7d3f24}
-.qbtn.on{background:#7d3f24;color:#fff;border-color:#7d3f24}
-.di{border:1px solid #d4b5a0;background:#fff;color:#3d2817;font-size:12px;font-weight:600;padding:6px 10px;border-radius:6px;width:175px;cursor:pointer;text-align:center}
-.di:focus{border-color:#c97a3e;outline:none}
+.qbtn{padding:6px 11px;font-size:11px;font-weight:700;color:#142E4F;background:#fff;border:1px solid #c9cfd8;border-radius:6px;cursor:pointer;white-space:nowrap}
+.qbtn:hover{border-color:#142E4F}
+.qbtn.on{background:#142E4F;color:#fff;border-color:#142E4F}
+.di{border:1px solid #c9cfd8;background:#fff;color:#1a1f36;font-size:12px;font-weight:600;padding:6px 10px;border-radius:6px;width:175px;cursor:pointer;text-align:center}
+.di:focus{border-color:#03826C;outline:none}
 
 .pane{display:none}.pane.on{display:block}
 
 /* Section Headers */
-.sh{margin:32px 0 10px;font-size:22px;font-weight:900;color:#7d3f24;letter-spacing:-.3px;border-bottom:1.5px solid #d4a574;padding-bottom:8px;display:block;text-align:left}
-.sh-desc{font-size:14px;color:#5d4633;margin:-2px 0 16px;font-weight:500}
+.sh{margin:32px 0 10px;font-size:22px;font-weight:900;color:#142E4F;letter-spacing:-.3px;border-bottom:1.5px solid #8fc4b7;padding-bottom:8px;display:block;text-align:left}
+.sh-desc{font-size:14px;color:#3c4257;margin:-2px 0 16px;font-weight:500}
 
 /* Metric Cards */
 .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:20px}
-.m{background:#fff;border-radius:10px;padding:18px;border:1px solid #e5d5c8}
+.m{background:#fff;border-radius:10px;padding:18px;border:1px solid #dde2e9}
 .m-icon{margin-bottom:6px;display:flex;align-items:center;height:28px}
-.m-icon svg{width:24px;height:24px;stroke:#9c4a2d;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.m-icon svg{width:24px;height:24px;stroke:#03826C;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
 .gbp-hdr{display:flex;align-items:center;gap:8px;margin-bottom:4px}
 .gbp-logo{height:20px}
-.m-label{font-size:12px;font-weight:800;color:#7d3f24;text-transform:uppercase;letter-spacing:.3px;margin-bottom:8px}
-.m-val{font-size:36px;font-weight:900;color:#3d2817;line-height:1;letter-spacing:-1.5px}
-.m-detail{font-size:12px;color:#5d4633;margin-top:8px;line-height:1.4}
+.m-label{font-size:12px;font-weight:800;color:#142E4F;text-transform:uppercase;letter-spacing:.3px;margin-bottom:8px}
+.m-val{font-size:36px;font-weight:900;color:#1a1f36;line-height:1;letter-spacing:-1.5px}
+.m-detail{font-size:12px;color:#3c4257;margin-top:8px;line-height:1.4}
 .star-row{display:flex;align-items:baseline;gap:6px}
-.stars{color:#d97e3c;font-size:18px;letter-spacing:1px}
+.stars{color:#b45309;font-size:18px;letter-spacing:1px}
 
 /* Provider Table */
 .prov-table{width:100%;border-collapse:collapse;max-width:700px}
-.prov-table td{padding:10px 8px;border-bottom:1px solid #e8dfd5;vertical-align:middle}
+.prov-table td{padding:10px 8px;border-bottom:1px solid #e3e8ee;vertical-align:middle}
 .prov-table tr:last-child td{border-bottom:none}
-.prov-table tr:hover td{background:#faf7f3}
-.prov-photo{width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid #e5d5c8}
-.prov-name{font-size:14px;font-weight:800;color:#5c3d2f}
-.prov-role{font-size:11px;color:#5d4633}
-.prov-num{font-size:24px;font-weight:900;color:#3d2817;text-align:right;width:50px}
-.prov-num-label{font-size:9px;font-weight:700;color:#5d4633;text-transform:uppercase;text-align:right}
+.prov-table tr:hover td{background:#f9fafb}
+.prov-photo{width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid #dde2e9}
+.prov-name{font-size:14px;font-weight:800;color:#1a1f36}
+.prov-role{font-size:11px;color:#3c4257}
+.prov-num{font-size:24px;font-weight:900;color:#1a1f36;text-align:right;width:50px}
+.prov-num-label{font-size:9px;font-weight:700;color:#3c4257;text-transform:uppercase;text-align:right}
 .prov-barwrap{width:80px}
-.prov-bartrack{height:5px;background:#e8dfd5;border-radius:3px;overflow:hidden}
-.prov-barfill{height:100%;border-radius:3px;background:#c97a3e}
+.prov-bartrack{height:5px;background:#e3e8ee;border-radius:3px;overflow:hidden}
+.prov-barfill{height:100%;border-radius:3px;background:#03826C}
 
 /* Charts */
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px}
-.box{background:#fff;border-radius:10px;padding:18px;border:1px solid #e5d5c8}
-.box-title{font-size:14px;font-weight:800;color:#7d3f24;margin-bottom:12px}
+.box{background:#fff;border-radius:10px;padding:18px;border:1px solid #dde2e9}
+.box-title{font-size:14px;font-weight:800;color:#142E4F;margin-bottom:12px}
 .ch{position:relative;height:220px}
 
 /* Stat Row */
 .stat-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px}
-.stat-item{background:#fff;border:1px solid #e5d5c8;border-radius:10px;padding:14px 16px;flex:1;min-width:130px}
-.stat-item-label{font-size:11px;font-weight:800;color:#7d3f24;text-transform:uppercase;margin-bottom:4px}
-.stat-item-val{font-size:20px;font-weight:900;color:#3d2817}
-.stat-item-note{font-size:11px;color:#5d4633;margin-top:2px}
+.stat-item{background:#fff;border:1px solid #dde2e9;border-radius:10px;padding:14px 16px;flex:1;min-width:130px}
+.stat-item-label{font-size:11px;font-weight:800;color:#142E4F;text-transform:uppercase;margin-bottom:4px}
+.stat-item-val{font-size:20px;font-weight:900;color:#1a1f36}
+.stat-item-note{font-size:11px;color:#3c4257;margin-top:2px}
 
 /* Tables */
 .tbl{width:100%;border-collapse:collapse;font-size:13px}
-.tbl th{text-align:left;font-size:11px;font-weight:800;color:#7d3f24;padding:10px 10px;border-bottom:2px solid #7d3f24;background:#f9f4f0}
-.tbl td{padding:10px;border-bottom:1px solid #e8dfd5;color:#3d2817}
+.tbl th{text-align:left;font-size:11px;font-weight:800;color:#142E4F;padding:10px 10px;border-bottom:2px solid #142E4F;background:#f6f8fa}
+.tbl td{padding:10px;border-bottom:1px solid #e3e8ee;color:#1a1f36}
 .tbl tr:last-child td{border-bottom:none}
-.tbl tr:hover td{background:#faf7f3}
+.tbl tr:hover td{background:#f9fafb}
 .tbl .r{text-align:right;font-variant-numeric:tabular-nums}
 .tbl .em{font-weight:800}
 .badge{display:inline-block;padding:3px 9px;border-radius:10px;font-size:11px;font-weight:700}
-.b1{background:#e8d8c5;color:#9c4a2d}
-.b2{background:#f0e8dc;color:#7d3f24}
-.b3{background:#fff4e6;color:#d97e3c}
+.b1{background:#e5f0ed;color:#03826C}
+.b2{background:#e3e8ee;color:#3c4257}
+.b3{background:#fef3c7;color:#92400e}
 
 .acc{margin-bottom:16px}
-.acc-toggle{width:100%;text-align:left;background:#fff;border:1px solid #e5d5c8;border-radius:10px;padding:16px 20px;font-size:16px;font-weight:800;color:#7d3f24;cursor:pointer;display:flex;align-items:center;justify-content:space-between}
-.acc-toggle:hover{background:#faf7f3}
+.acc-toggle{width:100%;text-align:left;background:#fff;border:1px solid #dde2e9;border-radius:10px;padding:16px 20px;font-size:16px;font-weight:800;color:#142E4F;cursor:pointer;display:flex;align-items:center;justify-content:space-between}
+.acc-toggle:hover{background:#f9fafb}
 .acc-arrow{font-size:14px;color:#697386;transition:transform .2s}
 .acc-body{display:none;border:1px solid #dde2e9;border-top:none;border-radius:0 0 10px 10px;background:#fff;padding:0;margin-top:-1px;overflow-x:auto}
 .acc.open .acc-body{display:block}
@@ -295,25 +295,10 @@ a{color:#c97a3e;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 <tr><td>Apr 24</td><td><span class="badge b2">No preference</span></td><td>General OB/GYN</td></tr>
 <tr><td>Apr 23</td><td><span class="badge b1">Dr. Clever</span></td><td>Follow-up</td></tr>
 <tr><td>Apr 22</td><td><span class="badge b1">Dr. Clever</span></td><td>Prenatal care</td></tr>
-<tr><td>Apr 21</td><td><span class="badge b2">No preference</span></td><td>Screening & prenatal</td></tr>
-<tr><td>Apr 20</td><td><span class="badge b1">Dr. Pyatt</span></td><td>Gynecological care</td></tr>
-<tr><td>Apr 19</td><td><span class="badge b1">Dr. Clever</span></td><td>Annual exam</td></tr>
-<tr><td>Apr 18</td><td><span class="badge b1">J. Smiley, NP</span></td><td>Contraception counseling</td></tr>
-<tr><td>Apr 17</td><td><span class="badge b2">No preference</span></td><td>General OB/GYN</td></tr>
-<tr><td>Apr 16</td><td><span class="badge b1">Dr. Clever</span></td><td>Postpartum follow-up</td></tr>
-<tr><td>Apr 15</td><td><span class="badge b1">Dr. Wiggins</span></td><td>Prenatal ultrasound</td></tr>
-<tr><td>Apr 14</td><td><span class="badge b2">No preference</span></td><td>Surgical consultation</td></tr>
-<tr><td>Apr 13</td><td><span class="badge b1">Dr. Clever</span></td><td>New OB patient</td></tr>
-<tr><td>Apr 12</td><td><span class="badge b1">J. Smiley, NP</span></td><td>Pregnancy testing</td></tr>
-<tr><td>Apr 11</td><td><span class="badge b1">Dr. Pyatt</span></td><td>Follow-up</td></tr>
-<tr><td>Apr 10</td><td><span class="badge b2">No preference</span></td><td>General OB/GYN</td></tr>
-<tr><td>Apr 9</td><td><span class="badge b1">Dr. Clever</span></td><td>Prenatal care</td></tr>
-<tr><td>Apr 8</td><td><span class="badge b1">Dr. Wiggins</span></td><td>Fibroid consultation</td></tr>
-<tr><td>Apr 7</td><td><span class="badge b2">No preference</span></td><td>Screening & prenatal</td></tr>
 </tbody>
 </table>
 <div style="padding:12px;text-align:center">
-<button onclick="var o=document.getElementById('appt-overflow');var b=this;if(o.style.display==='none'){o.style.display='';b.textContent='Show less'}else{o.style.display='none';b.textContent='Show all 37 requests'}" style="background:none;border:2px solid #e5d5c8;border-radius:6px;padding:8px 20px;font-size:13px;font-weight:700;color:#7d3f24;cursor:pointer">Show all 37 requests</button>
+<button onclick="var o=document.getElementById('appt-overflow');var b=this;if(o.style.display==='none'){o.style.display='';b.textContent='Show less'}else{o.style.display='none';b.textContent='Show all 37 requests'}" style="background:none;border:2px solid #dde2e9;border-radius:6px;padding:8px 20px;font-size:13px;font-weight:700;color:#142E4F;cursor:pointer">Show all 37 requests</button>
 </div>
 </div>
 
@@ -335,18 +320,17 @@ a{color:#c97a3e;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 </div>
 
 <div class="sh">Healthgrades Provider Profiles</div>
-<div class="sh-desc">Paid promotion program — monthly NPI-level reporting (April 2026).</div>
+<div class="sh-desc">Paid promotion program — monthly NPI-level reporting.</div>
 <div class="box" style="margin-bottom:20px;overflow-x:auto">
 <table class="tbl">
-<thead><tr><th>Provider</th><th class="r">Views</th><th class="r">Calls</th><th class="r">Appt Clicks</th><th class="r">Avg Rating</th><th class="r">Reviews</th></tr></thead>
+<thead><tr><th>Provider</th><th class="r">Views</th><th class="r">Calls</th><th class="r">Appt Clicks</th><th>Status</th></tr></thead>
 <tbody>
-<tr><td><strong>Dr. Lauren Clever, MD</strong></td><td class="r em">487</td><td class="r em">23</td><td class="r em">68</td><td class="r">4.8</td><td class="r">156</td></tr>
-<tr><td><strong>Jacqueline Smiley, NP</strong></td><td class="r em">312</td><td class="r em">14</td><td class="r em">41</td><td class="r">4.6</td><td class="r">89</td></tr>
-<tr><td><strong>Dr. David Pyatt, DO</strong></td><td class="r em">248</td><td class="r em">9</td><td class="r em">28</td><td class="r">4.7</td><td class="r">64</td></tr>
-<tr><td><strong>Dr. Shawn Wiggins, MD</strong></td><td class="r em">201</td><td class="r em">7</td><td class="r em">19</td><td class="r">4.5</td><td class="r">42</td></tr>
+<tr><td><strong>Dr. David Pyatt, DO</strong></td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td><span class="badge b3">Awaiting report</span></td></tr>
+<tr><td><strong>Jacqueline Smiley, NP</strong></td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td><span class="badge b3">Awaiting report</span></td></tr>
+<tr><td><strong>Dr. Lauren Clever, MD</strong></td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td><span class="badge b3">Awaiting report</span></td></tr>
+<tr><td><strong>Dr. Shawn Wiggins, MD</strong></td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td><span class="badge b3">Awaiting report</span></td></tr>
 </tbody>
 </table>
-<div style="padding:12px;text-align:center;font-size:12px;color:#3c4257">Data source: Healthgrades API — April 1-30, 2026</div>
 </div>
 
 <div class="acc">
@@ -372,21 +356,21 @@ var fp=flatpickr('#dr',{mode:'range',dateFormat:'M j, Y',defaultDate:[new Date(n
 Chart.register(ChartDataLabels);
 Chart.defaults.font.family="'Inter',-apple-system,sans-serif";
 Chart.defaults.font.size=12;
-Chart.defaults.color='#3d2817';
+Chart.defaults.color='#1a1f36';
 Chart.defaults.plugins.legend.labels.usePointStyle=true;
 Chart.defaults.plugins.legend.labels.padding=14;
 Chart.defaults.plugins.legend.labels.font={size:12,weight:'700'};
 Chart.defaults.elements.bar.borderRadius=4;
-var T='#d97e3c',N='#7d3f24',LT='#e8a574',LN='#c9956c';
-var T70='rgba(217,126,60,0.82)',N70='rgba(125,63,36,0.82)',T40='rgba(217,126,60,0.55)',N40='rgba(125,63,36,0.55)';
+var T='#03826C',N='#142E4F',LT='#6dbfae',LN='#7a9cc6';
+var T70='rgba(3,130,108,0.82)',N70='rgba(20,46,79,0.82)',T40='rgba(3,130,108,0.55)',N40='rgba(20,46,79,0.55)';
 
-new Chart(document.getElementById('ch-trend'),{type:'bar',data:{labels:['Apr 14-20','Apr 21-27','Apr 28-May 4','May 5-6'],datasets:[{label:'Appointment Requests',data:[6,10,14,7],backgroundColor:T70,barPercentage:.6},{label:'Phone Calls',data:[2,3,4,3],backgroundColor:N70,barPercentage:.6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top'},datalabels:{color:'#fff',font:{weight:'700',size:11},display:function(ctx){return ctx.dataset.data[ctx.dataIndex]>2},anchor:'center'}},scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:'#e8dfd5'},beginAtZero:true}}}});
+new Chart(document.getElementById('ch-trend'),{type:'bar',data:{labels:['Apr 14-20','Apr 21-27','Apr 28-May 4','May 5-6'],datasets:[{label:'Appointment Requests',data:[6,10,14,7],backgroundColor:T70,barPercentage:.6},{label:'Phone Calls',data:[2,3,4,3],backgroundColor:N70,barPercentage:.6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top'},datalabels:{color:'#fff',font:{weight:'700',size:11},display:function(ctx){return ctx.dataset.data[ctx.dataIndex]>2},anchor:'center'}},scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:'#e3e8ee'},beginAtZero:true}}}});
 
 new Chart(document.getElementById('ch-paid'),{type:'doughnut',data:{labels:['From Paid Campaigns — 38','From Organic / Direct — 11'],datasets:[{data:[38,11],backgroundColor:[T70,N70],borderWidth:0,hoverOffset:4}]},options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{position:'bottom',labels:{font:{size:13,weight:'700'},padding:16}},datalabels:{color:'#fff',font:{weight:'800',size:16},formatter:function(v){return v}}}}});
 
-window.sessionsChart=new Chart(document.getElementById('ch-sessions'),{type:'line',data:{labels:['Apr 7','Apr 14','Apr 21','Apr 28','May 5'],datasets:[{label:'Sessions',data:[146,171,190,814,82],borderColor:T,backgroundColor:T+'20',fill:true,pointRadius:4,pointBackgroundColor:T,tension:.3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},datalabels:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'#e8dfd5'},beginAtZero:true}}}});
+window.sessionsChart=new Chart(document.getElementById('ch-sessions'),{type:'line',data:{labels:['Apr 7','Apr 14','Apr 21','Apr 28','May 5'],datasets:[{label:'Sessions',data:[146,171,190,814,82],borderColor:T,backgroundColor:T+'20',fill:true,pointRadius:4,pointBackgroundColor:T,tension:.3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},datalabels:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'#e3e8ee'},beginAtZero:true}}}});
 
-window.sourcesChart=new Chart(document.getElementById('ch-sources'),{type:'bar',data:{labels:['Paid Search','Organic Search','Direct','Referral','Cross-network'],datasets:[{data:[904,299,152,22,16],backgroundColor:[T70,N70,T40,N40,LN],borderRadius:5}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},datalabels:{color:'#fff',font:{weight:'700',size:12},anchor:'end',align:'start',offset:8,display:function(ctx){return ctx.dataset.data[ctx.dataIndex]>20}}},scales:{x:{grid:{color:'#e8dfd5'},beginAtZero:true},y:{grid:{display:false}}}}});
+window.sourcesChart=new Chart(document.getElementById('ch-sources'),{type:'bar',data:{labels:['Paid Search','Organic Search','Direct','Referral','Cross-network'],datasets:[{data:[904,299,152,22,16],backgroundColor:[T70,N70,T40,N40,LN],borderRadius:5}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},datalabels:{color:'#fff',font:{weight:'700',size:12},anchor:'end',align:'start',offset:8,display:function(ctx){return ctx.dataset.data[ctx.dataIndex]>20}}},scales:{x:{grid:{color:'#e3e8ee'},beginAtZero:true},y:{grid:{display:false}}}}});
 // ─── LIVE DATA FETCH ───────────────────────
 var GA4_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRD3Yq2IiyRJk3BIbY_cPBBWGZ2hvM9TuW94IHk-Km6y4BdSi_dBOGjKZSjMzmHHp0H5T43NF_g7kJv/pub?gid=1506320842&single=true&output=csv';
 var GA4_DAILY_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRD3Yq2IiyRJk3BIbY_cPBBWGZ2hvM9TuW94IHk-Km6y4BdSi_dBOGjKZSjMzmHHp0H5T43NF_g7kJv/pub?gid=957768954&single=true&output=csv';
