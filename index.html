@@ -138,18 +138,18 @@ a{color:#16c2d5;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 <div class="sh-desc">Online appointment requests and tracked phone calls across all channels.</div>
 
 <div class="metrics" style="grid-template-columns:repeat(3,1fr)">
-<div class="m"><div class="m-icon"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div class="m-label">Total Inquiries</div><div class="m-val">49</div><div class="m-detail">37 online + 12 phone</div></div>
-<div class="m"><div class="m-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div><div class="m-label">Appointment Requests</div><div class="m-val">37</div><div class="m-detail">Via appointment form</div></div>
-<div class="m"><div class="m-icon"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div><div class="m-label">Phone Calls</div><div class="m-val">12</div><div class="m-detail">From ads and landing pages</div></div>
+<div class="m"><div class="m-icon"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div class="m-label">Total Inquiries</div><div class="m-val" id="m-total">49</div><div class="m-detail" id="m-total-detail">37 online + 12 phone</div></div>
+<div class="m"><div class="m-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div><div class="m-label">Appointment Requests</div><div class="m-val" id="m-online">37</div><div class="m-detail">Via appointment form</div></div>
+<div class="m"><div class="m-icon"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div><div class="m-label">Phone Calls</div><div class="m-val" id="m-phone">12</div><div class="m-detail">From ads and landing pages</div></div>
 </div>
 
 <div class="g2">
 <div class="box"><div class="box-title">Inquiries by Week</div><div class="ch"><canvas id="ch-trend"></canvas></div></div>
-<div class="box"><div class="box-title">Paid vs Organic Inquiries</div><div class="ch"><canvas id="ch-paid"></canvas></div></div>
+<div class="box"><div class="box-title">Paid vs Organic Inquiries <span style="font-weight:500;color:#7a8794;font-size:11px">(since launch)</span></div><div class="ch"><canvas id="ch-paid"></canvas></div></div>
 </div>
 
 <div class="sh">Provider Demand</div>
-<div class="sh-desc">Which providers patients are requesting when they submit an appointment form.</div>
+<div class="sh-desc">Which providers patients are requesting when they submit an appointment form. <span style="color:#7a8794">(Since launch — provider-level data is not yet date-segmented.)</span></div>
 
 <div class="box" style="padding:8px 12px;margin-bottom:20px;display:inline-block">
 <table class="prov-table">
@@ -374,137 +374,274 @@ a{color:#16c2d5;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 </div>
 
 <script>
-function go(id){document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('on')});document.querySelectorAll('.pane').forEach(function(p){p.classList.remove('on')});event.target.classList.add('on');document.getElementById('p-'+id).classList.add('on')}
-function pre(b,k){b.parentElement.querySelectorAll('.qbtn').forEach(function(x){x.classList.remove('on')});b.classList.add('on');var e=new Date(),s=new Date();if(k==='7d')s.setDate(e.getDate()-7);else if(k==='30d')s.setDate(e.getDate()-30);else if(k==='lm'){s.setMonth(e.getMonth()-1);s.setDate(1);e.setDate(0)}else if(k==='90d')s.setDate(e.getDate()-90);else{s=new Date(2026,3,13)}fp.setDate([s,e]);if(window._ga4data)updateDashboard(window._ga4data)}
-var fp=flatpickr('#dr',{mode:'range',dateFormat:'M j, Y',defaultDate:[new Date(new Date().setDate(new Date().getDate()-30)),new Date()],onChange:function(){if(window._ga4data)setTimeout(function(){updateDashboard(window._ga4data)},100)}});
-/* timestamp removed */
+// ─── CAMPAIGN CONFIG ────────────────────────────────────────────────
+// Per-campaign settings. To stand up a new service-line dashboard,
+// copy this file and replace this object (and the DATA block below).
+var CAMPAIGN = {
+  slug: 'hhs-womens-health',
+  name: "HHS Women's Health Services",
+  subtitle: "OB/GYN Campaign Dashboard",
+  launchDate: '2026-04-07',
+  theme: { primary: '#16c2d5', secondary: '#1E3E72', accent: '#63C8F2', success: '#5ABA4A' },
+  sheet: {
+    base: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRD3Yq2IiyRJk3BIbY_cPBBWGZ2hvM9TuW94IHk-Km6y4BdSi_dBOGjKZSjMzmHHp0H5T43NF_g7kJv/pub',
+    gids: { aggregate: 1506320842, daily: 957768954, links: 1330028358 }
+  }
+};
 
+// ─── INLINE DATA ────────────────────────────────────────────────────
+// Stays inline until corresponding tabs are added to the campaign sheet.
+// All values must total to the since-launch aggregates.
+var DATA = {
+  // Inquiries bucketed by week. Date filtering sums weeks whose start falls in range.
+  inquiriesByWeek: [
+    { weekStart: '2026-04-14', label: 'Apr 14-20',    appointmentRequests: 6,  phoneCalls: 2 },
+    { weekStart: '2026-04-21', label: 'Apr 21-27',    appointmentRequests: 10, phoneCalls: 3 },
+    { weekStart: '2026-04-28', label: 'Apr 28-May 4', appointmentRequests: 14, phoneCalls: 4 },
+    { weekStart: '2026-05-05', label: 'May 5-6',      appointmentRequests: 7,  phoneCalls: 3 }
+  ],
+  // Since-launch aggregate split. No per-week split available yet.
+  paidVsOrganic: { paid: 38, organic: 11 }
+};
+
+// ─── HELPERS ────────────────────────────────────────────────────────
+function parseLocalDate(s) { var p = s.split('-'); return new Date(+p[0], +p[1]-1, +p[2]); }
+function fmtMD(s) { var p = s.split('-'); return p[1]+'/'+p[2]; }
+function getRange() {
+  var dates = fp ? fp.selectedDates : [];
+  var start = dates[0] || parseLocalDate(CAMPAIGN.launchDate);
+  var end = dates[1] || new Date();
+  return { start: start, end: end };
+}
+
+// ─── TAB + PRESET CONTROLS ──────────────────────────────────────────
+function go(id) {
+  document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('on'); });
+  document.querySelectorAll('.pane').forEach(function(p){ p.classList.remove('on'); });
+  event.target.classList.add('on');
+  document.getElementById('p-'+id).classList.add('on');
+}
+
+function pre(b, k) {
+  b.parentElement.querySelectorAll('.qbtn').forEach(function(x){ x.classList.remove('on'); });
+  b.classList.add('on');
+  var today = new Date(); today.setHours(23, 59, 59, 999);
+  var s, e = today;
+  if (k === '7d')       { s = new Date(); s.setDate(today.getDate() - 7); }
+  else if (k === '30d') { s = new Date(); s.setDate(today.getDate() - 30); }
+  else if (k === 'lm')  {
+    // Full previous calendar month
+    var firstOfThis = new Date(today.getFullYear(), today.getMonth(), 1);
+    e = new Date(firstOfThis); e.setDate(0); e.setHours(23, 59, 59, 999);
+    s = new Date(e.getFullYear(), e.getMonth(), 1);
+  }
+  else if (k === '90d') { s = new Date(); s.setDate(today.getDate() - 90); }
+  else                  { s = parseLocalDate(CAMPAIGN.launchDate); }
+  fp.setDate([s, e]);
+  applyDateRange();
+}
+
+var fp = flatpickr('#dr', {
+  mode: 'range',
+  dateFormat: 'M j, Y',
+  defaultDate: [ new Date(new Date().setDate(new Date().getDate() - 30)), new Date() ],
+  onChange: function(){ setTimeout(applyDateRange, 50); }
+});
+
+// ─── CHART DEFAULTS + STYLE ─────────────────────────────────────────
 Chart.register(ChartDataLabels);
-Chart.defaults.font.family="'Inter',-apple-system,sans-serif";
-Chart.defaults.font.size=12;
-Chart.defaults.color='#2c3e50';
-Chart.defaults.plugins.legend.labels.usePointStyle=true;
-Chart.defaults.plugins.legend.labels.padding=14;
-Chart.defaults.plugins.legend.labels.font={size:12,weight:'700'};
-Chart.defaults.elements.bar.borderRadius=4;
-var T='#16c2d5',N='#1E3E72',LT='#63C8F2',LN='#5ABA4A';
-var T70='rgba(22,194,213,0.82)',N70='rgba(30,62,114,0.82)',T40='rgba(22,194,213,0.55)',N40='rgba(30,62,114,0.55)';
+Chart.defaults.font.family = "'Inter',-apple-system,sans-serif";
+Chart.defaults.font.size = 12;
+Chart.defaults.color = '#2c3e50';
+Chart.defaults.plugins.legend.labels.usePointStyle = true;
+Chart.defaults.plugins.legend.labels.padding = 14;
+Chart.defaults.plugins.legend.labels.font = { size: 12, weight: '700' };
+Chart.defaults.elements.bar.borderRadius = 4;
+var T = CAMPAIGN.theme.primary, N = CAMPAIGN.theme.secondary;
+var LT = CAMPAIGN.theme.accent, LN = CAMPAIGN.theme.success;
+var T70 = 'rgba(22,194,213,0.82)', N70 = 'rgba(30,62,114,0.82)';
+var T40 = 'rgba(22,194,213,0.55)', N40 = 'rgba(30,62,114,0.55)';
 
-new Chart(document.getElementById('ch-trend'),{type:'bar',data:{labels:['Apr 14-20','Apr 21-27','Apr 28-May 4','May 5-6'],datasets:[{label:'Appointment Requests',data:[6,10,14,7],backgroundColor:T70,barPercentage:.6},{label:'Phone Calls',data:[2,3,4,3],backgroundColor:N70,barPercentage:.6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top'},datalabels:{color:'#fff',font:{weight:'700',size:11},display:function(ctx){return ctx.dataset.data[ctx.dataIndex]>2},anchor:'center'}},scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:'#e8ecf1'},beginAtZero:true}}}});
+// ─── CHART INITIALIZATION (empty; applyDateRange fills them) ────────
+window.trendChart = new Chart(document.getElementById('ch-trend'), {
+  type: 'bar',
+  data: { labels: [], datasets: [
+    { label: 'Appointment Requests', data: [], backgroundColor: T70, barPercentage: .6 },
+    { label: 'Phone Calls',          data: [], backgroundColor: N70, barPercentage: .6 }
+  ]},
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { position: 'top' }, datalabels: { color: '#fff', font: { weight: '700', size: 11 }, display: function(ctx){ return ctx.dataset.data[ctx.dataIndex] > 2; }, anchor: 'center' } },
+    scales: { x: { stacked: true, grid: { display: false } }, y: { stacked: true, grid: { color: '#e8ecf1' }, beginAtZero: true } }
+  }
+});
 
-new Chart(document.getElementById('ch-paid'),{type:'doughnut',data:{labels:['From Paid Campaigns — 38','From Organic / Direct — 11'],datasets:[{data:[38,11],backgroundColor:[T70,N70],borderWidth:0,hoverOffset:4}]},options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{position:'bottom',labels:{font:{size:13,weight:'700'},padding:16}},datalabels:{color:'#fff',font:{weight:'800',size:16},formatter:function(v){return v}}}}});
+window.paidChart = new Chart(document.getElementById('ch-paid'), {
+  type: 'doughnut',
+  data: { labels: [], datasets: [{ data: [], backgroundColor: [T70, N70], borderWidth: 0, hoverOffset: 4 }] },
+  options: {
+    responsive: true, maintainAspectRatio: false, cutout: '62%',
+    plugins: { legend: { position: 'bottom', labels: { font: { size: 13, weight: '700' }, padding: 16 } }, datalabels: { color: '#fff', font: { weight: '800', size: 16 }, formatter: function(v){ return v; } } }
+  }
+});
 
-window.sessionsChart=new Chart(document.getElementById('ch-sessions'),{type:'line',data:{labels:['Apr 7','Apr 14','Apr 21','Apr 28','May 5'],datasets:[{label:'Sessions',data:[146,171,190,814,82],borderColor:T,backgroundColor:T+'20',fill:true,pointRadius:4,pointBackgroundColor:T,tension:.3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},datalabels:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'#e8ecf1'},beginAtZero:true}}}});
+window.sessionsChart = new Chart(document.getElementById('ch-sessions'), {
+  type: 'line',
+  data: { labels: ['Apr 7','Apr 14','Apr 21','Apr 28','May 5'], datasets: [{ label: 'Sessions', data: [146,171,190,814,82], borderColor: T, backgroundColor: T+'20', fill: true, pointRadius: 4, pointBackgroundColor: T, tension: .3 }] },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false }, datalabels: { display: false } },
+    scales: { x: { grid: { display: false } }, y: { grid: { color: '#e8ecf1' }, beginAtZero: true } }
+  }
+});
 
-window.sourcesChart=new Chart(document.getElementById('ch-sources'),{type:'bar',data:{labels:['Paid Search','Organic Search','Direct','Referral','Cross-network'],datasets:[{data:[904,299,152,22,16],backgroundColor:[T70,N70,T40,N40,LN],borderRadius:5}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},datalabels:{color:'#fff',font:{weight:'700',size:12},anchor:'end',align:'start',offset:8,display:function(ctx){return ctx.dataset.data[ctx.dataIndex]>20}}},scales:{x:{grid:{color:'#e8ecf1'},beginAtZero:true},y:{grid:{display:false}}}}});
-// ─── LIVE DATA FETCH ───────────────────────
-var GA4_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRD3Yq2IiyRJk3BIbY_cPBBWGZ2hvM9TuW94IHk-Km6y4BdSi_dBOGjKZSjMzmHHp0H5T43NF_g7kJv/pub?gid=1506320842&single=true&output=csv';
-var GA4_DAILY_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRD3Yq2IiyRJk3BIbY_cPBBWGZ2hvM9TuW94IHk-Km6y4BdSi_dBOGjKZSjMzmHHp0H5T43NF_g7kJv/pub?gid=957768954&single=true&output=csv';
-var LINKS_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRD3Yq2IiyRJk3BIbY_cPBBWGZ2hvM9TuW94IHk-Km6y4BdSi_dBOGjKZSjMzmHHp0H5T43NF_g7kJv/pub?gid=1330028358&single=true&output=csv';
+window.sourcesChart = new Chart(document.getElementById('ch-sources'), {
+  type: 'bar',
+  data: { labels: ['Paid Search','Organic Search','Direct','Referral','Cross-network'], datasets: [{ data: [904,299,152,22,16], backgroundColor: [T70, N70, T40, N40, LN], borderRadius: 5 }] },
+  options: {
+    indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false }, datalabels: { color: '#fff', font: { weight: '700', size: 12 }, anchor: 'end', align: 'start', offset: 8, display: function(ctx){ return ctx.dataset.data[ctx.dataIndex] > 20; } } },
+    scales: { x: { grid: { color: '#e8ecf1' }, beginAtZero: true }, y: { grid: { display: false } } }
+  }
+});
+
+// ─── RENDER PIPELINE: SINGLE SOURCE OF TRUTH ────────────────────────
+// Every card/chart/table that depends on the selected date range gets
+// updated from here. To add a new visualization, wire it in this fn.
+function applyDateRange() {
+  var range = getRange();
+
+  // --- Inquiries: filter weeks whose start falls within the range ---
+  var filteredWeeks = DATA.inquiriesByWeek.filter(function(w) {
+    var d = parseLocalDate(w.weekStart);
+    return d >= range.start && d <= range.end;
+  });
+  if (filteredWeeks.length === 0) filteredWeeks = DATA.inquiriesByWeek; // safety fallback
+  var apptSum  = filteredWeeks.reduce(function(s,w){ return s + w.appointmentRequests; }, 0);
+  var phoneSum = filteredWeeks.reduce(function(s,w){ return s + w.phoneCalls; }, 0);
+  var totalSum = apptSum + phoneSum;
+
+  var el;
+  if ((el = document.getElementById('m-total')))        el.textContent = totalSum;
+  if ((el = document.getElementById('m-total-detail'))) el.textContent = apptSum + ' online + ' + phoneSum + ' phone';
+  if ((el = document.getElementById('m-online')))       el.textContent = apptSum;
+  if ((el = document.getElementById('m-phone')))        el.textContent = phoneSum;
+
+  window.trendChart.data.labels = filteredWeeks.map(function(w){ return w.label; });
+  window.trendChart.data.datasets[0].data = filteredWeeks.map(function(w){ return w.appointmentRequests; });
+  window.trendChart.data.datasets[1].data = filteredWeeks.map(function(w){ return w.phoneCalls; });
+  window.trendChart.update();
+
+  // --- Paid vs Organic: cumulative since launch (no per-week split) ---
+  window.paidChart.data.labels = ['From Paid Campaigns — ' + DATA.paidVsOrganic.paid, 'From Organic / Direct — ' + DATA.paidVsOrganic.organic];
+  window.paidChart.data.datasets[0].data = [DATA.paidVsOrganic.paid, DATA.paidVsOrganic.organic];
+  window.paidChart.update();
+
+  // --- GA4: sessions, sources, devices ---
+  applyGa4(range);
+}
+
+function applyGa4(range) {
+  var ga4 = window._ga4data;
+  if (!ga4) return;
+
+  var filtered = (ga4.daily || []).filter(function(d) {
+    var dt = new Date(d.date + 'T00:00:00');
+    return dt >= range.start && dt <= range.end;
+  });
+
+  var fSessions = 0, fUsers = 0, fNewUsers = 0;
+  if (filtered.length > 0) {
+    filtered.forEach(function(d){ fSessions += d.sessions; fUsers += d.users; fNewUsers += d.newUsers; });
+  } else {
+    fSessions = parseInt(ga4.summary['Sessions']) || 0;
+    fUsers    = parseInt(ga4.summary['Total Users']) || 0;
+    fNewUsers = parseInt(ga4.summary['New Users']) || 0;
+  }
+
+  var el;
+  if ((el = document.getElementById('live-sessions'))) el.textContent = fSessions.toLocaleString();
+  var newPct = fUsers > 0 ? Math.round(fNewUsers / fUsers * 100) : 0;
+  if ((el = document.getElementById('live-newpct'))) el.textContent = newPct + '% first-time visitors';
+
+  var mobile = 0, all = 0;
+  (ga4.devices || []).forEach(function(d){ all += d.sessions; if (d.device === 'mobile') mobile = d.sessions; });
+  var mobilePct = all > 0 ? Math.round(mobile / all * 100) : 0;
+  if ((el = document.getElementById('live-mobile'))) el.textContent = mobilePct + '%';
+
+  // Sessions Over Time: real daily data inside the range
+  if (filtered.length > 0) {
+    window.sessionsChart.data.labels = filtered.map(function(d){ return fmtMD(d.date); });
+    window.sessionsChart.data.datasets[0].data = filtered.map(function(d){ return d.sessions; });
+    window.sessionsChart.update();
+  }
+
+  // Traffic Sources: GA4 sheet exports only aggregate channels today,
+  // so we scale by the ratio of filtered-window sessions to aggregate
+  // sessions. When per-day channel data lands in the sheet, sum directly.
+  var channels = (ga4.channels || []).slice(0, 5);
+  if (channels.length > 0) {
+    var totalAgg = parseInt(ga4.summary['Sessions']) || 1;
+    var ratio = totalAgg > 0 ? fSessions / totalAgg : 0;
+    window.sourcesChart.data.labels = channels.map(function(c){ return c.name; });
+    window.sourcesChart.data.datasets[0].data = channels.map(function(c){ return Math.max(0, Math.round(c.sessions * ratio)); });
+    window.sourcesChart.update();
+  }
+}
+
+// ─── DATA FETCH (GA4 from Google Sheet CSVs) ─────────────────────────
+var SHEET = CAMPAIGN.sheet;
+function csvUrl(gid) { return SHEET.base + '?gid=' + gid + '&single=true&output=csv'; }
 
 function parseCSV(text) {
-  return text.trim().split('\n').map(function(row) {
-    return row.split(',').map(function(c) { return c.trim(); });
+  return text.trim().split('\n').map(function(row){
+    return row.split(',').map(function(c){ return c.trim(); });
   });
 }
 
 function parseGA4(rows) {
-  var data = {summary:{}, channels:[], pages:[], weeks:[], devices:[]};
+  var data = { summary: {}, channels: [], pages: [], weeks: [], devices: [] };
   var section = 'summary';
   for (var i = 1; i < rows.length; i++) {
     var r = rows[i];
     if (r[0] === '---') { section = 'next'; continue; }
     if (section === 'next') {
-      if (r[0] === 'Channel') section = 'channels';
-      else if (r[0] === 'Page') section = 'pages';
-      else if (r[0] === 'Week') section = 'weeks';
-      else if (r[0] === 'Device') section = 'devices';
+      if (r[0] === 'Channel')      section = 'channels';
+      else if (r[0] === 'Page')    section = 'pages';
+      else if (r[0] === 'Week')    section = 'weeks';
+      else if (r[0] === 'Device')  section = 'devices';
       continue;
     }
-    if (section === 'summary') data.summary[r[0]] = r[1];
-    else if (section === 'channels') data.channels.push({name: r[0], sessions: parseInt(r[1])});
-    else if (section === 'pages') data.pages.push({path: r[0], views: parseInt(r[1]), bounce: r[2], duration: r[3]});
-    else if (section === 'weeks') data.weeks.push({week: r[0], sessions: parseInt(r[1])});
-    else if (section === 'devices') data.devices.push({device: r[0], sessions: parseInt(r[1])});
+    if (section === 'summary')       data.summary[r[0]] = r[1];
+    else if (section === 'channels') data.channels.push({ name: r[0], sessions: parseInt(r[1]) });
+    else if (section === 'pages')    data.pages.push({ path: r[0], views: parseInt(r[1]), bounce: r[2], duration: r[3] });
+    else if (section === 'weeks')    data.weeks.push({ week: r[0], sessions: parseInt(r[1]) });
+    else if (section === 'devices')  data.devices.push({ device: r[0], sessions: parseInt(r[1]) });
   }
   return data;
 }
 
-function updateDashboard(ga4) {
-  window._ga4data = ga4;
-
-  // Get selected date range from flatpickr
-  var dates = fp.selectedDates;
-  var startDate = dates[0] || new Date(2026, 3, 13);
-  var endDate = dates[1] || new Date();
-
-  // Filter daily data by date range
-  var filtered = (ga4.daily || []).filter(function(d) {
-    var dt = new Date(d.date + 'T00:00:00');
-    return dt >= startDate && dt <= endDate;
-  });
-
-  // If no daily data or no matches, fall back to aggregate
-  var filteredSessions = 0, filteredUsers = 0, filteredNewUsers = 0;
-  if (filtered.length > 0) {
-    filtered.forEach(function(d) { filteredSessions += d.sessions; filteredUsers += d.users; filteredNewUsers += d.newUsers; });
-  } else {
-    filteredSessions = parseInt(ga4.summary['Sessions']) || 0;
-    filteredUsers = parseInt(ga4.summary['Total Users']) || 0;
-    filteredNewUsers = parseInt(ga4.summary['New Users']) || 0;
-  }
-
-  // Update summary cards
-  var sessEl = document.querySelector('#live-sessions');
-  if (sessEl) sessEl.textContent = filteredSessions.toLocaleString();
-
-  var newPct = filteredUsers > 0 ? Math.round(filteredNewUsers / filteredUsers * 100) : 0;
-  var newPctEl = document.querySelector('#live-newpct');
-  if (newPctEl) newPctEl.textContent = newPct + '% first-time visitors';
-
-  var mobileTotal = 0, allDevices = 0;
-  ga4.devices.forEach(function(d) { allDevices += d.sessions; if (d.device === 'mobile') mobileTotal = d.sessions; });
-  var mobilePct = Math.round(mobileTotal / allDevices * 100);
-  var mobileEl = document.querySelector('#live-mobile');
-  if (mobileEl) mobileEl.textContent = mobilePct + '%';
-
-  // Update sessions over time chart with daily data
-  if (window.sessionsChart && filtered.length > 0) {
-    var dayLabels = filtered.map(function(d) { var parts = d.date.split('-'); return parts[1]+'/'+parts[2]; });
-    var dayData = filtered.map(function(d) { return d.sessions; });
-    window.sessionsChart.data.labels = dayLabels;
-    window.sessionsChart.data.datasets[0].data = dayData;
-    window.sessionsChart.update();
-  }
-
-  // Update traffic sources (proportional to filtered range)
-  if (window.sourcesChart) {
-    var srcLabels = ga4.channels.slice(0, 5).map(function(c) { return c.name; });
-    var totalSess = parseInt(ga4.summary['Sessions']) || 1;
-    var ratio = filteredSessions / totalSess;
-    var srcData = ga4.channels.slice(0, 5).map(function(c) { return Math.round(c.sessions * ratio); });
-    window.sourcesChart.data.labels = srcLabels;
-    window.sourcesChart.data.datasets[0].data = srcData;
-    window.sourcesChart.update();
-  }
-}
-
-// Fetch daily data for date filtering
-fetch(GA4_DAILY_CSV).then(function(r) { return r.text(); }).then(function(csv) {
-  var rows = parseCSV(csv);
-  var daily = [];
-  for (var i = 1; i < rows.length; i++) {
-    if (rows[i][0] && rows[i][0] !== '---') {
-      daily.push({date: rows[i][0], sessions: parseInt(rows[i][1])||0, users: parseInt(rows[i][2])||0, newUsers: parseInt(rows[i][3])||0, conversions: parseInt(rows[i][4])||0});
+fetch(csvUrl(SHEET.gids.daily))
+  .then(function(r){ return r.text(); })
+  .then(function(csv){
+    var rows = parseCSV(csv);
+    var daily = [];
+    for (var i = 1; i < rows.length; i++) {
+      if (rows[i][0] && rows[i][0] !== '---') {
+        daily.push({ date: rows[i][0], sessions: parseInt(rows[i][1])||0, users: parseInt(rows[i][2])||0, newUsers: parseInt(rows[i][3])||0, conversions: parseInt(rows[i][4])||0 });
+      }
     }
-  }
-  // Also fetch aggregate for channels/devices
-  return fetch(GA4_CSV).then(function(r2) { return r2.text(); }).then(function(csv2) {
-    var ga4 = parseGA4(parseCSV(csv2));
-    ga4.daily = daily;
-    updateDashboard(ga4);
-  });
-}).catch(function(e) { console.log('GA4 fetch error:', e); });
+    return fetch(csvUrl(SHEET.gids.aggregate)).then(function(r2){ return r2.text(); }).then(function(csv2){
+      var ga4 = parseGA4(parseCSV(csv2));
+      ga4.daily = daily;
+      window._ga4data = ga4;
+      applyDateRange();
+    });
+  })
+  .catch(function(e){ console.log('GA4 fetch error:', e); applyDateRange(); });
+
+// First render with inline data while GA4 fetch is in flight
+applyDateRange();
 </script>
 </body>
 </html>
