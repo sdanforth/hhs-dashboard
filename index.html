@@ -387,7 +387,7 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 // Last time the inline data values + appointment-log rows in this file
 // were refreshed from source-of-truth APIs (Alchemer, GBP, GA4 sheet).
 // Bump this whenever you edit the inline numbers so the header reflects it.
-var DATA_REFRESHED_AT = '2026-05-11T18:30:00-04:00';
+var DATA_REFRESHED_AT = '2026-05-11T18:55:00-04:00';
 (function showRefreshTs() {
   var el = document.getElementById('data-refresh-ts');
   if (!el) return;
@@ -673,7 +673,8 @@ function applyPaidVsOrganic(range, totalInquiries) {
 }
 
 // ── Provider Demand: count each provider's filtered appointment rows
-// directly from the appointment-log DOM (exact, not estimated). ──
+// directly from the appointment-log DOM (exact, not estimated), then
+// reorder the table rows by descending count so highest demand is on top. ──
 function applyProviderDemand(range, apptSum) {
   var rows = document.querySelectorAll('#appt-log tr[data-date]');
   var counts = { clever: 0, smiley: 0, nopref: 0, pyatt: 0, wiggins: 0 };
@@ -690,6 +691,20 @@ function applyProviderDemand(range, apptSum) {
     if ((el = document.getElementById('prov-' + k)))         el.textContent = counts[k];
     if ((el = document.getElementById('prov-' + k + '-bar'))) el.style.width = (counts[k] / maxCount * 100) + '%';
   });
+
+  // Reorder provider-table rows by descending count
+  var provTable = document.querySelector('.prov-table');
+  if (provTable) {
+    var tbody = provTable.tBodies[0] || provTable;
+    var rowMap = {};
+    Array.from(tbody.querySelectorAll('tr')).forEach(function(tr) {
+      var numEl = tr.querySelector('.prov-num[id^="prov-"]');
+      if (numEl) rowMap[numEl.id.replace('prov-', '')] = tr;
+    });
+    Object.keys(counts)
+      .sort(function(a, b){ return counts[b] - counts[a]; })
+      .forEach(function(key){ if (rowMap[key]) tbody.appendChild(rowMap[key]); });
+  }
 }
 
 // ── Google Ads stats (Channels tab): scale impressions/clicks/conversions
