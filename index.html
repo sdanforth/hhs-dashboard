@@ -387,12 +387,14 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 // Last time the inline data values + appointment-log rows in this file
 // were refreshed from source-of-truth APIs (Alchemer, GBP, GA4 sheet).
 // Bump this whenever you edit the inline numbers so the header reflects it.
-var DATA_REFRESHED_AT = '2026-05-11T19:15:00-04:00';
+var DATA_REFRESHED_AT = '2026-05-11T15:15:00-04:00'; // Eastern Time (Steve / Flint, MI)
 (function showRefreshTs() {
   var el = document.getElementById('data-refresh-ts');
   if (!el) return;
   var d = new Date(DATA_REFRESHED_AT);
-  el.textContent = 'Data refreshed ' + d.toLocaleDateString('en-US', {month:'short', day:'numeric'}) + ' at ' + d.toLocaleTimeString('en-US', {hour:'numeric', minute:'2-digit'});
+  var dateStr = d.toLocaleDateString('en-US', {month:'short', day:'numeric', timeZone: 'America/Detroit'});
+  var timeStr = d.toLocaleTimeString('en-US', {hour:'numeric', minute:'2-digit', timeZone: 'America/Detroit', timeZoneName: 'short'});
+  el.textContent = 'Data refreshed ' + dateStr + ' at ' + timeStr;
 })();
 
 // ─── CAMPAIGN CONFIG ────────────────────────────────────────────────
