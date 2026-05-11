@@ -387,7 +387,7 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 // Last time the inline data values + appointment-log rows in this file
 // were refreshed from source-of-truth APIs (Alchemer, GBP, GA4 sheet).
 // Bump this whenever you edit the inline numbers so the header reflects it.
-var DATA_REFRESHED_AT = '2026-05-11T15:35:00-04:00'; // Eastern Time (Steve / Flint, MI)
+var DATA_REFRESHED_AT = '2026-05-11T15:40:00-04:00'; // Eastern Time (Steve / Flint, MI)
 (function showRefreshTs() {
   var el = document.getElementById('data-refresh-ts');
   if (!el) return;
@@ -511,7 +511,10 @@ function pre(b, k) {
   }
   else if (k === '90d') { s = new Date(); s.setDate(today.getDate() - 90); }
   else                  { s = parseLocalDate(CAMPAIGN.launchDate); }
-  if (s) s.setHours(0, 0, 0, 0); // ensure same-day entries (data-date midnight) fall inside the range
+  if (s) s.setHours(0, 0, 0, 0); // same-day entries (data-date midnight) need to fall inside the range
+  // Never let the range start before the campaign launched.
+  var launchD = parseLocalDate(CAMPAIGN.launchDate);
+  if (s < launchD) s = launchD;
   fp.setDate([s, e]);
   applyDateRange();
 }
@@ -519,6 +522,7 @@ function pre(b, k) {
 var fp = flatpickr('#dr', {
   mode: 'range',
   dateFormat: 'M j, Y',
+  minDate: CAMPAIGN.launchDate, // block manual selection of pre-launch dates
   defaultDate: [ new Date(new Date().setDate(new Date().getDate() - 30)), new Date() ],
   onChange: function(){ setTimeout(applyDateRange, 50); }
 });
