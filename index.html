@@ -126,7 +126,7 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 <div class="wrap">
 <div class="hdr">
 <div><h1>HHS Obstetrics &amp; Gynecology Associates</h1><div class="hdr-sub">Clinic &amp; Provider Campaigns</div></div>
-<div class="hdr-ts"></div>
+<div class="hdr-ts"><span id="data-refresh-ts"></span></div>
 </div>
 
 <div class="ctrl">
@@ -277,15 +277,14 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 <div class="stat-item"><div class="stat-item-label">Conv. Rate</div><div class="stat-item-val" id="ads-convrate">2.1%</div></div>
 </div>
 <div class="sh">Landing Pages</div>
-<div class="sh-desc">Conversion performance by page.</div>
+<div class="sh-desc">Visits, bounce, and time-on-page for the three paid landing pages. <span style="color:#7a8794">(Appt + Phone Calls per LP pending the Apps Script extension that adds `landingPage` dimension to GA4_Events.)</span></div>
 <div class="box" style="margin-bottom:20px;overflow-x:auto">
 <table class="tbl">
-<thead><tr><th>Page</th><th class="r">Visits</th><th class="r">Bounce</th><th class="r">Time</th><th class="r">Appts</th><th class="r">Conv.</th></tr></thead>
+<thead><tr><th>Landing Page</th><th class="r">Visits</th><th class="r">Bounce</th><th class="r">Avg Time</th><th class="r">Appts</th><th class="r">Phone Calls</th></tr></thead>
 <tbody>
-<tr><td><strong>Women's Health &amp; OB/GYN</strong></td><td class="r em">529</td><td class="r">81.8%</td><td class="r">0:55</td><td class="r em">—</td><td class="r em">—</td></tr>
-<tr><td><strong>Genetic Counseling</strong></td><td class="r">369</td><td class="r">83.8%</td><td class="r">0:40</td><td class="r">—</td><td class="r">—</td></tr>
-<tr><td><strong>Appointment Form</strong></td><td class="r">134</td><td class="r">20%</td><td class="r">2:09</td><td class="r em">37</td><td class="r em">27.6%</td></tr>
-<tr><td><strong>Menopause &amp; Perimenopause</strong></td><td class="r">83</td><td class="r">57.3%</td><td class="r">1:00</td><td class="r">—</td><td class="r">—</td></tr>
+<tr><td><strong>Women's Health &amp; OB/GYN</strong> <span style="font-weight:400;color:#7a8794">/lp/womens-health</span></td><td class="r em">555</td><td class="r">81.9%</td><td class="r">0:54</td><td class="r em">—</td><td class="r em">—</td></tr>
+<tr><td><strong>Genetic Counseling</strong> <span style="font-weight:400;color:#7a8794">/lp/genetic-counseling</span></td><td class="r">398</td><td class="r">83.0%</td><td class="r">0:38</td><td class="r">—</td><td class="r">—</td></tr>
+<tr><td><strong>Menopause &amp; Perimenopause</strong> <span style="font-weight:400;color:#7a8794">/lp/menopause</span></td><td class="r">86</td><td class="r">56.6%</td><td class="r">1:01</td><td class="r">—</td><td class="r">—</td></tr>
 </tbody>
 </table>
 </div>
@@ -384,6 +383,18 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 </div>
 
 <script>
+// ─── DATA REFRESH TIMESTAMP ─────────────────────────────────────────
+// Last time the inline data values + appointment-log rows in this file
+// were refreshed from source-of-truth APIs (Alchemer, GBP, GA4 sheet).
+// Bump this whenever you edit the inline numbers so the header reflects it.
+var DATA_REFRESHED_AT = '2026-05-11T18:30:00-04:00';
+(function showRefreshTs() {
+  var el = document.getElementById('data-refresh-ts');
+  if (!el) return;
+  var d = new Date(DATA_REFRESHED_AT);
+  el.textContent = 'Data refreshed ' + d.toLocaleDateString('en-US', {month:'short', day:'numeric'}) + ' at ' + d.toLocaleTimeString('en-US', {hour:'numeric', minute:'2-digit'});
+})();
+
 // ─── CAMPAIGN CONFIG ────────────────────────────────────────────────
 // Per-campaign settings. To stand up a new service-line dashboard,
 // copy this file and replace this object (and the DATA block below).
