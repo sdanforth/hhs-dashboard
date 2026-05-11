@@ -34,7 +34,8 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 .qbtn{padding:6px 11px;font-size:11px;font-weight:700;color:#1E3E72;background:#fff;border:1px solid #cbd5e0;border-radius:6px;cursor:pointer;white-space:nowrap}
 .qbtn:hover{border-color:#1E3E72}
 .qbtn.on{background:#1E3E72;color:#fff;border-color:#1E3E72}
-.di{border:1px solid #cbd5e0;background:#fff;color:#2c3e50;font-size:12px;font-weight:600;padding:6px 10px;border-radius:6px;width:175px;cursor:pointer;text-align:center}
+.di{border:1px solid #cbd5e0;background:#fff url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2311A88A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='4' width='18' height='18' rx='2' ry='2'/><line x1='16' y1='2' x2='16' y2='6'/><line x1='8' y1='2' x2='8' y2='6'/><line x1='3' y1='10' x2='21' y2='10'/></svg>") no-repeat 9px center / 14px 14px,#fff url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237a8794' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>") no-repeat right 8px center / 12px 12px;color:#2c3e50;font-size:12px;font-weight:600;padding:6px 26px 6px 30px;border-radius:6px;width:220px;cursor:pointer;text-align:center;transition:border-color .12s,box-shadow .12s,background-color .12s}
+.di:hover{border-color:#11A88A;box-shadow:0 0 0 3px rgba(17,168,138,0.10)}
 .di:focus{border-color:#11A88A;outline:none}
 
 .pane{display:none}.pane.on{display:block}
@@ -141,7 +142,7 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 <button class="qbtn" onclick="pre(this,'lm')">Last Month</button>
 <button class="qbtn" onclick="pre(this,'90d')">90 Days</button>
 <button class="qbtn" onclick="pre(this,'all')">Since Launch</button>
-<input type="text" id="dr" class="di" placeholder="Custom range...">
+<input type="text" id="dr" class="di" placeholder="Pick a custom range" aria-label="Custom date range" readonly>
 </div>
 </div>
 
@@ -387,7 +388,7 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 // Last time the inline data values + appointment-log rows in this file
 // were refreshed from source-of-truth APIs (Alchemer, GBP, GA4 sheet).
 // Bump this whenever you edit the inline numbers so the header reflects it.
-var DATA_REFRESHED_AT = '2026-05-11T15:40:00-04:00'; // Eastern Time (Steve / Flint, MI)
+var DATA_REFRESHED_AT = '2026-05-11T15:42:00-04:00'; // Eastern Time (Steve / Flint, MI)
 (function showRefreshTs() {
   var el = document.getElementById('data-refresh-ts');
   if (!el) return;
