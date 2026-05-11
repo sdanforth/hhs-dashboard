@@ -387,7 +387,7 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 // Last time the inline data values + appointment-log rows in this file
 // were refreshed from source-of-truth APIs (Alchemer, GBP, GA4 sheet).
 // Bump this whenever you edit the inline numbers so the header reflects it.
-var DATA_REFRESHED_AT = '2026-05-11T15:30:00-04:00'; // Eastern Time (Steve / Flint, MI)
+var DATA_REFRESHED_AT = '2026-05-11T15:35:00-04:00'; // Eastern Time (Steve / Flint, MI)
 (function showRefreshTs() {
   var el = document.getElementById('data-refresh-ts');
   if (!el) return;
@@ -465,12 +465,36 @@ function getRange() {
 }
 
 // ─── TAB + PRESET CONTROLS ──────────────────────────────────────────
-function go(id) {
+// Tab IDs map to URL slugs so each tab is shareable: #channels, #detail.
+// Overview is default (no hash). Slugs are bidirectional with internal IDs.
+var TAB_SLUG = { exec: 'overview', chan: 'channels', deep: 'detail' };
+var SLUG_TAB = { overview: 'exec', channels: 'chan', detail: 'deep' };
+
+function go(id, opts) {
+  opts = opts || {};
   document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('on'); });
   document.querySelectorAll('.pane').forEach(function(p){ p.classList.remove('on'); });
-  event.target.classList.add('on');
-  document.getElementById('p-'+id).classList.add('on');
+  // Find the matching tab button by its onclick (so works both on click and on hash restore)
+  var btn = Array.prototype.slice.call(document.querySelectorAll('.tab')).find(function(b){
+    return (b.getAttribute('onclick') || '').indexOf("'" + id + "'") > -1;
+  });
+  if (btn) btn.classList.add('on');
+  var pane = document.getElementById('p-' + id);
+  if (pane) pane.classList.add('on');
+  if (!opts.fromHash) {
+    var slug = TAB_SLUG[id] || id;
+    var newHash = slug === 'overview' ? '' : '#' + slug;
+    history.replaceState(null, '', location.pathname + location.search + newHash);
+  }
 }
+
+function applyHashTab() {
+  var slug = (location.hash || '').replace('#', '').toLowerCase();
+  var id = SLUG_TAB[slug] || 'exec';
+  go(id, { fromHash: true });
+}
+window.addEventListener('hashchange', applyHashTab);
+applyHashTab();
 
 function pre(b, k) {
   b.parentElement.querySelectorAll('.qbtn').forEach(function(x){ x.classList.remove('on'); });
