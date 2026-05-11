@@ -51,9 +51,8 @@
  */
 
 // ─── CONFIG ──────────────────────────────────────────────────────────
-// GA4 property ID — the NUMERIC id (e.g. "381234567"), NOT the G-XXX
-// measurement id. Find it: GA4 → Admin → Property Settings → Property ID.
-var GA4_PROPERTY_ID = 'REPLACE_ME_GA4_NUMERIC_PROPERTY_ID';
+// GA4 property ID for hhs.hurleymc.com (numeric, not the G-XXX measurement id).
+var GA4_PROPERTY_ID = '366812419';
 
 // GBP location IDs. Numeric IDs from the Business Profile Manager.
 // (These are confirmed for the OB/GYN Healthcare Associates clinics.)
