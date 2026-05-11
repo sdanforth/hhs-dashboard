@@ -56,7 +56,7 @@ var ADDON_DAYS_LOOKBACK = 90;
 //     Logger.log('All data updated at ' + new Date().toISOString());
 //   }
 
-// ─── fetchGA4Events: per-day appointment + phone events × channel ─────
+// ─── fetchGA4Events: per-day appointment + phone events × channel × landingPage ─
 function fetchGA4Events() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var sheet = ss.getSheetByName('GA4_Events') || ss.insertSheet('GA4_Events');
@@ -70,7 +70,8 @@ function fetchGA4Events() {
     dimensions: [
       { name: 'date' },
       { name: 'eventName' },
-      { name: 'sessionDefaultChannelGroup' }
+      { name: 'sessionDefaultChannelGroup' },
+      { name: 'landingPage' }
     ],
     metrics: [{ name: 'eventCount' }],
     dimensionFilter: {
@@ -83,7 +84,7 @@ function fetchGA4Events() {
     limit: 10000
   }, 'properties/' + GA4_PROPERTY_ID); // GA4_PROPERTY_ID already declared at top of v4
 
-  sheet.appendRow(['date', 'eventName', 'channel', 'count']);
+  sheet.appendRow(['date', 'eventName', 'channel', 'landingPage', 'count']);
   if (report.rows) {
     report.rows.forEach(function(r) {
       var d = r.dimensionValues[0].value;
@@ -91,6 +92,7 @@ function fetchGA4Events() {
         d.substring(0,4) + '-' + d.substring(4,6) + '-' + d.substring(6,8),
         r.dimensionValues[1].value,
         r.dimensionValues[2].value,
+        r.dimensionValues[3].value,
         parseInt(r.metricValues[0].value) || 0
       ]);
     });
