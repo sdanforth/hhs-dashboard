@@ -41,20 +41,25 @@ var GBP_LOCATIONS_ADDON = [
 // How many days back the GBP + Events refresh should pull on each run.
 var ADDON_DAYS_LOOKBACK = 90;
 
-// ─── INTEGRATE WITH EXISTING fetchAllData ─────────────────────────────
-// Replace your existing fetchAllData() with this version (or just add the
-// three new function calls inside the existing one):
-//
-//   function fetchAllData() {
-//     fetchGA4Daily();
-//     fetchGA4Channels();
-//     fetchGA4Pages();
-//     fetchShortIoClicks();
-//     fetchGA4Events();         // <-- new
-//     fetchGBPDaily();          // <-- new
-//     fetchAlchemerResponses(); // <-- new
-//     Logger.log('All data updated at ' + new Date().toISOString());
-//   }
+// ─── STANDALONE TRIGGER (doesn't touch your existing v4 fetchAllData) ─
+// Calls all three new extension functions. Install once via setupExtensionsTrigger().
+function fetchExtensions() {
+  try { fetchGA4Events(); }         catch (e) { Logger.log('fetchGA4Events failed: ' + e); }
+  try { fetchGBPDaily(); }          catch (e) { Logger.log('fetchGBPDaily failed: ' + e); }
+  try { fetchAlchemerResponses(); } catch (e) { Logger.log('fetchAlchemerResponses failed: ' + e); }
+  Logger.log('Extensions refreshed at ' + new Date().toISOString());
+}
+
+// One-time setup. Run this once after pasting. Installs a daily 4am trigger
+// and immediately runs fetchExtensions() so the three new tabs get populated.
+function setupExtensionsTrigger() {
+  ScriptApp.getProjectTriggers().forEach(function(t) {
+    if (t.getHandlerFunction() === 'fetchExtensions') ScriptApp.deleteTrigger(t);
+  });
+  ScriptApp.newTrigger('fetchExtensions').timeBased().atHour(4).everyDays(1).create();
+  Logger.log('Daily 4am trigger installed for fetchExtensions.');
+  fetchExtensions(); // run once now so the tabs exist
+}
 
 // ─── fetchGA4Events: per-day appointment + phone events × channel × landingPage ─
 function fetchGA4Events() {
