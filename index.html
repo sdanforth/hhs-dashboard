@@ -144,10 +144,10 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 <div class="date-ctrl">
 <span class="date-ctrl-label"><svg viewBox="0 0 24 24"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>Date range</span>
 <button class="qbtn" onclick="pre(this,'7d')">This Week</button>
-<button class="qbtn on" onclick="pre(this,'30d')">This Month</button>
+<button class="qbtn" onclick="pre(this,'30d')">This Month</button>
 <button class="qbtn" onclick="pre(this,'lm')">Last Month</button>
 <button class="qbtn" onclick="pre(this,'90d')">90 Days</button>
-<button class="qbtn" onclick="pre(this,'all')">Since Launch</button>
+<button class="qbtn on" onclick="pre(this,'all')">Since Launch</button>
 <input type="text" id="dr" class="di" placeholder="Pick a custom range" aria-label="Custom date range" readonly>
 </div>
 </div>
@@ -394,7 +394,7 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 // Last time the inline data values + appointment-log rows in this file
 // were refreshed from source-of-truth APIs (Alchemer, GBP, GA4 sheet).
 // Bump this whenever you edit the inline numbers so the header reflects it.
-var DATA_REFRESHED_AT = '2026-05-12T09:30:00-04:00'; // Eastern Time (Steve / Flint, MI)
+var DATA_REFRESHED_AT = '2026-05-12T09:35:00-04:00'; // Eastern Time (Steve / Flint, MI)
 (function showRefreshTs() {
   var el = document.getElementById('data-refresh-ts');
   if (!el) return;
@@ -530,7 +530,7 @@ var fp = flatpickr('#dr', {
   mode: 'range',
   dateFormat: 'M j, Y',
   minDate: CAMPAIGN.launchDate, // block manual selection of pre-launch dates
-  defaultDate: [ new Date(new Date().setDate(new Date().getDate() - 30)), new Date() ],
+  defaultDate: [ CAMPAIGN.launchDate, new Date() ], // Since Launch = the default range
   onChange: function(){ setTimeout(applyDateRange, 50); }
 });
 
