@@ -146,12 +146,8 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 <div class="hdr-ts"><span id="data-refresh-ts"></span></div>
 </div>
 
-<div class="ctrl-help">
-<b>How to use:</b> Click a <b>green button</b> below to switch between Overview, Channels, and Detail. Pick a <b>date range on the right</b> to change what timeframe you're viewing.
-</div>
 <div class="ctrl">
 <div class="tabs-group">
-<span class="tabs-group-label">View:</span>
 <nav class="tabs" role="tablist" aria-label="Dashboard sections">
 <button class="tab on" role="tab" onclick="go('exec')"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>Overview</button>
 <button class="tab" role="tab" onclick="go('chan')"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="3" y1="20" x2="21" y2="20"/></svg>Channels</button>
@@ -414,7 +410,7 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 // Last time the inline data values + appointment-log rows in this file
 // were refreshed from source-of-truth APIs (Alchemer, GBP, GA4 sheet).
 // Bump this whenever you edit the inline numbers so the header reflects it.
-var DATA_REFRESHED_AT = '2026-05-12T10:10:00-04:00'; // Eastern Time (Steve / Flint, MI)
+var DATA_REFRESHED_AT = '2026-05-12T10:20:00-04:00'; // Eastern Time (Steve / Flint, MI)
 (function showRefreshTs() {
   var el = document.getElementById('data-refresh-ts');
   if (!el) return;
@@ -805,23 +801,21 @@ function applyChannels(range) {
   // CTR and Conv. Rate are ratios — unchanged by date range.
 }
 
-// ── Detail tab: filter the appointment-request log rows by date,
-// renumber the visible rows, and respect the current sort. ──
+// ── Detail tab: appointment-request log is the COMPLETE record of every
+// submission Alchemer has captured. Always show all rows (don't filter by
+// date), but tell the reader how many fall in the currently selected range. ──
 function applyDetail(range) {
   var rows = document.querySelectorAll('#appt-log tr[data-date]');
-  var shown = 0, total = rows.length, n = 1;
+  var inRange = 0, total = rows.length, n = 1;
   rows.forEach(function(r){
     var d = parseLocalDate(r.getAttribute('data-date'));
-    var inRange = d >= range.start && d <= range.end;
-    r.style.display = inRange ? '' : 'none';
-    if (inRange) {
-      shown++;
-      var numCell = r.querySelector('.num');
-      if (numCell) numCell.textContent = n++;
-    }
+    r.style.display = ''; // always visible
+    var numCell = r.querySelector('.num');
+    if (numCell) numCell.textContent = n++;
+    if (d >= range.start && d <= range.end) inRange++;
   });
   var footer = document.getElementById('appt-log-footer');
-  if (footer) footer.textContent = 'Showing ' + shown + ' of ' + total + ' requests in the selected range.';
+  if (footer) footer.textContent = 'All ' + total + ' appointment requests (' + inRange + ' fall within the selected date range).';
 }
 
 // ── Sortable appointment-log columns ──
