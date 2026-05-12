@@ -300,7 +300,7 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 <div class="stat-item"><div class="stat-item-label">Conv. Rate</div><div class="stat-item-val" id="ads-convrate">2.1%</div></div>
 </div>
 <div class="sh">Landing Pages</div>
-<div class="sh-desc">Visits, bounce, and time-on-page for the three paid landing pages.</div>
+<div class="sh-desc">Visits, bounce, and time-on-page for the three paid landing pages. <span style="color:#7a8794">(Per-LP Appt + Phone attribution requires marking <code>appointment_request</code> + <code>phone_call_click</code> as Key Events in GA4 Admin, or the Apps Script extension that adds a landingPage dimension to event counts.)</span></div>
 <div class="box" style="margin-bottom:20px;overflow-x:auto">
 <table class="tbl">
 <thead><tr><th>Landing Page</th><th class="r">Visits</th><th class="r">Bounce</th><th class="r">Avg Time</th><th class="r">Appts</th><th class="r">Phone Calls</th></tr></thead>
@@ -314,9 +314,9 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 <div class="sh">Budget Allocation</div>
 <div class="sh-desc">Spend weighting across service lines.</div>
 <div class="stat-row">
-<div class="stat-item"><div class="stat-item-label">Women's Health</div><div class="stat-item-val">60%</div><div class="stat-item-note">Highest demand</div></div>
-<div class="stat-item"><div class="stat-item-label">Menopause</div><div class="stat-item-val">30%</div><div class="stat-item-note">Strong conversion</div></div>
-<div class="stat-item"><div class="stat-item-label">Genetic Counseling</div><div class="stat-item-val">10%</div><div class="stat-item-note">Needs LP optimization</div></div>
+<div class="stat-item"><div class="stat-item-label">Women's Health</div><div class="stat-item-val">60%</div></div>
+<div class="stat-item"><div class="stat-item-label">Menopause</div><div class="stat-item-val">30%</div></div>
+<div class="stat-item"><div class="stat-item-label">Genetic Counseling</div><div class="stat-item-val">10%</div></div>
 </div>
 </div>
 
@@ -406,7 +406,7 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 // Last time the inline data values + appointment-log rows in this file
 // were refreshed from source-of-truth APIs (Alchemer, GBP, GA4 sheet).
 // Bump this whenever you edit the inline numbers so the header reflects it.
-var DATA_REFRESHED_AT = '2026-05-12T10:30:00-04:00'; // Eastern Time (Steve / Flint, MI)
+var DATA_REFRESHED_AT = '2026-05-12T10:55:00-04:00'; // Eastern Time (Steve / Flint, MI)
 (function showRefreshTs() {
   var el = document.getElementById('data-refresh-ts');
   if (!el) return;
