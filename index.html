@@ -24,16 +24,21 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 .hdr-ts{font-size:12px;color:#b8d4ed}
 
 /* Controls */
-.ctrl{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:16px;flex-wrap:wrap}
-.tabs{display:flex;border:2px solid #1E3E72;border-radius:8px;overflow:hidden}
-.tab{padding:8px 20px;font-size:13px;font-weight:700;color:#1E3E72;background:#fff;border:none;cursor:pointer}
-.tab:not(:last-child){border-right:2px solid #1E3E72}
-.tab:hover{background:#e8f4f8}
-.tab.on{background:#1E3E72;color:#fff}
-.date-ctrl{display:flex;align-items:center;gap:4px;flex-wrap:wrap}
-.qbtn{padding:6px 11px;font-size:11px;font-weight:700;color:#1E3E72;background:#fff;border:1px solid #cbd5e0;border-radius:6px;cursor:pointer;white-space:nowrap}
-.qbtn:hover{border-color:#1E3E72}
-.qbtn.on{background:#1E3E72;color:#fff;border-color:#1E3E72}
+.ctrl{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin-bottom:16px;flex-wrap:wrap}
+/* Tabs — underline-active style, reads clearly as section navigation */
+.tabs{display:inline-flex;gap:4px;border-bottom:2px solid #e3e8ee;align-items:flex-end}
+.tab{position:relative;padding:11px 18px 12px;font-size:15px;font-weight:700;color:#7a8794;background:transparent;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:8px;margin-bottom:-2px;border-bottom:3px solid transparent;transition:color .12s,border-color .12s}
+.tab svg{width:16px;height:16px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.tab:hover{color:#1E3E72}
+.tab.on{color:#11A88A;border-bottom-color:#11A88A}
+/* Date filter — clearly labeled, soft container, teal active */
+.date-ctrl{display:flex;align-items:center;gap:6px;flex-wrap:wrap;background:#f3f5f7;border:1px solid #e3e8ee;border-radius:10px;padding:6px 10px 6px 12px}
+.date-ctrl-label{font-size:10px;font-weight:800;color:#7a8794;text-transform:uppercase;letter-spacing:.5px;margin-right:4px;display:inline-flex;align-items:center;gap:5px}
+.date-ctrl-label svg{width:13px;height:13px;stroke:#7a8794;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.qbtn{padding:6px 11px;font-size:11px;font-weight:700;color:#1E3E72;background:#fff;border:1px solid #cbd5e0;border-radius:6px;cursor:pointer;white-space:nowrap;transition:all .12s}
+.qbtn:hover{border-color:#11A88A;color:#11A88A}
+.qbtn.on{background:#11A88A;color:#fff;border-color:#11A88A;box-shadow:0 1px 3px rgba(17,168,138,.25)}
+.qbtn.on:hover{color:#fff;background:#0f9078;border-color:#0f9078}
 .di{border:1px solid #cbd5e0;background:#fff url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2311A88A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='4' width='18' height='18' rx='2' ry='2'/><line x1='16' y1='2' x2='16' y2='6'/><line x1='8' y1='2' x2='8' y2='6'/><line x1='3' y1='10' x2='21' y2='10'/></svg>") no-repeat 9px center / 14px 14px,#fff url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237a8794' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>") no-repeat right 8px center / 12px 12px;color:#2c3e50;font-size:12px;font-weight:600;padding:6px 26px 6px 30px;border-radius:6px;width:220px;cursor:pointer;text-align:center;transition:border-color .12s,box-shadow .12s,background-color .12s}
 .di:hover{border-color:#11A88A;box-shadow:0 0 0 3px rgba(17,168,138,0.10)}
 .di:focus{border-color:#11A88A;outline:none}
@@ -120,7 +125,7 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 .acc.open .acc-arrow{transform:rotate(180deg)}
 .ftr{text-align:center;padding:24px;font-size:11px;color:#697386}
 @media(max-width:900px){.g2{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:600px){.wrap{padding:12px}.metrics{grid-template-columns:1fr}.ctrl{flex-direction:column;align-items:stretch}.date-ctrl{justify-content:flex-start}.hdr{flex-direction:column;text-align:center}.stat-row{flex-direction:column}.prov-barwrap{width:50px}.tabs{width:100%}.tab{flex:1;text-align:center;padding:8px 8px;font-size:12px}.tbl{font-size:11px}.tbl th,.tbl td{padding:8px 5px}.box{overflow-x:auto}}
+@media(max-width:600px){.wrap{padding:12px}.metrics{grid-template-columns:1fr}.ctrl{flex-direction:column;align-items:stretch}.date-ctrl{justify-content:flex-start}.hdr{flex-direction:column;text-align:center}.stat-row{flex-direction:column}.prov-barwrap{width:50px}.tabs{width:100%;justify-content:space-between}.tab{flex:1;justify-content:center;padding:10px 8px;font-size:13px;gap:6px}.tab svg{width:14px;height:14px}.tbl{font-size:11px}.tbl th,.tbl td{padding:8px 5px}.box{overflow-x:auto}}
 </style>
 </head>
 <body>
@@ -131,12 +136,13 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 </div>
 
 <div class="ctrl">
-<div class="tabs">
-<button class="tab on" onclick="go('exec')">Overview</button>
-<button class="tab" onclick="go('chan')">Channels</button>
-<button class="tab" onclick="go('deep')">Detail</button>
-</div>
+<nav class="tabs" role="tablist" aria-label="Dashboard sections">
+<button class="tab on" role="tab" onclick="go('exec')"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>Overview</button>
+<button class="tab" role="tab" onclick="go('chan')"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="3" y1="20" x2="21" y2="20"/></svg>Channels</button>
+<button class="tab" role="tab" onclick="go('deep')"><svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>Detail</button>
+</nav>
 <div class="date-ctrl">
+<span class="date-ctrl-label"><svg viewBox="0 0 24 24"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>Date range</span>
 <button class="qbtn" onclick="pre(this,'7d')">This Week</button>
 <button class="qbtn on" onclick="pre(this,'30d')">This Month</button>
 <button class="qbtn" onclick="pre(this,'lm')">Last Month</button>
@@ -388,7 +394,7 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 // Last time the inline data values + appointment-log rows in this file
 // were refreshed from source-of-truth APIs (Alchemer, GBP, GA4 sheet).
 // Bump this whenever you edit the inline numbers so the header reflects it.
-var DATA_REFRESHED_AT = '2026-05-11T15:57:00-04:00'; // Eastern Time (Steve / Flint, MI)
+var DATA_REFRESHED_AT = '2026-05-12T09:30:00-04:00'; // Eastern Time (Steve / Flint, MI)
 (function showRefreshTs() {
   var el = document.getElementById('data-refresh-ts');
   if (!el) return;
