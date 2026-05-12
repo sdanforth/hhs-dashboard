@@ -24,14 +24,25 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 .hdr-ts{font-size:12px;color:#b8d4ed}
 
 /* Controls */
-.ctrl{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin-bottom:16px;flex-wrap:wrap}
-/* Tabs — underline-active style, reads clearly as section navigation */
-.tabs{display:inline-flex;gap:4px;border-bottom:2px solid #e3e8ee;align-items:flex-end}
-.tab{position:relative;padding:11px 18px 12px;font-size:15px;font-weight:700;color:#7a8794;background:transparent;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:8px;margin-bottom:-2px;border-bottom:3px solid transparent;transition:color .12s,border-color .12s}
+/* Executive-friendly intro line + spacious control row */
+.ctrl-help{margin:4px 0 10px;font-size:13px;color:#3c4257;line-height:1.5;background:#f3f5f7;border-left:3px solid #11A88A;border-radius:0 6px 6px 0;padding:8px 12px}
+.ctrl-help b{color:#1E3E72}
+.ctrl{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:10px;flex-wrap:wrap}
+
+/* Tabs — filled-pill style (unambiguously "buttons" for non-dashboard folks) */
+.tabs-group{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.tabs-group-label{font-size:11px;font-weight:800;color:#7a8794;text-transform:uppercase;letter-spacing:.6px;white-space:nowrap}
+.tabs{display:inline-flex;gap:6px;flex-wrap:wrap}
+.tab{padding:10px 18px;font-size:14px;font-weight:700;color:#1E3E72;background:#fff;border:2px solid #cbd5e0;border-radius:999px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:all .12s;line-height:1}
 .tab svg{width:16px;height:16px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
-.tab:hover{color:#1E3E72}
-.tab.on{color:#11A88A;border-bottom-color:#11A88A}
-/* Date filter — clearly labeled, soft container, teal active */
+.tab:hover{border-color:#11A88A;color:#11A88A;transform:translateY(-1px)}
+.tab.on{background:#11A88A;color:#fff;border-color:#11A88A;box-shadow:0 2px 8px rgba(17,168,138,.32)}
+.tab.on:hover{background:#0f9078;border-color:#0f9078;color:#fff}
+
+/* Date filter — clearly labeled, soft container, plain-English caption */
+.date-ctrl-wrap{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.date-summary{font-size:13px;color:#3c4257;line-height:1.3;text-align:right;font-weight:500}
+.date-summary b{color:#1E3E72;font-weight:800}
 .date-ctrl{display:flex;align-items:center;gap:6px;flex-wrap:wrap;background:#f3f5f7;border:1px solid #e3e8ee;border-radius:10px;padding:6px 10px 6px 12px}
 .date-ctrl-label{font-size:10px;font-weight:800;color:#7a8794;text-transform:uppercase;letter-spacing:.5px;margin-right:4px;display:inline-flex;align-items:center;gap:5px}
 .date-ctrl-label svg{width:13px;height:13px;stroke:#7a8794;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
@@ -135,12 +146,20 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 <div class="hdr-ts"><span id="data-refresh-ts"></span></div>
 </div>
 
+<div class="ctrl-help">
+<b>How to use:</b> Click a <b>green button</b> below to switch between Overview, Channels, and Detail. Pick a <b>date range on the right</b> to change what timeframe you're viewing.
+</div>
 <div class="ctrl">
+<div class="tabs-group">
+<span class="tabs-group-label">View:</span>
 <nav class="tabs" role="tablist" aria-label="Dashboard sections">
 <button class="tab on" role="tab" onclick="go('exec')"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>Overview</button>
 <button class="tab" role="tab" onclick="go('chan')"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="3" y1="20" x2="21" y2="20"/></svg>Channels</button>
 <button class="tab" role="tab" onclick="go('deep')"><svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>Detail</button>
 </nav>
+</div>
+<div class="date-ctrl-wrap">
+<div class="date-summary">Showing data from <b id="date-summary-text">campaign launch through today</b></div>
 <div class="date-ctrl">
 <span class="date-ctrl-label"><svg viewBox="0 0 24 24"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>Date range</span>
 <button class="qbtn" onclick="pre(this,'7d')">This Week</button>
@@ -149,6 +168,7 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 <button class="qbtn" onclick="pre(this,'90d')">90 Days</button>
 <button class="qbtn on" onclick="pre(this,'all')">Since Launch</button>
 <input type="text" id="dr" class="di" placeholder="Pick a custom range" aria-label="Custom date range" readonly>
+</div>
 </div>
 </div>
 
@@ -394,7 +414,7 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 // Last time the inline data values + appointment-log rows in this file
 // were refreshed from source-of-truth APIs (Alchemer, GBP, GA4 sheet).
 // Bump this whenever you edit the inline numbers so the header reflects it.
-var DATA_REFRESHED_AT = '2026-05-12T09:55:00-04:00'; // Eastern Time (Steve / Flint, MI)
+var DATA_REFRESHED_AT = '2026-05-12T10:10:00-04:00'; // Eastern Time (Steve / Flint, MI)
 (function showRefreshTs() {
   var el = document.getElementById('data-refresh-ts');
   if (!el) return;
@@ -530,7 +550,7 @@ var fp = flatpickr('#dr', {
   mode: 'range',
   dateFormat: 'M j, Y',
   minDate: CAMPAIGN.launchDate, // block manual selection of pre-launch dates
-  defaultDate: [ CAMPAIGN.launchDate, new Date() ], // Since Launch = the default range
+  defaultDate: [ parseLocalDate(CAMPAIGN.launchDate), new Date() ], // Since Launch = the default range
   onChange: function(){ setTimeout(applyDateRange, 50); }
 });
 
@@ -607,6 +627,26 @@ function applyDateRange() {
   applyGbp(range);
   applyChannels(range);
   applyDetail(range);
+  applyDateSummary(range);
+}
+
+// "Showing data from [plain-English range]" — execs need to read what they're seeing.
+function applyDateSummary(range) {
+  var el = document.getElementById('date-summary-text');
+  if (!el) return;
+  var fmt = function(d) {
+    return d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'America/Detroit' });
+  };
+  var launchDate = parseLocalDate(CAMPAIGN.launchDate);
+  var today = new Date(); today.setHours(0, 0, 0, 0);
+  var sameDay = function(a, b) { return a.toDateString() === b.toDateString(); };
+  var label;
+  if (sameDay(range.start, launchDate) && range.end >= today) {
+    label = 'campaign launch (' + fmt(launchDate) + ') through today';
+  } else {
+    label = fmt(range.start) + ' through ' + fmt(range.end);
+  }
+  el.textContent = label;
 }
 
 // ── Inquiries: cards + weekly chart ──
