@@ -17,16 +17,16 @@
  * Paste at the bottom of Code.gs in the "HHS Updates" Apps Script project.
  *
  * STATUS (2026-05-18):
- *   ✅ Legacy "Analytics" service removed from the project (was blocking saves).
- *   ✅ Extensions.gs saved + parsed. All 5 functions visible in Run dropdown.
- *   ✅ Ran fetchExtensions once: GA4_Events tab populated (115 rows, 90-day lookback).
- *   ✅ GA4_Events published to web (gid 391561072). Wired into CAMPAIGN.sheet.gids.
- *   ⏳ setupExtensionsTrigger NOT yet run — nightly 4am trigger not installed.
- *   ⏳ GBP_Daily empty: 403 PERMISSION_DENIED because business.manage scope missing.
- *   ⏳ Alchemer_Responses empty: ALCHEMER_API_KEY + SECRET still REPLACE_ME.
+ *   [x] Legacy "Analytics" service removed from the project (was blocking saves).
+ *   [x] Extensions.gs saved + parsed. All 5 functions visible in Run dropdown.
+ *   [x] Ran fetchExtensions once: GA4_Events tab populated (115 rows, 90-day lookback).
+ *   [x] GA4_Events published to web (gid 391561072). Wired into CAMPAIGN.sheet.gids.
+ *   [ ] setupExtensionsTrigger NOT yet run — nightly 4am trigger not installed.
+ *   [ ] GBP_Daily empty: 403 PERMISSION_DENIED because business.manage scope missing.
+ *   [ ] Alchemer_Responses empty: ALCHEMER_API_KEY + SECRET still REPLACE_ME.
  *
  * Remaining setup steps for Steve to finish:
- *   1. Add OAuth scope for GBP. Project Settings → tick "Show appsscript.json".
+ *   1. Add OAuth scope for GBP. Project Settings -> tick "Show appsscript.json".
  *      Open appsscript.json (now in file list) and replace its current content
  *      with this — IMPORTANT: oauthScopes REPLACES auto-detection, so all
  *      already-used scopes must be listed:
@@ -47,20 +47,27 @@
  *          "https://www.googleapis.com/auth/business.manage"
  *        ]
  *      }
- *   2. Set ALCHEMER_API_KEY + ALCHEMER_API_SECRET below (Account → Security →
- *      API Access in Alchemer; the existing key from Sep 2016 works).
+ *   2. Set Alchemer keys via Project Settings -> Script Properties -> add:
+ *        ALCHEMER_API_KEY    = <key from app.alchemer.com -> Account -> Security -> API Access>
+ *        ALCHEMER_API_SECRET = <secret from same page>
+ *      (Keys live in script properties, not source code — won't end up in git.)
  *   3. Select setupExtensionsTrigger in the function dropdown, click Run.
  *      Authorize the new scopes when prompted. This installs the 4am ET nightly
  *      trigger and runs once immediately so all 3 tabs get populated.
- *   4. Publish to web → add GBP_Daily + Alchemer_Responses to the published list.
+ *   4. Publish to web -> add GBP_Daily + Alchemer_Responses to the published list.
  *      (GA4_Events already published 2026-05-18 — gid 391561072.)
  *   5. Send me the gids for GBP_Daily + Alchemer_Responses; I'll wire them into
  *      CAMPAIGN.sheet.gids.
  */
 
-// ─── ADD-ON CONFIG ────────────────────────────────────────────────────
-var ALCHEMER_API_KEY    = 'REPLACE_ME_ALCHEMER_KEY';
-var ALCHEMER_API_SECRET = 'REPLACE_ME_ALCHEMER_SECRET';
+// --- ADD-ON CONFIG ----------------------------------------------------
+// Alchemer keys live in Project Settings -> Script Properties (NOT in source
+// code, so they don't end up committed in the dashboard repo).
+// One-time setup: open Project Settings, scroll to "Script Properties",
+// click "Add script property" twice and add:
+//   ALCHEMER_API_KEY    = <your Alchemer API key>
+//   ALCHEMER_API_SECRET = <your Alchemer API secret>
+// (Get both from app.alchemer.com -> Account -> Security -> API Access.)
 var ALCHEMER_SURVEY_ID  = '8781626'; // HHS: Request an Appointment
 
 var GBP_LOCATIONS_ADDON = [
@@ -71,7 +78,7 @@ var GBP_LOCATIONS_ADDON = [
 // How many days back the GBP + Events refresh should pull on each run.
 var ADDON_DAYS_LOOKBACK = 90;
 
-// ─── STANDALONE TRIGGER (doesn't touch your existing v4 fetchAllData) ─
+// --- STANDALONE TRIGGER (doesn't touch your existing v4 fetchAllData) -
 // Calls all three new extension functions. Install once via setupExtensionsTrigger().
 function fetchExtensions() {
   try { fetchGA4Events(); }         catch (e) { Logger.log('fetchGA4Events failed: ' + e); }
@@ -91,7 +98,7 @@ function setupExtensionsTrigger() {
   fetchExtensions(); // run once now so the tabs exist
 }
 
-// ─── fetchGA4Events: per-day appointment + phone events × channel × landingPage ─
+// --- fetchGA4Events: per-day appointment + phone events × channel × landingPage -
 function fetchGA4Events() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var sheet = ss.getSheetByName('GA4_Events') || ss.insertSheet('GA4_Events');
@@ -136,7 +143,7 @@ function fetchGA4Events() {
   Logger.log('GA4_Events: ' + (report.rows ? report.rows.length : 0) + ' rows');
 }
 
-// ─── fetchGBPDaily: per-day per-location GBP Performance metrics ──────
+// --- fetchGBPDaily: per-day per-location GBP Performance metrics ------
 function fetchGBPDaily() {
   var headers = ['date', 'location_id', 'location_name',
                  'impressions_search_mobile', 'impressions_search_desktop',
@@ -213,10 +220,13 @@ function fetchGBPDaily() {
   Logger.log('GBP_Daily: ' + totalRows + ' rows');
 }
 
-// ─── fetchAlchemerResponses: pull all completed survey responses ──────
+// --- fetchAlchemerResponses: pull all completed survey responses ------
 function fetchAlchemerResponses() {
-  if (ALCHEMER_API_KEY.indexOf('REPLACE_ME') === 0) {
-    Logger.log('Alchemer keys not set — skipping. Edit the script and fill ALCHEMER_API_KEY + ALCHEMER_API_SECRET.');
+  var props = PropertiesService.getScriptProperties();
+  var apiKey = props.getProperty('ALCHEMER_API_KEY');
+  var apiSecret = props.getProperty('ALCHEMER_API_SECRET');
+  if (!apiKey || !apiSecret) {
+    Logger.log('Alchemer keys not set — skipping. Project Settings -> Script Properties -> add ALCHEMER_API_KEY + ALCHEMER_API_SECRET.');
     return;
   }
   var ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -229,8 +239,8 @@ function fetchAlchemerResponses() {
     var url = 'https://api.alchemer.com/v5/survey/' + ALCHEMER_SURVEY_ID + '/surveyresponse' +
               '?resultsperpage=100&page=' + page +
               '&filter[field][0]=status&filter[operator][0]==&filter[value][0]=Complete' +
-              '&api_token=' + encodeURIComponent(ALCHEMER_API_KEY) +
-              '&api_token_secret=' + encodeURIComponent(ALCHEMER_API_SECRET);
+              '&api_token=' + encodeURIComponent(apiKey) +
+              '&api_token_secret=' + encodeURIComponent(apiSecret);
     var resp = UrlFetchApp.fetch(url, { muteHttpExceptions: true });
     if (resp.getResponseCode() !== 200) { Logger.log('Alchemer fetch failed: ' + resp.getContentText().substring(0,300)); break; }
     var j = JSON.parse(resp.getContentText());
@@ -249,5 +259,5 @@ function fetchAlchemerResponses() {
   Logger.log('Alchemer_Responses: ' + total + ' rows');
 }
 
-// ─── helper ─────────────────────────────────────────────────────────
+// --- helper ---------------------------------------------------------
 function pad2(n) { return n < 10 ? '0' + n : '' + n; }
