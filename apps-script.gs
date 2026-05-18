@@ -16,29 +16,46 @@
  * THIS FILE = three drop-in functions + a one-line addition to fetchAllData().
  * Paste at the bottom of Code.gs in the "HHS Updates" Apps Script project.
  *
- * ⚠️ KNOWN ISSUE (2026-05-18): the "HHS Updates" project has a stale
- * legacy "Analytics" service binding ("Unreachable Service: analytics"
- * toast). That binding blocks the Apps Script editor's Save action
- * silently — POSTs return 200 but the project flag stays "Unsaved".
- * To complete this extension setup, Steve will need to either:
- *   (a) Remove the legacy "Analytics" service from the left sidebar
- *       Services list (Code.gs uses "AnalyticsData", which is separate
- *       and stays), then save Extensions.gs; OR
- *   (b) Paste Extensions.gs content directly via clasp / Apps Script API.
- * Until that's resolved, the dashboard pulls GBP / GA4_Events / Alchemer
- * data manually (see project page in wiki for the refresh procedure).
+ * STATUS (2026-05-18):
+ *   ✅ Legacy "Analytics" service removed from the project (was blocking saves).
+ *   ✅ Extensions.gs saved + parsed. All 5 functions visible in Run dropdown.
+ *   ✅ Ran fetchExtensions once: GA4_Events tab populated (115 rows, 90-day lookback).
+ *   ✅ GA4_Events published to web (gid 391561072). Wired into CAMPAIGN.sheet.gids.
+ *   ⏳ setupExtensionsTrigger NOT yet run — nightly 4am trigger not installed.
+ *   ⏳ GBP_Daily empty: 403 PERMISSION_DENIED because business.manage scope missing.
+ *   ⏳ Alchemer_Responses empty: ALCHEMER_API_KEY + SECRET still REPLACE_ME.
  *
- * Required setup beyond what's already in place:
- *   1. Resolve the Unreachable Service issue above so saves persist.
- *   2. Add a new OAuth scope for GBP. Open Project Settings → tick
- *      "Show appsscript.json", and add to the oauthScopes array:
- *        "https://www.googleapis.com/auth/business.manage"
- *   3. Set ALCHEMER_API_KEY + ALCHEMER_API_SECRET below (Account → Security →
+ * Remaining setup steps for Steve to finish:
+ *   1. Add OAuth scope for GBP. Project Settings → tick "Show appsscript.json".
+ *      Open appsscript.json (now in file list) and replace its current content
+ *      with this — IMPORTANT: oauthScopes REPLACES auto-detection, so all
+ *      already-used scopes must be listed:
+ *      {
+ *        "timeZone": "America/Detroit",
+ *        "dependencies": {
+ *          "enabledAdvancedServices": [
+ *            { "userSymbol": "AnalyticsData", "version": "v1beta", "serviceId": "analyticsdata" }
+ *          ]
+ *        },
+ *        "exceptionLogging": "STACKDRIVER",
+ *        "runtimeVersion": "V8",
+ *        "oauthScopes": [
+ *          "https://www.googleapis.com/auth/spreadsheets",
+ *          "https://www.googleapis.com/auth/script.external_request",
+ *          "https://www.googleapis.com/auth/script.scriptapp",
+ *          "https://www.googleapis.com/auth/analytics.readonly",
+ *          "https://www.googleapis.com/auth/business.manage"
+ *        ]
+ *      }
+ *   2. Set ALCHEMER_API_KEY + ALCHEMER_API_SECRET below (Account → Security →
  *      API Access in Alchemer; the existing key from Sep 2016 works).
- *   4. After first run, Publish to web → add GA4_Events + GBP_Daily +
- *      Alchemer_Responses tabs so the dashboard can fetch their CSVs.
- *   5. Send me each new tab's gid (number after gid= in the URL when you
- *      click the tab); I'll wire them into CAMPAIGN.sheet.gids.
+ *   3. Select setupExtensionsTrigger in the function dropdown, click Run.
+ *      Authorize the new scopes when prompted. This installs the 4am ET nightly
+ *      trigger and runs once immediately so all 3 tabs get populated.
+ *   4. Publish to web → add GBP_Daily + Alchemer_Responses to the published list.
+ *      (GA4_Events already published 2026-05-18 — gid 391561072.)
+ *   5. Send me the gids for GBP_Daily + Alchemer_Responses; I'll wire them into
+ *      CAMPAIGN.sheet.gids.
  */
 
 // ─── ADD-ON CONFIG ────────────────────────────────────────────────────
