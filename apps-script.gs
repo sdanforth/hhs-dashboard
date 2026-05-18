@@ -16,15 +16,28 @@
  * THIS FILE = three drop-in functions + a one-line addition to fetchAllData().
  * Paste at the bottom of Code.gs in the "HHS Updates" Apps Script project.
  *
+ * ⚠️ KNOWN ISSUE (2026-05-18): the "HHS Updates" project has a stale
+ * legacy "Analytics" service binding ("Unreachable Service: analytics"
+ * toast). That binding blocks the Apps Script editor's Save action
+ * silently — POSTs return 200 but the project flag stays "Unsaved".
+ * To complete this extension setup, Steve will need to either:
+ *   (a) Remove the legacy "Analytics" service from the left sidebar
+ *       Services list (Code.gs uses "AnalyticsData", which is separate
+ *       and stays), then save Extensions.gs; OR
+ *   (b) Paste Extensions.gs content directly via clasp / Apps Script API.
+ * Until that's resolved, the dashboard pulls GBP / GA4_Events / Alchemer
+ * data manually (see project page in wiki for the refresh procedure).
+ *
  * Required setup beyond what's already in place:
- *   1. Add a new OAuth scope for GBP. Open Project Settings → tick
+ *   1. Resolve the Unreachable Service issue above so saves persist.
+ *   2. Add a new OAuth scope for GBP. Open Project Settings → tick
  *      "Show appsscript.json", and add to the oauthScopes array:
  *        "https://www.googleapis.com/auth/business.manage"
- *   2. Set ALCHEMER_API_KEY + ALCHEMER_API_SECRET below (Account → Security →
+ *   3. Set ALCHEMER_API_KEY + ALCHEMER_API_SECRET below (Account → Security →
  *      API Access in Alchemer; the existing key from Sep 2016 works).
- *   3. After first run, Publish to web → add GA4_Events + GBP_Daily +
+ *   4. After first run, Publish to web → add GA4_Events + GBP_Daily +
  *      Alchemer_Responses tabs so the dashboard can fetch their CSVs.
- *   4. Send me each new tab's gid (number after gid= in the URL when you
+ *   5. Send me each new tab's gid (number after gid= in the URL when you
  *      click the tab); I'll wire them into CAMPAIGN.sheet.gids.
  */
 

@@ -175,9 +175,9 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 <div class="sh-desc">Online appointment requests and tracked phone calls across all channels.</div>
 
 <div class="metrics" style="grid-template-columns:repeat(3,1fr)">
-<div class="m"><div class="m-icon"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div class="m-label">Total Inquiries</div><div class="m-val" id="m-total">48</div><div class="m-detail" id="m-total-detail">36 online + 12 phone</div></div>
+<div class="m"><div class="m-icon"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div class="m-label">Total Inquiries</div><div class="m-val" id="m-total">124</div><div class="m-detail" id="m-total-detail">48 online + 76 phone</div></div>
 <div class="m"><div class="m-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div><div class="m-label">Appointment Requests</div><div class="m-val" id="m-online">36</div><div class="m-detail">Via appointment form</div></div>
-<div class="m"><div class="m-icon"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div><div class="m-label">Phone Calls</div><div class="m-val" id="m-phone">12</div><div class="m-detail">From ads and landing pages</div></div>
+<div class="m"><div class="m-icon"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div><div class="m-label">Phone Calls</div><div class="m-val" id="m-phone">76</div><div class="m-detail">208 click events from 76 people</div></div>
 </div>
 
 <div class="g2">
@@ -300,17 +300,21 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 <div class="stat-item"><div class="stat-item-label">Conv. Rate</div><div class="stat-item-val" id="ads-convrate">2.1%</div></div>
 </div>
 <div class="sh">Landing Pages</div>
-<div class="sh-desc">Visits, bounce, and time-on-page for the three paid landing pages. <span style="color:#7a8794">(Per-LP Appt + Phone attribution requires marking <code>appointment_request</code> + <code>phone_call_click</code> as Key Events in GA4 Admin, or the Apps Script extension that adds a landingPage dimension to event counts.)</span></div>
+<div class="sh-desc">Per-LP performance since launch. Appt + Phone Call events now tracked as Key Events in GA4 (enabled 2026-05-18).</div>
 <div class="box" style="margin-bottom:20px;overflow-x:auto">
 <table class="tbl">
-<thead><tr><th>Landing Page</th><th class="r">Visits</th><th class="r">Bounce</th><th class="r">Avg Time</th><th class="r">Appts</th><th class="r">Phone Calls</th></tr></thead>
+<thead><tr><th>Landing Page</th><th class="r">Sessions</th><th class="r">Bounce</th><th class="r">Avg Time</th><th class="r">Appts</th><th class="r">Phone Calls</th></tr></thead>
 <tbody>
-<tr><td><strong>Women's Health &amp; OB/GYN</strong> <span style="font-weight:400;color:#7a8794">/lp/womens-health</span></td><td class="r em">555</td><td class="r">81.9%</td><td class="r">0:54</td><td class="r em">—</td><td class="r em">—</td></tr>
-<tr><td><strong>Genetic Counseling</strong> <span style="font-weight:400;color:#7a8794">/lp/genetic-counseling</span></td><td class="r">398</td><td class="r">83.0%</td><td class="r">0:38</td><td class="r">—</td><td class="r">—</td></tr>
-<tr><td><strong>Menopause &amp; Perimenopause</strong> <span style="font-weight:400;color:#7a8794">/lp/menopause</span></td><td class="r">86</td><td class="r">56.6%</td><td class="r">1:01</td><td class="r">—</td><td class="r">—</td></tr>
+<tr><td><strong>Women's Health &amp; OB/GYN</strong> <span style="font-weight:400;color:#7a8794">/lp/womens-health</span></td><td class="r em">1,184</td><td class="r">—</td><td class="r">9s</td><td class="r em">14</td><td class="r em">46</td></tr>
+<tr><td><strong>Genetic Counseling</strong> <span style="font-weight:400;color:#7a8794">/lp/genetic-counseling</span></td><td class="r">2,192</td><td class="r">—</td><td class="r">5s</td><td class="r">0</td><td class="r">28</td></tr>
+<tr><td><strong>Menopause &amp; Perimenopause</strong> <span style="font-weight:400;color:#7a8794">/lp/menopause</span></td><td class="r">238</td><td class="r">—</td><td class="r">18s</td><td class="r">3</td><td class="r">6</td></tr>
+<tr><td><strong>Homepage</strong> <span style="font-weight:400;color:#7a8794">/</span></td><td class="r">490</td><td class="r">—</td><td class="r">34s</td><td class="r">26</td><td class="r">24</td></tr>
+<tr><td><span style="color:#7a8794">Other / direct (not set)</span></td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">82</td><td class="r">104</td></tr>
+<tr style="background:#f7f9fc;font-weight:600"><td>Total</td><td class="r">4,419</td><td class="r"></td><td class="r"></td><td class="r">125</td><td class="r">208</td></tr>
 </tbody>
 </table>
 </div>
+<div style="font-size:11px;color:#7a8794;margin:-12px 0 20px">Source: GA4 (Apr 7 → today). "Other / direct" rolls up referrals, direct hits, /thanks revisits, and pages outside the four LPs above (genetic counseling drives high session volume but zero appointment requests — re-evaluate copy/CTA).</div>
 <div class="sh">Budget Allocation</div>
 <div class="sh-desc">Spend weighting across service lines.</div>
 <div class="stat-row">
@@ -406,7 +410,7 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 // Last time the inline data values + appointment-log rows in this file
 // were refreshed from source-of-truth APIs (Alchemer, GBP, GA4 sheet).
 // Bump this whenever you edit the inline numbers so the header reflects it.
-var DATA_REFRESHED_AT = '2026-05-12T10:55:00-04:00'; // Eastern Time (Steve / Flint, MI)
+var DATA_REFRESHED_AT = '2026-05-18T13:05:00-04:00'; // Eastern Time (Steve / Flint, MI)
 (function showRefreshTs() {
   var el = document.getElementById('data-refresh-ts');
   if (!el) return;
@@ -452,12 +456,14 @@ var DATA = {
   // Campaign launched Apr 7. Pre-launch responses (Apr 3 × 1, Apr 6 × 3)
   // are excluded from the dashboard entirely.
   inquiriesByWeek: [
-    { weekStart: '2026-04-06', label: 'Apr 7-12',     appointmentRequests: 3,  phoneCalls: 2 },
-    { weekStart: '2026-04-13', label: 'Apr 13-19',    appointmentRequests: 7,  phoneCalls: 2 },
-    { weekStart: '2026-04-20', label: 'Apr 20-26',    appointmentRequests: 5,  phoneCalls: 2 },
-    { weekStart: '2026-04-27', label: 'Apr 27-May 3', appointmentRequests: 15, phoneCalls: 4 },
-    { weekStart: '2026-05-04', label: 'May 4-10',     appointmentRequests: 4,  phoneCalls: 1 },
-    { weekStart: '2026-05-11', label: 'May 11',       appointmentRequests: 2,  phoneCalls: 1 }
+    // phoneCalls = unique users who clicked tel: link, from GA4 phone_call_click event
+    // (76 users / 208 events total since launch — see Channels tab Landing Pages table)
+    { weekStart: '2026-04-06', label: 'Apr 7-12',     appointmentRequests: 3,  phoneCalls: 5 },
+    { weekStart: '2026-04-13', label: 'Apr 13-19',    appointmentRequests: 7,  phoneCalls: 10 },
+    { weekStart: '2026-04-20', label: 'Apr 20-26',    appointmentRequests: 5,  phoneCalls: 11 },
+    { weekStart: '2026-04-27', label: 'Apr 27-May 3', appointmentRequests: 15, phoneCalls: 22 },
+    { weekStart: '2026-05-04', label: 'May 4-10',     appointmentRequests: 4,  phoneCalls: 15 },
+    { weekStart: '2026-05-11', label: 'May 11-17',    appointmentRequests: 2,  phoneCalls: 13 }
   ],
   // Since-launch aggregate (36 appt + 12 phone = 48). Pre-launch responses
   // would all have been Organic (no campaign running), so removing them
