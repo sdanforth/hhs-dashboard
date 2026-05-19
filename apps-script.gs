@@ -1,114 +1,309 @@
 /**
- * HHS Dashboard — Extension functions to add to the existing v4 script
- * ====================================================================
- * Steve already has v4 of `HHS Updates` Apps Script running. It populates:
- *   - GA4_Daily       date, Sessions, Users, New Users, Conversions
- *   - GA4_Channels    Date, Channel, Sessions   (per-day; published 2026-05-11)
- *   - GA4_Pages       (per-page metrics)
- *   - ShortLinks      (Short.io clicks)
+ * HHS Dashboard ETL — Safe, validated, nightly + on-demand
+ * ========================================================
  *
- * What's missing for the dashboard's filter-everything goal:
- *   - GA4_Events      Date, eventName, channel, count
- *                     (for paid-vs-organic inquiry attribution)
- *   - GBP_Daily       per-day per-location impressions / calls / directions / clicks
- *   - Alchemer        per-response feed (replaces the buggy Zap)
+ * Deployed location: Apps Script project "HHS Updates" bound to the campaign
+ * Google Sheet. This file is the source of truth in git; paste it over the
+ * Apps Script project's Code.gs to deploy. (Use `clasp` once we set it up.)
  *
- * THIS FILE = three drop-in functions + a one-line addition to fetchAllData().
- * Paste at the bottom of Code.gs in the "HHS Updates" Apps Script project.
+ * Why this rewrite (2026-05-19):
+ *   - Old code did `sheet.clear()` then `appendRow(...)` per row. If the API
+ *     fetch failed partway, the sheet was left empty and the dashboard
+ *     showed blank cards until the next nightly run. This was the "boss
+ *     looking at a wiped dashboard" failure mode. Fixed below.
+ *   - All writes now go through `safeReplaceSheet()` which:
+ *       1. Validates row count vs. existing (rejects updates that lose >20%)
+ *       2. Validates column count matches expected headers
+ *       3. Writes atomically via `setValues()` (one bulk call, not append loop)
+ *       4. On any validation failure: aborts the write, leaves existing data
+ *          intact, and logs to `Sync_Log` so the dashboard can show health.
+ *   - On-demand refresh: deployed as a web app. Hit the /exec URL with
+ *     `?action=update&token=XXX` to force a fresh sync from any device.
+ *     Used by the hidden "Refresh now" button in the dashboard header.
  *
- * STATUS (2026-05-18):
- *   [x] Legacy "Analytics" service removed from the project (was blocking saves).
- *   [x] Extensions.gs saved + parsed. All 5 functions visible in Run dropdown.
- *   [x] Ran fetchExtensions once: GA4_Events tab populated (115 rows, 90-day lookback).
- *   [x] GA4_Events published to web (gid 391561072). Wired into CAMPAIGN.sheet.gids.
- *   [ ] setupExtensionsTrigger NOT yet run — nightly 4am trigger not installed.
- *   [ ] GBP_Daily empty: 403 PERMISSION_DENIED because business.manage scope missing.
- *   [ ] Alchemer_Responses empty: ALCHEMER_API_KEY + SECRET still REPLACE_ME.
+ * One-time setup (Steve, on the Apps Script project):
+ *   1. Project Settings → Script Properties → add:
+ *        UPDATE_TOKEN         = (any random string — paste into dashboard too)
+ *        ALCHEMER_API_KEY     = (from app.alchemer.com → Account → Security)
+ *        ALCHEMER_API_SECRET  = (same page)
+ *   2. Project Settings → Show "appsscript.json" → paste the manifest in the
+ *      MANIFEST comment block below.
+ *   3. Select `setupTriggers` in the function dropdown → Run. Authorize all
+ *      scopes when prompted. This installs the 4am ET nightly trigger AND
+ *      runs one fetch immediately so all tabs populate.
+ *   4. Deploy → New deployment → Type: Web app → Execute as: Me → Who has
+ *      access: Anyone. Copy the /exec URL → paste into dashboard CAMPAIGN
+ *      config as `updateEndpoint`.
  *
- * Remaining setup steps for Steve to finish:
- *   1. Add OAuth scope for GBP. Project Settings -> tick "Show appsscript.json".
- *      Open appsscript.json (now in file list) and replace its current content
- *      with this — IMPORTANT: oauthScopes REPLACES auto-detection, so all
- *      already-used scopes must be listed:
- *      {
- *        "timeZone": "America/Detroit",
- *        "dependencies": {
- *          "enabledAdvancedServices": [
- *            { "userSymbol": "AnalyticsData", "version": "v1beta", "serviceId": "analyticsdata" }
- *          ]
- *        },
- *        "exceptionLogging": "STACKDRIVER",
- *        "runtimeVersion": "V8",
- *        "oauthScopes": [
- *          "https://www.googleapis.com/auth/spreadsheets",
- *          "https://www.googleapis.com/auth/script.external_request",
- *          "https://www.googleapis.com/auth/script.scriptapp",
- *          "https://www.googleapis.com/auth/analytics.readonly",
- *          "https://www.googleapis.com/auth/business.manage"
- *        ]
- *      }
- *   2. Set Alchemer keys via Project Settings -> Script Properties -> add:
- *        ALCHEMER_API_KEY    = <key from app.alchemer.com -> Account -> Security -> API Access>
- *        ALCHEMER_API_SECRET = <secret from same page>
- *      (Keys live in script properties, not source code — won't end up in git.)
- *   3. Select setupExtensionsTrigger in the function dropdown, click Run.
- *      Authorize the new scopes when prompted. This installs the 4am ET nightly
- *      trigger and runs once immediately so all 3 tabs get populated.
- *   4. Publish to web -> add GBP_Daily + Alchemer_Responses to the published list.
- *      (GA4_Events already published 2026-05-18 — gid 391561072.)
- *   5. Send me the gids for GBP_Daily + Alchemer_Responses; I'll wire them into
- *      CAMPAIGN.sheet.gids.
+ * MANIFEST (appsscript.json):
+ *   {
+ *     "timeZone": "America/Detroit",
+ *     "dependencies": {
+ *       "enabledAdvancedServices": [
+ *         { "userSymbol": "AnalyticsData", "version": "v1beta", "serviceId": "analyticsdata" }
+ *       ]
+ *     },
+ *     "exceptionLogging": "STACKDRIVER",
+ *     "runtimeVersion": "V8",
+ *     "webapp": { "executeAs": "USER_DEPLOYING", "access": "ANYONE_ANONYMOUS" },
+ *     "oauthScopes": [
+ *       "https://www.googleapis.com/auth/spreadsheets",
+ *       "https://www.googleapis.com/auth/script.external_request",
+ *       "https://www.googleapis.com/auth/script.scriptapp",
+ *       "https://www.googleapis.com/auth/analytics.readonly",
+ *       "https://www.googleapis.com/auth/business.manage"
+ *     ]
+ *   }
  */
 
-// --- ADD-ON CONFIG ----------------------------------------------------
-// Alchemer keys live in Project Settings -> Script Properties (NOT in source
-// code, so they don't end up committed in the dashboard repo).
-// One-time setup: open Project Settings, scroll to "Script Properties",
-// click "Add script property" twice and add:
-//   ALCHEMER_API_KEY    = <your Alchemer API key>
-//   ALCHEMER_API_SECRET = <your Alchemer API secret>
-// (Get both from app.alchemer.com -> Account -> Security -> API Access.)
-var ALCHEMER_SURVEY_ID  = '8781626'; // HHS: Request an Appointment
+// ─── CONFIG ──────────────────────────────────────────────────────────
+// GA4 property ID for HHS site. Redeclared here so this file stands alone
+// even if pasted over the v4 Code.gs.
+var GA4_PROPERTY_ID = '366812419';
 
-var GBP_LOCATIONS_ADDON = [
+// Survey for the appointment request form.
+var ALCHEMER_SURVEY_ID = '8781626';
+
+// GBP locations to pull daily metrics for. Add new clinics here.
+var GBP_LOCATIONS = [
   { id: '16646406286010861765', name: 'HMC (Hurley Plaza)' },
   { id: '16097963768114038946', name: 'Dort Hwy' }
 ];
 
-// How many days back the GBP + Events refresh should pull on each run.
-var ADDON_DAYS_LOOKBACK = 90;
+// How many days back to pull on every run. 90d gives 'Last 90 days' filter
+// room without forcing a custom backfill.
+var DAYS_LOOKBACK = 90;
 
-// --- STANDALONE TRIGGER (doesn't touch your existing v4 fetchAllData) -
-// Calls all three new extension functions. Install once via setupExtensionsTrigger().
-function fetchExtensions() {
-  try { fetchGA4Events(); }         catch (e) { Logger.log('fetchGA4Events failed: ' + e); }
-  try { fetchGBPDaily(); }          catch (e) { Logger.log('fetchGBPDaily failed: ' + e); }
-  try { fetchAlchemerResponses(); } catch (e) { Logger.log('fetchAlchemerResponses failed: ' + e); }
-  Logger.log('Extensions refreshed at ' + new Date().toISOString());
+// Validation: a sync that drops the row count below this fraction of the
+// previous run is rejected. Per-source overrides below.
+var DEFAULT_MIN_ROW_RATIO = 0.8;
+
+// ─── ENTRY POINTS ────────────────────────────────────────────────────
+
+/**
+ * Web-app entry point. Deploy as web app; visit /exec?action=update&token=XXX
+ * to trigger an on-demand sync. Returns JSON status. Used by the dashboard's
+ * hidden "Refresh now" button.
+ */
+function doGet(e) {
+  var params = (e && e.parameter) || {};
+  var action = params.action || '';
+
+  if (action === 'status') {
+    return jsonResponse({ ok: true, ts: new Date().toISOString() });
+  }
+
+  if (action === 'update') {
+    var expected = PropertiesService.getScriptProperties().getProperty('UPDATE_TOKEN');
+    if (!expected) {
+      return jsonResponse({ ok: false, error: 'UPDATE_TOKEN not configured' });
+    }
+    if (params.token !== expected) {
+      return jsonResponse({ ok: false, error: 'unauthorized' });
+    }
+    var startMs = Date.now();
+    var summary = fetchAll();
+    return jsonResponse({
+      ok: true,
+      durationMs: Date.now() - startMs,
+      timestamp: new Date().toISOString(),
+      summary: summary
+    });
+  }
+
+  return jsonResponse({ ok: false, error: 'unknown action; try ?action=status' });
 }
 
-// One-time setup. Run this once after pasting. Installs a daily 4am trigger
-// and immediately runs fetchExtensions() so the three new tabs get populated.
-function setupExtensionsTrigger() {
+/**
+ * One-time setup. Installs the 4am ET nightly trigger AND runs a fetch once
+ * so all tabs populate immediately.
+ */
+function setupTriggers() {
   ScriptApp.getProjectTriggers().forEach(function(t) {
-    if (t.getHandlerFunction() === 'fetchExtensions') ScriptApp.deleteTrigger(t);
+    if (t.getHandlerFunction() === 'fetchAll') ScriptApp.deleteTrigger(t);
   });
-  ScriptApp.newTrigger('fetchExtensions').timeBased().atHour(4).everyDays(1).create();
-  Logger.log('Daily 4am trigger installed for fetchExtensions.');
-  fetchExtensions(); // run once now so the tabs exist
+  ScriptApp.newTrigger('fetchAll').timeBased().atHour(4).everyDays(1).create();
+  fetchAll();
+  Logger.log('setupTriggers done. Nightly 4am trigger installed; initial fetch ran.');
 }
 
-// --- fetchGA4Events: per-day appointment + phone events × channel × landingPage -
-function fetchGA4Events() {
+/**
+ * Master sync. Each fetcher logs independently to Sync_Log.
+ * One failing source does not block the others.
+ * Called by the nightly trigger AND by the on-demand web app.
+ */
+function fetchAll() {
+  var results = {};
+  results.ga4Daily         = runSafely('GA4_Daily',          fetchGA4Daily);
+  results.ga4Channels      = runSafely('GA4_Channels',       fetchGA4Channels);
+  results.ga4Events        = runSafely('GA4_Events',         fetchGA4Events);
+  results.gbpDaily         = runSafely('GBP_Daily',          fetchGBPDaily);
+  results.alchemer         = runSafely('Alchemer_Responses', fetchAlchemerResponses);
+  return results;
+}
+
+function runSafely(label, fn) {
+  try {
+    return fn();
+  } catch (e) {
+    logSync(label, { ok: false, before: 0, after: 0, errors: ['EXCEPTION: ' + e] });
+    Logger.log(label + ' threw: ' + e);
+    return { ok: false, error: String(e) };
+  }
+}
+
+// ─── SAFE WRITE + VALIDATION ─────────────────────────────────────────
+
+/**
+ * Atomic, validated replacement of a sheet's contents.
+ * - Validates row count vs. existing (configurable threshold).
+ * - Validates column count matches headers.
+ * - Writes via setValues() (one bulk call).
+ * - On failure: ABORTS write, leaves existing data intact, returns error.
+ *
+ * @param {string} sheetName
+ * @param {string[]} headers   expected column names (first row)
+ * @param {Array[]} newRows    2D array of new data rows
+ * @param {{minRowRatio?:number, allowEmpty?:boolean}} opts
+ * @return {{ok:boolean, before:number, after:number, errors:string[]}}
+ */
+function safeReplaceSheet(sheetName, headers, newRows, opts) {
+  opts = opts || {};
+  var minRatio = (opts.minRowRatio != null) ? opts.minRowRatio : DEFAULT_MIN_ROW_RATIO;
+  var allowEmpty = !!opts.allowEmpty;
+
   var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var sheet = ss.getSheetByName('GA4_Events') || ss.insertSheet('GA4_Events');
+  var sheet = ss.getSheetByName(sheetName);
+  var existing = sheet ? Math.max(0, sheet.getLastRow() - 1) : 0;
+  var incoming = newRows.length;
+  var errs = [];
+
+  // Schema check
+  if (incoming > 0 && newRows[0].length !== headers.length) {
+    errs.push('column count mismatch: header=' + headers.length + ', row=' + newRows[0].length);
+  }
+  // Empty guard
+  if (!allowEmpty && incoming === 0) {
+    errs.push('no rows fetched (would wipe sheet of ' + existing + ' rows)');
+  }
+  // Drop guard
+  if (existing > 0 && incoming < Math.floor(existing * minRatio)) {
+    errs.push('new rows (' + incoming + ') < ' + Math.round(minRatio * 100) + '% of existing (' + existing + ')');
+  }
+
+  if (errs.length) {
+    return { ok: false, before: existing, after: existing, errors: errs };
+  }
+
+  if (!sheet) sheet = ss.insertSheet(sheetName);
   sheet.clear();
+  sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
+  if (incoming > 0) {
+    sheet.getRange(2, 1, incoming, headers.length).setValues(newRows);
+  }
+  sheet.setFrozenRows(1);
+  return { ok: true, before: existing, after: incoming, errors: [] };
+}
 
-  var endDate = Utilities.formatDate(new Date(), 'America/Detroit', 'yyyy-MM-dd');
-  var startDate = Utilities.formatDate(new Date(Date.now() - ADDON_DAYS_LOOKBACK * 86400000), 'America/Detroit', 'yyyy-MM-dd');
+/**
+ * Append a row to the Sync_Log tab. Creates the tab on first run.
+ * One row per source per sync attempt.
+ */
+function logSync(source, result) {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName('Sync_Log');
+  if (!sheet) {
+    sheet = ss.insertSheet('Sync_Log');
+    sheet.appendRow(['timestamp', 'source', 'status', 'rows_before', 'rows_after', 'message']);
+    sheet.setFrozenRows(1);
+  }
+  var ts = Utilities.formatDate(new Date(), 'America/Detroit', "yyyy-MM-dd'T'HH:mm:ssXXX");
+  var msg = (result.errors && result.errors.length) ? result.errors.join('; ') : '';
+  sheet.appendRow([
+    ts,
+    source,
+    result.ok ? 'OK' : 'FAIL',
+    result.before || 0,
+    result.after || 0,
+    msg
+  ]);
+  // Trim log to last 500 entries to keep the tab snappy
+  var max = 500;
+  if (sheet.getLastRow() > max + 1) {
+    sheet.deleteRows(2, sheet.getLastRow() - max - 1);
+  }
+}
 
+// ─── FETCHERS ────────────────────────────────────────────────────────
+
+/**
+ * Per-day sessions/users/conversions.
+ */
+function fetchGA4Daily() {
+  var dateRange = lookbackDates();
   var report = AnalyticsData.Properties.runReport({
-    dateRanges: [{ startDate: startDate, endDate: endDate }],
+    dateRanges: [{ startDate: dateRange.start, endDate: dateRange.end }],
+    dimensions: [{ name: 'date' }],
+    metrics: [
+      { name: 'sessions' },
+      { name: 'totalUsers' },
+      { name: 'newUsers' },
+      { name: 'conversions' }
+    ],
+    orderBys: [{ dimension: { dimensionName: 'date' } }],
+    limit: 1000
+  }, 'properties/' + GA4_PROPERTY_ID);
+
+  var headers = ['date', 'sessions', 'users', 'newUsers', 'conversions'];
+  var rows = (report.rows || []).map(function(r) {
+    return [
+      ga4DateToISO(r.dimensionValues[0].value),
+      parseInt(r.metricValues[0].value) || 0,
+      parseInt(r.metricValues[1].value) || 0,
+      parseInt(r.metricValues[2].value) || 0,
+      parseFloat(r.metricValues[3].value) || 0
+    ];
+  });
+
+  var result = safeReplaceSheet('GA4_Daily', headers, rows, { minRowRatio: 0.8 });
+  logSync('GA4_Daily', result);
+  return result;
+}
+
+/**
+ * Per-day channel breakdown (sessions by channel).
+ */
+function fetchGA4Channels() {
+  var dateRange = lookbackDates();
+  var report = AnalyticsData.Properties.runReport({
+    dateRanges: [{ startDate: dateRange.start, endDate: dateRange.end }],
+    dimensions: [{ name: 'date' }, { name: 'sessionDefaultChannelGroup' }],
+    metrics: [{ name: 'sessions' }],
+    orderBys: [{ dimension: { dimensionName: 'date' } }],
+    limit: 10000
+  }, 'properties/' + GA4_PROPERTY_ID);
+
+  var headers = ['date', 'channel', 'sessions'];
+  var rows = (report.rows || []).map(function(r) {
+    return [
+      ga4DateToISO(r.dimensionValues[0].value),
+      r.dimensionValues[1].value,
+      parseInt(r.metricValues[0].value) || 0
+    ];
+  });
+
+  var result = safeReplaceSheet('GA4_Channels', headers, rows, { minRowRatio: 0.8 });
+  logSync('GA4_Channels', result);
+  return result;
+}
+
+/**
+ * Per-day appointment_request + phone_call_click events × channel × landingPage.
+ */
+function fetchGA4Events() {
+  var dateRange = lookbackDates();
+  var report = AnalyticsData.Properties.runReport({
+    dateRanges: [{ startDate: dateRange.start, endDate: dateRange.end }],
     dimensions: [
       { name: 'date' },
       { name: 'eventName' },
@@ -124,26 +319,28 @@ function fetchGA4Events() {
     },
     orderBys: [{ dimension: { dimensionName: 'date' } }],
     limit: 10000
-  }, 'properties/' + GA4_PROPERTY_ID); // GA4_PROPERTY_ID already declared at top of v4
+  }, 'properties/' + GA4_PROPERTY_ID);
 
-  sheet.appendRow(['date', 'eventName', 'channel', 'landingPage', 'count']);
-  if (report.rows) {
-    report.rows.forEach(function(r) {
-      var d = r.dimensionValues[0].value;
-      sheet.appendRow([
-        d.substring(0,4) + '-' + d.substring(4,6) + '-' + d.substring(6,8),
-        r.dimensionValues[1].value,
-        r.dimensionValues[2].value,
-        r.dimensionValues[3].value,
-        parseInt(r.metricValues[0].value) || 0
-      ]);
-    });
-  }
-  sheet.setFrozenRows(1);
-  Logger.log('GA4_Events: ' + (report.rows ? report.rows.length : 0) + ' rows');
+  var headers = ['date', 'eventName', 'channel', 'landingPage', 'count'];
+  var rows = (report.rows || []).map(function(r) {
+    return [
+      ga4DateToISO(r.dimensionValues[0].value),
+      r.dimensionValues[1].value,
+      r.dimensionValues[2].value,
+      r.dimensionValues[3].value,
+      parseInt(r.metricValues[0].value) || 0
+    ];
+  });
+
+  var result = safeReplaceSheet('GA4_Events', headers, rows, { minRowRatio: 0.8 });
+  logSync('GA4_Events', result);
+  return result;
 }
 
-// --- fetchGBPDaily: per-day per-location GBP Performance metrics ------
+/**
+ * Per-day per-location GBP Performance metrics.
+ * Requires `business.manage` scope (in manifest).
+ */
 function fetchGBPDaily() {
   var headers = ['date', 'location_id', 'location_name',
                  'impressions_search_mobile', 'impressions_search_desktop',
@@ -162,13 +359,8 @@ function fetchGBPDaily() {
     BUSINESS_CONVERSATIONS:              'conversations'
   };
 
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var sheet = ss.getSheetByName('GBP_Daily') || ss.insertSheet('GBP_Daily');
-  sheet.clear();
-  sheet.appendRow(headers);
-
   var end = new Date();
-  var start = new Date(Date.now() - ADDON_DAYS_LOOKBACK * 86400000);
+  var start = new Date(Date.now() - DAYS_LOOKBACK * 86400000);
   var qs = 'dailyMetrics=' + Object.keys(metricMap).join('&dailyMetrics=') +
            '&dailyRange.startDate.year='  + start.getFullYear() +
            '&dailyRange.startDate.month=' + (start.getMonth() + 1) +
@@ -177,8 +369,9 @@ function fetchGBPDaily() {
            '&dailyRange.endDate.month='   + (end.getMonth() + 1) +
            '&dailyRange.endDate.day='     + end.getDate();
 
-  var totalRows = 0;
-  GBP_LOCATIONS_ADDON.forEach(function(loc) {
+  var allRows = [];
+  var locErrors = [];
+  GBP_LOCATIONS.forEach(function(loc) {
     var url = 'https://businessprofileperformance.googleapis.com/v1/locations/' + loc.id + ':fetchMultiDailyMetricsTimeSeries?' + qs;
     var resp = UrlFetchApp.fetch(url, {
       method: 'get',
@@ -186,7 +379,7 @@ function fetchGBPDaily() {
       muteHttpExceptions: true
     });
     if (resp.getResponseCode() !== 200) {
-      Logger.log('GBP fetch failed for ' + loc.id + ': ' + resp.getResponseCode() + ' ' + resp.getContentText().substring(0, 300));
+      locErrors.push(loc.name + ': HTTP ' + resp.getResponseCode());
       return;
     }
     var data = JSON.parse(resp.getContentText());
@@ -197,67 +390,103 @@ function fetchGBPDaily() {
         if (!key) return;
         (s.timeSeries.datedValues || []).forEach(function(dv) {
           var dateStr = dv.date.year + '-' + pad2(dv.date.month) + '-' + pad2(dv.date.day);
-          if (!byDate[dateStr]) byDate[dateStr] = { date: dateStr, location_id: loc.id, location_name: loc.name,
+          if (!byDate[dateStr]) byDate[dateStr] = {
+            date: dateStr, location_id: loc.id, location_name: loc.name,
             impressions_search_mobile: 0, impressions_search_desktop: 0,
             impressions_maps_mobile: 0, impressions_maps_desktop: 0,
             call_clicks: 0, direction_requests: 0, website_clicks: 0,
-            bookings: 0, conversations: 0 };
+            bookings: 0, conversations: 0
+          };
           byDate[dateStr][key] = Number(dv.value) || 0;
         });
       });
     });
     Object.keys(byDate).sort().forEach(function(d) {
       var r = byDate[d];
-      sheet.appendRow([r.date, r.location_id, r.location_name,
+      allRows.push([r.date, r.location_id, r.location_name,
         r.impressions_search_mobile, r.impressions_search_desktop,
         r.impressions_maps_mobile, r.impressions_maps_desktop,
         r.call_clicks, r.direction_requests, r.website_clicks,
         r.bookings, r.conversations]);
-      totalRows++;
     });
   });
-  sheet.setFrozenRows(1);
-  Logger.log('GBP_Daily: ' + totalRows + ' rows');
+
+  // If all locations failed, the empty-guard in safeReplaceSheet will reject
+  // and preserve existing data.
+  var result = safeReplaceSheet('GBP_Daily', headers, allRows, { minRowRatio: 0.8 });
+  if (locErrors.length) {
+    result.errors = (result.errors || []).concat(locErrors);
+  }
+  logSync('GBP_Daily', result);
+  return result;
 }
 
-// --- fetchAlchemerResponses: pull all completed survey responses ------
+/**
+ * All completed Alchemer survey responses for the appointment-request form.
+ */
 function fetchAlchemerResponses() {
   var props = PropertiesService.getScriptProperties();
   var apiKey = props.getProperty('ALCHEMER_API_KEY');
   var apiSecret = props.getProperty('ALCHEMER_API_SECRET');
   if (!apiKey || !apiSecret) {
-    Logger.log('Alchemer keys not set — skipping. Project Settings -> Script Properties -> add ALCHEMER_API_KEY + ALCHEMER_API_SECRET.');
-    return;
+    var skip = { ok: false, before: 0, after: 0, errors: ['ALCHEMER_API_KEY / SECRET not set in Script Properties'] };
+    logSync('Alchemer_Responses', skip);
+    return skip;
   }
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var sheet = ss.getSheetByName('Alchemer_Responses') || ss.insertSheet('Alchemer_Responses');
-  sheet.clear();
-  sheet.appendRow(['response_id', 'date_submitted', 'provider_answer', 'message', 'city', 'country', 'referer']);
 
-  var page = 1, total = 0;
-  while (page < 20) { // safety cap
+  var headers = ['response_id', 'date_submitted', 'provider_answer', 'service_type', 'city', 'country', 'referer'];
+  var allRows = [];
+  var page = 1;
+  var fetchErr = null;
+
+  while (page < 20) {
     var url = 'https://api.alchemer.com/v5/survey/' + ALCHEMER_SURVEY_ID + '/surveyresponse' +
               '?resultsperpage=100&page=' + page +
               '&filter[field][0]=status&filter[operator][0]==&filter[value][0]=Complete' +
               '&api_token=' + encodeURIComponent(apiKey) +
               '&api_token_secret=' + encodeURIComponent(apiSecret);
     var resp = UrlFetchApp.fetch(url, { muteHttpExceptions: true });
-    if (resp.getResponseCode() !== 200) { Logger.log('Alchemer fetch failed: ' + resp.getContentText().substring(0,300)); break; }
+    if (resp.getResponseCode() !== 200) {
+      fetchErr = 'HTTP ' + resp.getResponseCode() + ' on page ' + page;
+      break;
+    }
     var j = JSON.parse(resp.getContentText());
     var data = j.data || [];
     if (!data.length) break;
     data.forEach(function(d) {
       var providerAns = (d.survey_data && d.survey_data['59'] && d.survey_data['59'].answer) || 'No preference';
       var msg = (d.survey_data && d.survey_data['31'] && d.survey_data['31'].answer) || '';
-      sheet.appendRow([d.id, d.date_submitted, providerAns, msg, d.city || '', d.country || '', d.referer || '']);
-      total++;
+      allRows.push([d.id, d.date_submitted, providerAns, msg, d.city || '', d.country || '', d.referer || '']);
     });
     if (data.length < 100) break;
     page++;
   }
-  sheet.setFrozenRows(1);
-  Logger.log('Alchemer_Responses: ' + total + ' rows');
+
+  // Alchemer responses only grow — never shrink in practice.
+  var result = safeReplaceSheet('Alchemer_Responses', headers, allRows, { minRowRatio: 0.95 });
+  if (fetchErr) {
+    result.errors = (result.errors || []).concat([fetchErr]);
+  }
+  logSync('Alchemer_Responses', result);
+  return result;
 }
 
-// --- helper ---------------------------------------------------------
+// ─── HELPERS ─────────────────────────────────────────────────────────
+
+function lookbackDates() {
+  var end = Utilities.formatDate(new Date(), 'America/Detroit', 'yyyy-MM-dd');
+  var start = Utilities.formatDate(new Date(Date.now() - DAYS_LOOKBACK * 86400000), 'America/Detroit', 'yyyy-MM-dd');
+  return { start: start, end: end };
+}
+
+function ga4DateToISO(yyyymmdd) {
+  return yyyymmdd.substring(0,4) + '-' + yyyymmdd.substring(4,6) + '-' + yyyymmdd.substring(6,8);
+}
+
 function pad2(n) { return n < 10 ? '0' + n : '' + n; }
+
+function jsonResponse(obj) {
+  return ContentService
+    .createTextOutput(JSON.stringify(obj))
+    .setMimeType(ContentService.MimeType.JSON);
+}
