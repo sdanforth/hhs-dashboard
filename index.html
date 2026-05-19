@@ -21,7 +21,17 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 .hdr{background:#1E3E72;border-radius:10px;padding:24px 28px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
 .hdr h1{font-size:26px;font-weight:900;color:#fff;letter-spacing:-.5px}
 .hdr-sub{font-size:14px;color:#b8d4ed;margin-top:2px}
-.hdr-ts{font-size:12px;color:#b8d4ed}
+.hdr-ts{font-size:12px;color:#b8d4ed;display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+.sync-pill{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.20);border-radius:999px;padding:4px 10px;font-size:11px;font-weight:600;color:#dbe9f7}
+.sync-pill .sync-dot{width:6px;height:6px;border-radius:50%;background:#5ABA4A}
+.sync-pill.stale .sync-dot{background:#f59e0b}
+.sync-pill.failed .sync-dot{background:#ef4444}
+.refresh-btn{background:#fff;color:#1E3E72;border:none;border-radius:6px;padding:5px 11px;font-size:11px;font-weight:800;cursor:pointer;display:none;align-items:center;gap:5px;letter-spacing:.2px}
+.refresh-btn.show{display:inline-flex}
+.refresh-btn:hover{background:#11A88A;color:#fff}
+.refresh-btn:disabled{opacity:0.6;cursor:wait}
+.refresh-btn .spin{display:inline-block;animation:spin 0.9s linear infinite}
+@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
 
 /* Controls */
 /* Executive-friendly intro line + spacious control row */
@@ -53,6 +63,10 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 .di{border:1px solid #cbd5e0;background:#fff url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2311A88A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='4' width='18' height='18' rx='2' ry='2'/><line x1='16' y1='2' x2='16' y2='6'/><line x1='8' y1='2' x2='8' y2='6'/><line x1='3' y1='10' x2='21' y2='10'/></svg>") no-repeat 9px center / 14px 14px,#fff url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237a8794' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>") no-repeat right 8px center / 12px 12px;color:#2c3e50;font-size:12px;font-weight:600;padding:6px 26px 6px 30px;border-radius:6px;width:220px;cursor:pointer;text-align:center;transition:border-color .12s,box-shadow .12s,background-color .12s}
 .di:hover{border-color:#11A88A;box-shadow:0 0 0 3px rgba(17,168,138,0.10)}
 .di:focus{border-color:#11A88A;outline:none}
+/* Compact preset dropdown — replaces the row of 5 quick-select buttons (2026-05-19). */
+.dr-preset{appearance:none;-webkit-appearance:none;border:1px solid #cbd5e0;background:#fff url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237a8794' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>") no-repeat right 8px center / 12px 12px;color:#1E3E72;font-size:12px;font-weight:700;padding:7px 26px 7px 12px;border-radius:6px;cursor:pointer;transition:border-color .12s,box-shadow .12s}
+.dr-preset:hover{border-color:#11A88A;box-shadow:0 0 0 3px rgba(17,168,138,0.10)}
+.dr-preset:focus{border-color:#11A88A;outline:none}
 
 .pane{display:none}.pane.on{display:block}
 
@@ -143,27 +157,32 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 <div class="wrap">
 <div class="hdr">
 <div><h1>HHS Obstetrics &amp; Gynecology Associates</h1><div class="hdr-sub">Clinic &amp; Provider Campaigns</div></div>
-<div class="hdr-ts"><span id="data-refresh-ts"></span></div>
+<div class="hdr-ts">
+<span class="sync-pill" id="sync-pill" title="When the underlying data was last refreshed from GA4 / GBP / Alchemer."><span class="sync-dot"></span><span id="data-refresh-ts">Loading…</span></span>
+<button class="refresh-btn" id="refresh-btn" onclick="refreshNow()" type="button" aria-label="Force a data refresh now"><span id="refresh-icon">⟳</span> <span id="refresh-label">Refresh now</span></button>
+</div>
 </div>
 
 <div class="ctrl">
 <div class="tabs-group">
 <nav class="tabs" role="tablist" aria-label="Dashboard sections">
 <button class="tab on" role="tab" onclick="go('exec')"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>Overview</button>
-<button class="tab" role="tab" onclick="go('chan')"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="3" y1="20" x2="21" y2="20"/></svg>Channels</button>
-<button class="tab" role="tab" onclick="go('deep')"><svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>Detail</button>
+<button class="tab" role="tab" onclick="go('full')"><svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>Full Report</button>
 </nav>
 </div>
 <div class="date-ctrl-wrap">
 <div class="date-summary">Showing data from <b id="date-summary-text">campaign launch through today</b></div>
 <div class="date-ctrl">
 <span class="date-ctrl-label"><svg viewBox="0 0 24 24"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>Date range</span>
-<button class="qbtn" onclick="pre(this,'7d')">This Week</button>
-<button class="qbtn" onclick="pre(this,'30d')">This Month</button>
-<button class="qbtn" onclick="pre(this,'lm')">Last Month</button>
-<button class="qbtn" onclick="pre(this,'90d')">90 Days</button>
-<button class="qbtn on" onclick="pre(this,'all')">Since Launch</button>
-<input type="text" id="dr" class="di" placeholder="Pick a custom range" aria-label="Custom date range" readonly>
+<select id="dr-preset" class="dr-preset" onchange="applyPreset(this.value)" aria-label="Date range preset">
+<option value="7d">Last 7 days</option>
+<option value="30d">Last 30 days</option>
+<option value="lm">Last month</option>
+<option value="90d">Last 90 days</option>
+<option value="all" selected>Since launch</option>
+<option value="custom">Custom range…</option>
+</select>
+<input type="text" id="dr" class="di" placeholder="Pick start &amp; end dates" aria-label="Custom date range" readonly style="display:none;margin-left:6px">
 </div>
 </div>
 </div>
@@ -185,11 +204,13 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 <div class="box"><div class="box-title">Paid vs Organic Inquiries <span style="font-weight:500;color:#7a8794;font-size:11px">(estimated split — filters to selected range)</span></div><div class="ch"><canvas id="ch-paid"></canvas></div></div>
 </div>
 
-<div class="sh">Provider Demand</div>
-<div class="sh-desc">Which providers patients are requesting when they submit an appointment form.</div>
+<div class="sh">Provider Demand &amp; Service Mix</div>
+<div class="sh-desc">Who patients are asking for, and the most common reasons they're contacting the clinic.</div>
 
-<div class="box" style="padding:8px 12px;margin-bottom:20px;display:inline-block">
-<table class="prov-table">
+<div class="g2" style="margin-bottom:20px">
+<div class="box" style="padding:8px 16px">
+<div class="box-title" style="margin-bottom:8px">Most-Requested Providers</div>
+<table class="prov-table" style="max-width:none;width:100%">
 <tr>
 <td style="width:52px"><img class="prov-photo" src="data:image/jpeg;base64,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" alt="Dr. Clever"></td>
 <td><div class="prov-name">Dr. Lauren Clever, MD</div><div class="prov-role">OB/GYN</div></td>
@@ -221,6 +242,14 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 <td><div class="prov-num" id="prov-wiggins">3</div><div class="prov-num-label">requests</div></td>
 </tr>
 </table>
+<div style="font-size:11px;color:#7a8794;margin-top:8px;padding:0 4px">Live counts from the appointment form. "No Preference" patients are routed to the next available provider.</div>
+</div>
+
+<div class="box">
+<div class="box-title">Service Type Mix</div>
+<div class="ch" style="height:240px"><canvas id="ch-services"></canvas></div>
+<div style="font-size:11px;color:#7a8794;margin-top:8px">Top reasons patients are contacting the clinic — categorised from the appointment log.</div>
+</div>
 </div>
 
 <div class="sh">Healthgrades Provider Profiles</div>
@@ -288,8 +317,8 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 
 </div>
 
-<!-- CHANNELS -->
-<div id="p-chan" class="pane">
+<!-- FULL REPORT — merged Channels + Detail (2026-05-19) -->
+<div id="p-full" class="pane">
 <div class="sh">Google Ads</div>
 <div class="sh-desc">PMax: HHS Women's Clinics campaign performance.</div>
 <div class="stat-row">
@@ -305,12 +334,12 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 <table class="tbl">
 <thead><tr><th>Landing Page</th><th class="r">Sessions</th><th class="r">Appt Click Events</th><th class="r">Phone Click Events</th></tr></thead>
 <tbody>
-<tr><td><strong>Women's Health &amp; OB/GYN</strong> <span style="font-weight:400;color:#7a8794">/lp/womens-health</span></td><td class="r em">1,184</td><td class="r em">30</td><td class="r em">83</td></tr>
-<tr><td><strong>Genetic Counseling</strong> <span style="font-weight:400;color:#7a8794">/lp/genetic-counseling</span></td><td class="r">2,192</td><td class="r">0</td><td class="r">41</td></tr>
-<tr><td><strong>Menopause &amp; Perimenopause</strong> <span style="font-weight:400;color:#7a8794">/lp/menopause</span></td><td class="r">238</td><td class="r">6</td><td class="r">10</td></tr>
-<tr><td><strong>Homepage</strong> <span style="font-weight:400;color:#7a8794">/</span></td><td class="r">490</td><td class="r">50</td><td class="r">49</td></tr>
-<tr><td><span style="color:#7a8794">Other / direct</span></td><td class="r">—</td><td class="r">39</td><td class="r">27</td></tr>
-<tr style="background:#f7f9fc;font-weight:600"><td>Total events</td><td class="r">4,419</td><td class="r">125</td><td class="r">210</td></tr>
+<tr data-lp="/lp/womens-health"><td><strong>Women's Health &amp; OB/GYN</strong> <span style="font-weight:400;color:#7a8794">/lp/womens-health</span></td><td class="r em lp-sessions">1,184</td><td class="r em lp-appt">30</td><td class="r em lp-phone">83</td></tr>
+<tr data-lp="/lp/genetic-counseling"><td><strong>Genetic Counseling</strong> <span style="font-weight:400;color:#7a8794">/lp/genetic-counseling</span></td><td class="r lp-sessions">2,192</td><td class="r lp-appt">0</td><td class="r lp-phone">41</td></tr>
+<tr data-lp="/lp/menopause"><td><strong>Menopause &amp; Perimenopause</strong> <span style="font-weight:400;color:#7a8794">/lp/menopause</span></td><td class="r lp-sessions">238</td><td class="r lp-appt">6</td><td class="r lp-phone">10</td></tr>
+<tr data-lp="/"><td><strong>Homepage</strong> <span style="font-weight:400;color:#7a8794">/</span></td><td class="r lp-sessions">490</td><td class="r lp-appt">50</td><td class="r lp-phone">49</td></tr>
+<tr data-lp="__other"><td><span style="color:#7a8794">Other / direct</span></td><td class="r lp-sessions">—</td><td class="r lp-appt">39</td><td class="r lp-phone">27</td></tr>
+<tr data-lp="__total" style="background:#f7f9fc;font-weight:600"><td>Total events</td><td class="r lp-sessions">4,419</td><td class="r lp-appt">125</td><td class="r lp-phone">210</td></tr>
 </tbody>
 </table>
 </div>
@@ -322,10 +351,6 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 <div class="stat-item"><div class="stat-item-label">Menopause</div><div class="stat-item-val">30%</div></div>
 <div class="stat-item"><div class="stat-item-label">Genetic Counseling</div><div class="stat-item-val">10%</div></div>
 </div>
-</div>
-
-<!-- DETAIL -->
-<div id="p-deep" class="pane">
 
 <div class="sh">Appointment Request Log</div>
 <div class="sh-desc">Individual submissions — most recent first.</div>
@@ -386,9 +411,11 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 <tr><td><strong>hmc.gg/pyatt</strong></td><td>Healthgrades — Dr. Pyatt</td><td class="r">1</td></tr>
 <tr><td><strong>hmc.gg/smiley</strong></td><td>Healthgrades — J. Smiley</td><td class="r">1</td></tr>
 <tr><td><strong>hmc.gg/wiggins</strong></td><td>Healthgrades — Dr. Wiggins</td><td class="r">1</td></tr>
+<tr><td><strong>hmc.gg/obgynhca-hurley-nfc</strong> <span style="font-size:10px;font-weight:700;color:#11A88A;background:#e8f7f2;padding:2px 6px;border-radius:4px;margin-left:4px">NFC</span></td><td>Google Review — Hurley · TrustHero NFC stand</td><td class="r">0</td></tr>
+<tr><td><strong>hmc.gg/obgynhca-dort-nfc</strong> <span style="font-size:10px;font-weight:700;color:#11A88A;background:#e8f7f2;padding:2px 6px;border-radius:4px;margin-left:4px">NFC</span></td><td>Google Review — Dort Hwy · TrustHero NFC stand</td><td class="r">0</td></tr>
 </tbody>
 </table>
-<div style="padding:12px;text-align:center;font-size:12px;color:#3c4257">TrustHero NFC stands arriving this week</div>
+<div style="padding:12px;text-align:center;font-size:12px;color:#3c4257">TrustHero NFC stands now live at both clinic counters · counts update nightly from Short.io</div>
 </div>
 
 <div class="acc">
@@ -407,18 +434,25 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 
 <script>
 // ─── DATA REFRESH TIMESTAMP ─────────────────────────────────────────
-// Last time the inline data values + appointment-log rows in this file
-// were refreshed from source-of-truth APIs (Alchemer, GBP, GA4 sheet).
-// Bump this whenever you edit the inline numbers so the header reflects it.
+// Fallback timestamp displayed if Sync_Log isn't reachable yet. Once
+// the Apps Script's `safeReplaceSheet` is running and Sync_Log is
+// published, `applySyncStatus` overwrites this from real sync data.
 var DATA_REFRESHED_AT = '2026-05-18T15:10:00-04:00'; // Eastern Time (Steve / Flint, MI)
-(function showRefreshTs() {
+function renderSyncPillFromTimestamp(iso, status) {
+  // status: 'ok' | 'stale' | 'failed'. Updates pill text + colour.
   var el = document.getElementById('data-refresh-ts');
-  if (!el) return;
-  var d = new Date(DATA_REFRESHED_AT);
+  var pill = document.getElementById('sync-pill');
+  if (!el || !pill) return;
+  pill.classList.remove('stale', 'failed');
+  if (status === 'stale')  pill.classList.add('stale');
+  if (status === 'failed') pill.classList.add('failed');
+  if (!iso) { el.textContent = 'No sync data'; return; }
+  var d = new Date(iso);
   var dateStr = d.toLocaleDateString('en-US', {month:'short', day:'numeric', timeZone: 'America/Detroit'});
   var timeStr = d.toLocaleTimeString('en-US', {hour:'numeric', minute:'2-digit', timeZone: 'America/Detroit', timeZoneName: 'short'});
-  el.textContent = 'Data refreshed ' + dateStr + ' at ' + timeStr;
-})();
+  el.textContent = 'Synced ' + dateStr + ' · ' + timeStr;
+}
+renderSyncPillFromTimestamp(DATA_REFRESHED_AT, 'ok'); // initial paint before Sync_Log loads
 
 // ─── CAMPAIGN CONFIG ────────────────────────────────────────────────
 // Per-campaign settings. To stand up a new service-line dashboard,
@@ -440,9 +474,14 @@ var CAMPAIGN = {
       links:         1330028358,
       dailyChannels: 1519121568, // GA4_Channels — per-day channel breakdown (Steve's existing Apps Script writes this; published 2026-05-11)
       events:        391561072,  // GA4_Events — date × eventName × channel × landingPage × count (Extensions.gs nightly; published 2026-05-18)
-      gbpDaily:      null        // GBP_Daily — pending business.manage OAuth scope; tab exists but is empty
+      gbpDaily:      null,       // GBP_Daily — pending business.manage OAuth scope; tab exists but is empty
+      syncLog:       null        // Sync_Log — written by safeReplaceSheet(); paste gid here once the tab is published
     }
-  }
+  },
+  // Apps Script web-app /exec URL. Powers the hidden Refresh-now button
+  // when ?update is appended to the dashboard URL. Token is supplied via
+  // the dashboard URL (?update&token=XXX), never committed.
+  updateEndpoint: '' // e.g. 'https://script.google.com/macros/s/AKfycb.../exec'
 };
 
 // ─── INLINE DATA ────────────────────────────────────────────────────
@@ -496,8 +535,11 @@ function getRange() {
 // ─── TAB + PRESET CONTROLS ──────────────────────────────────────────
 // Tab IDs map to URL slugs so each tab is shareable: #channels, #detail.
 // Overview is default (no hash). Slugs are bidirectional with internal IDs.
-var TAB_SLUG = { exec: 'overview', chan: 'channels', deep: 'detail' };
-var SLUG_TAB = { overview: 'exec', channels: 'chan', detail: 'deep' };
+// 2026-05-19: merged Channels + Detail into a single Full Report tab. Old
+// slugs (#channels, #detail) still resolve to 'full' so existing bookmarks
+// don't break.
+var TAB_SLUG = { exec: 'overview', full: 'full' };
+var SLUG_TAB = { overview: 'exec', full: 'full', channels: 'full', detail: 'full' };
 
 function go(id, opts) {
   opts = opts || {};
@@ -525,22 +567,32 @@ function applyHashTab() {
 window.addEventListener('hashchange', applyHashTab);
 applyHashTab();
 
-function pre(b, k) {
-  b.parentElement.querySelectorAll('.qbtn').forEach(function(x){ x.classList.remove('on'); });
-  b.classList.add('on');
+// Date-range preset handler. Called by the <select id="dr-preset"> on change.
+// 'custom' opens flatpickr inline; everything else jumps to a fixed range.
+// Old qbtn buttons removed 2026-05-19 — preset list now lives in the <select>.
+function applyPreset(k) {
+  var custom = document.getElementById('dr');
+  if (k === 'custom') {
+    if (custom) {
+      custom.style.display = '';
+      // Open flatpickr now so the user gets a calendar without a second click
+      if (custom._flatpickr) custom._flatpickr.open();
+    }
+    return;
+  }
+  if (custom) custom.style.display = 'none';
   var today = new Date(); today.setHours(23, 59, 59, 999);
   var s, e = today;
   if (k === '7d')       { s = new Date(); s.setDate(today.getDate() - 7); }
   else if (k === '30d') { s = new Date(); s.setDate(today.getDate() - 30); }
   else if (k === 'lm')  {
-    // Full previous calendar month
     var firstOfThis = new Date(today.getFullYear(), today.getMonth(), 1);
     e = new Date(firstOfThis); e.setDate(0); e.setHours(23, 59, 59, 999);
     s = new Date(e.getFullYear(), e.getMonth(), 1);
   }
   else if (k === '90d') { s = new Date(); s.setDate(today.getDate() - 90); }
-  else                  { s = parseLocalDate(CAMPAIGN.launchDate); }
-  if (s) s.setHours(0, 0, 0, 0); // same-day entries (data-date midnight) need to fall inside the range
+  else                  { s = parseLocalDate(CAMPAIGN.launchDate); } // 'all'
+  if (s) s.setHours(0, 0, 0, 0);
   // Never let the range start before the campaign launched.
   var launchD = parseLocalDate(CAMPAIGN.launchDate);
   if (s < launchD) s = launchD;
@@ -553,7 +605,15 @@ var fp = flatpickr('#dr', {
   dateFormat: 'M j, Y',
   minDate: CAMPAIGN.launchDate, // block manual selection of pre-launch dates
   defaultDate: [ parseLocalDate(CAMPAIGN.launchDate), new Date() ], // Since Launch = the default range
-  onChange: function(){ setTimeout(applyDateRange, 50); }
+  onChange: function(selected){
+    // When the user picks a real custom range, flip the preset select to
+    // "Custom range…" so the UI reflects what's actually showing.
+    if (selected && selected.length === 2) {
+      var sel = document.getElementById('dr-preset');
+      if (sel) sel.value = 'custom';
+    }
+    setTimeout(applyDateRange, 50);
+  }
 });
 
 // ─── CHART DEFAULTS + STYLE ─────────────────────────────────────────
@@ -617,6 +677,26 @@ window.sourcesChart = new Chart(document.getElementById('ch-sources'), {
   }
 });
 
+// Service Type Mix donut — fills the right side of the Provider Demand row
+// on Overview. Categorises the visible service-type text from each appt-log
+// row into ~5 buckets. Data feed: same #appt-log rows that drive Provider
+// Demand, so the donut respects the date filter automatically.
+window.servicesChart = new Chart(document.getElementById('ch-services'), {
+  type: 'doughnut',
+  data: { labels: [], datasets: [{ data: [], backgroundColor: [T70, N70, T40, N40, LN, '#cbd5e0'], borderWidth: 0 }] },
+  options: {
+    responsive: true, maintainAspectRatio: false, cutout: '60%',
+    plugins: {
+      legend: { position: 'right', labels: { boxWidth: 10, padding: 8, font: { size: 11, weight: '600' } } },
+      datalabels: {
+        color: '#fff', font: { weight: '800', size: 12 },
+        display: function(ctx){ return ctx.dataset.data[ctx.dataIndex] > 1; },
+        formatter: function(v){ return v; }
+      }
+    }
+  }
+});
+
 // ─── RENDER PIPELINE: SINGLE SOURCE OF TRUTH ────────────────────────
 // Every card/chart/table that depends on the selected date range gets
 // updated from here. To add a new visualization, wire it in this fn.
@@ -625,11 +705,89 @@ function applyDateRange() {
   var inquiries = applyInquiries(range);
   applyPaidVsOrganic(range, inquiries.apptSum + inquiries.phoneSum);
   applyProviderDemand(range, inquiries.apptSum);
+  applyServiceMix(range);
   applyGa4(range);
   applyGbp(range);
   applyChannels(range);
+  applyLandingPages(range);
   applyDetail(range);
   applyDateSummary(range);
+}
+
+// Landing Pages table: filter GA4_Events by date and group by landingPage,
+// then write per-LP appointment + phone click counts back into the table
+// cells. Sessions column stays static until we wire GA4_Pages in (it's the
+// only column not derivable from the events tab). Falls through to the
+// existing hardcoded values when _eventsData isn't loaded.
+function applyLandingPages(range) {
+  var events = window._eventsData;
+  if (!events || !events.length) return; // keep static numbers
+  // Canonicalise LP paths. GA4 sometimes records with or without /lp/ prefix.
+  var aliases = {
+    '/lp/womens-health':       '/lp/womens-health',
+    '/womens-health':          '/lp/womens-health',
+    '/lp/genetic-counseling':  '/lp/genetic-counseling',
+    '/genetic-counseling':     '/lp/genetic-counseling',
+    '/lp/menopause':           '/lp/menopause',
+    '/menopause':              '/lp/menopause',
+    '/':                       '/',
+    '/thanks':                 '/'
+  };
+  var trackedKeys = { '/lp/womens-health':1, '/lp/genetic-counseling':1, '/lp/menopause':1, '/':1 };
+  var byLp = {}; // key → { appt, phone }
+  events.forEach(function(e) {
+    var d = parseLocalDate(e.date);
+    if (d < range.start || d > range.end) return;
+    var lp = aliases[e.landingPage] || (trackedKeys[e.landingPage] ? e.landingPage : '__other');
+    if (!byLp[lp]) byLp[lp] = { appt: 0, phone: 0 };
+    if (e.eventName === 'appointment_request') byLp[lp].appt += e.count;
+    else if (e.eventName === 'phone_call_click') byLp[lp].phone += e.count;
+  });
+  var totalAppt = 0, totalPhone = 0;
+  Object.keys(byLp).forEach(function(k) { totalAppt += byLp[k].appt; totalPhone += byLp[k].phone; });
+  // Write back into each tracked row + the totals row.
+  document.querySelectorAll('tr[data-lp]').forEach(function(tr) {
+    var key = tr.getAttribute('data-lp');
+    if (key === '__total') {
+      var apptCell = tr.querySelector('.lp-appt');
+      var phoneCell = tr.querySelector('.lp-phone');
+      if (apptCell)  apptCell.textContent  = totalAppt;
+      if (phoneCell) phoneCell.textContent = totalPhone;
+      return;
+    }
+    var b = byLp[key] || { appt: 0, phone: 0 };
+    var apptCell = tr.querySelector('.lp-appt');
+    var phoneCell = tr.querySelector('.lp-phone');
+    if (apptCell)  apptCell.textContent  = b.appt;
+    if (phoneCell) phoneCell.textContent = b.phone;
+  });
+}
+
+// Service Type Mix: categorise the appointment-log rows visible in the
+// selected range and feed the donut chart. Buckets are deliberately broad
+// — execs scanning Overview don't need 12 categories. Anything not in the
+// named buckets falls into "Other".
+function applyServiceMix(range) {
+  var buckets = { 'Pregnancy & OB': 0, 'Gynecology': 0, 'Fibroid': 0, 'Hormone / Menopause': 0, 'General / Other': 0 };
+  var rows = document.querySelectorAll('#appt-log tr[data-date]');
+  rows.forEach(function(r) {
+    var d = parseLocalDate(r.getAttribute('data-date'));
+    if (d < range.start || d > range.end) return;
+    var cells = r.querySelectorAll('td');
+    var text = (cells[cells.length - 1].textContent || '').toLowerCase();
+    if (/pregnan|ob|vbac/.test(text)) buckets['Pregnancy & OB'] += 1;
+    else if (/fibroid/.test(text)) buckets['Fibroid'] += 1;
+    else if (/menopaus|hormone/.test(text)) buckets['Hormone / Menopause'] += 1;
+    else if (/gynecolog|gyn/.test(text)) buckets['Gynecology'] += 1;
+    else buckets['General / Other'] += 1;
+  });
+  var labels = [], data = [];
+  Object.keys(buckets).forEach(function(k) {
+    if (buckets[k] > 0) { labels.push(k); data.push(buckets[k]); }
+  });
+  window.servicesChart.data.labels = labels;
+  window.servicesChart.data.datasets[0].data = data;
+  window.servicesChart.update();
 }
 
 // "Showing data from [plain-English range]" — execs need to read what they're seeing.
@@ -1033,9 +1191,21 @@ function parseDailyChannels(rows) {
   return out;
 }
 function parseEvents(rows) {
+  // Schema (5-col, current): date, eventName, channel, landingPage, count
+  // Legacy 4-col schema was: date, eventName, channel, count
+  // Detect by column count so we work with either tab format.
   var out = [];
   for (var i = 1; i < rows.length; i++) {
-    if (rows[i][0]) out.push({ date: rows[i][0], eventName: rows[i][1], channel: rows[i][2], count: parseInt(rows[i][3])||0 });
+    var r = rows[i];
+    if (!r[0]) continue;
+    var hasLp = r.length >= 5;
+    out.push({
+      date: r[0],
+      eventName: r[1],
+      channel: r[2],
+      landingPage: hasLp ? r[3] : '',
+      count: parseInt(hasLp ? r[4] : r[3]) || 0
+    });
   }
   return out;
 }
@@ -1070,15 +1240,87 @@ function fetchOptional(gid) {
     .catch(function(){ return null; });
 }
 
+// Sync_Log schema: timestamp, source, status, rows_before, rows_after, message
+// Returns the most-recent OK timestamp + an overall status (ok / stale / failed)
+// so the header pill can colour-code freshness.
+function parseSyncLog(rows) {
+  if (!rows || rows.length < 2) return { lastOkIso: null, status: 'failed' };
+  var latestOk = null, anyFailRecent = false;
+  // Walk all rows; collect the most recent OK timestamp and look for any FAIL
+  // in the most-recent run window (last 25 hours, so a nightly fail surfaces).
+  var cutoffMs = Date.now() - 25 * 3600 * 1000;
+  for (var i = 1; i < rows.length; i++) {
+    var r = rows[i];
+    if (!r[0]) continue;
+    var iso = r[0], status = r[2];
+    var t = new Date(iso).getTime();
+    if (isNaN(t)) continue;
+    if (status === 'OK' && (!latestOk || t > new Date(latestOk).getTime())) latestOk = iso;
+    if (status === 'FAIL' && t > cutoffMs) anyFailRecent = true;
+  }
+  var overall = 'ok';
+  if (!latestOk) overall = 'failed';
+  else if (anyFailRecent) overall = 'stale';
+  else if (new Date(latestOk).getTime() < Date.now() - 36 * 3600 * 1000) overall = 'stale';
+  return { lastOkIso: latestOk, status: overall };
+}
+
+// ── Hidden refresh button: shown when ?update is in the URL. Token must
+// also be in the URL (?update&token=XXX) — we never commit it. ──
+(function wireRefreshButton() {
+  if (location.search.indexOf('update') < 0) return; // button stays hidden
+  var btn = document.getElementById('refresh-btn');
+  if (btn) btn.classList.add('show');
+})();
+
+function refreshNow() {
+  var btn = document.getElementById('refresh-btn');
+  var label = document.getElementById('refresh-label');
+  var icon = document.getElementById('refresh-icon');
+  var endpoint = CAMPAIGN.updateEndpoint;
+  var tokenMatch = location.search.match(/[?&]token=([^&]+)/);
+  var token = tokenMatch ? decodeURIComponent(tokenMatch[1]) : '';
+  if (!endpoint) {
+    alert('Refresh endpoint not configured.\n\nSet CAMPAIGN.updateEndpoint to the Apps Script /exec URL after deploying the web app.');
+    return;
+  }
+  if (!token) {
+    alert('Token required.\n\nAppend it to the dashboard URL: ?update&token=YOUR_TOKEN');
+    return;
+  }
+  btn.disabled = true;
+  icon.className = 'spin';
+  label.textContent = 'Refreshing…';
+  var url = endpoint + (endpoint.indexOf('?') > -1 ? '&' : '?') + 'action=update&token=' + encodeURIComponent(token);
+  fetch(url)
+    .then(function(r){ return r.json(); })
+    .then(function(j){
+      if (j.ok) {
+        label.textContent = 'Refreshed · reloading';
+        setTimeout(function(){ location.reload(); }, 1200);
+      } else {
+        icon.className = ''; icon.textContent = '✗';
+        label.textContent = j.error || 'failed';
+        btn.disabled = false;
+      }
+    })
+    .catch(function(e){
+      icon.className = ''; icon.textContent = '✗';
+      label.textContent = 'network error';
+      btn.disabled = false;
+    });
+}
+
 // ── Kick off all fetches in parallel, render whenever any complete ──
 Promise.all([
   fetchOptional(SHEET.gids.daily),
   fetchOptional(SHEET.gids.aggregate),
   fetchOptional(SHEET.gids.dailyChannels),
   fetchOptional(SHEET.gids.events),
-  fetchOptional(SHEET.gids.gbpDaily)
+  fetchOptional(SHEET.gids.gbpDaily),
+  fetchOptional(SHEET.gids.syncLog)
 ]).then(function(results) {
-  var dailyCsv = results[0], aggCsv = results[1], chanCsv = results[2], evtCsv = results[3], gbpCsv = results[4];
+  var dailyCsv = results[0], aggCsv = results[1], chanCsv = results[2], evtCsv = results[3], gbpCsv = results[4], syncCsv = results[5];
 
   if (dailyCsv && aggCsv) {
     var ga4 = parseGA4(parseCSV(aggCsv));
@@ -1088,6 +1330,10 @@ Promise.all([
   if (chanCsv) window._channelsData = parseDailyChannels(parseCSV(chanCsv));
   if (evtCsv)  window._eventsData   = parseEvents(parseCSV(evtCsv));
   if (gbpCsv)  window._gbpData      = parseGbp(parseCSV(gbpCsv));
+  if (syncCsv) {
+    var sync = parseSyncLog(parseCSV(syncCsv));
+    renderSyncPillFromTimestamp(sync.lastOkIso || DATA_REFRESHED_AT, sync.status);
+  }
 
   applyDateRange();
 }).catch(function(e){
