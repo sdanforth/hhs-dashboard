@@ -95,8 +95,9 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 .prov-photo{width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid #e2e8f0}
 .prov-name{font-size:14px;font-weight:800;color:#0d3b66}
 .prov-role{font-size:11px;color:#415a77}
-.prov-num{font-size:24px;font-weight:900;color:#0d1b2a;text-align:right;width:50px}
-.prov-num-label{font-size:9px;font-weight:700;color:#415a77;text-transform:uppercase;text-align:right}
+.prov-num-cell{text-align:right;padding-right:0;min-width:80px}
+.prov-num{font-size:24px;font-weight:900;color:#0d1b2a;text-align:right;line-height:1.1}
+.prov-num-label{font-size:9px;font-weight:700;color:#415a77;text-transform:uppercase;text-align:right;line-height:1;margin-top:2px}
 .prov-barwrap{width:80px}
 .prov-bartrack{height:5px;background:#e8ecf1;border-radius:3px;overflow:hidden}
 .prov-barfill{height:100%;border-radius:3px;background:#11A88A}
@@ -175,11 +176,9 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 <div class="date-ctrl">
 <span class="date-ctrl-label"><svg viewBox="0 0 24 24"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>Date range</span>
 <select id="dr-preset" class="dr-preset" onchange="applyPreset(this.value)" aria-label="Date range preset">
-<option value="7d">Last 7 days</option>
-<option value="30d">Last 30 days</option>
-<option value="lm">Last month</option>
-<option value="90d">Last 90 days</option>
 <option value="all" selected>Since launch</option>
+<option value="7d">Last week</option>
+<option value="lm">Last month</option>
 <option value="custom">Custom range…</option>
 </select>
 <input type="text" id="dr" class="di" placeholder="Pick start &amp; end dates" aria-label="Custom date range" readonly style="display:none;margin-left:6px">
@@ -201,55 +200,46 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 
 <div class="g2">
 <div class="box"><div class="box-title">Inquiries by Week</div><div class="ch"><canvas id="ch-trend"></canvas></div></div>
-<div class="box"><div class="box-title">Paid vs Organic Inquiries <span style="font-weight:500;color:#7a8794;font-size:11px">(estimated split — filters to selected range)</span></div><div class="ch"><canvas id="ch-paid"></canvas></div></div>
+<div class="box"><div class="box-title">Paid vs Organic Inquiries <span style="font-weight:500;color:#7a8794;font-size:11px">(stacked by inquiry type — filters to selected range)</span></div><div class="ch"><canvas id="ch-paid"></canvas></div></div>
 </div>
 
-<div class="sh">Provider Demand &amp; Service Mix</div>
-<div class="sh-desc">Who patients are asking for, and the most common reasons they're contacting the clinic.</div>
+<div class="sh">Provider Demand</div>
+<div class="sh-desc">Which providers patients are asking for on the appointment form. Updates with the date filter.</div>
 
-<div class="g2" style="margin-bottom:20px">
-<div class="box" style="padding:8px 16px">
-<div class="box-title" style="margin-bottom:8px">Most-Requested Providers</div>
-<table class="prov-table" style="max-width:none;width:100%">
+<div class="box" style="padding:12px 16px;margin-bottom:20px;max-width:680px">
+<table class="prov-table" style="width:100%;max-width:none">
 <tr>
 <td style="width:52px"><img class="prov-photo" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAB4AHgDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDcmJyQOarE468E1dDKyL03EZrPvckM3QCvoUfn8u5RmGy6yh+YUws+XJPJphLSybhxSgN5RGOe9Miwv/LMP3FS28X2lxzio4kJUDtnmtC3kRWCgc+tBasXRCVhAzmjlUw1Bk6DNKxynPSka+gIQYj3pISyRse1Rq5CkbeKl37YCWXk9KAQKGIyTUi896rQq7k88VYjQgfNQNE8R+bBqaMAk4qEIMgipYyVfpxQWiwACQTwaKUMPxoqSznoyDtY8FetQSEOzKT96mz3C/dU4qoGLPwSCKux57kWIoNrHHAFLKUVtnc1AJXBJJqGdy8ykHmiwXLPl7RjPJpquUbg5NV3nKEmRgFAzuJ4Feb+IvE17qNzLBpk729khIMicM/vnsKxrV40VeR3YLBVMXO0Nu56m99BbLvuZkjA/vsBVR/FelZAW9jbJxxzXh08jEHLlh/eYliauaDG97crAokxuA+Vc158sxl0ifQU8hgl703c9muPFmlWykPPuzjlVJFaOn6vZ6pbbrK4jmA+8FPK/UdRXk3ifTl0y7FsJQ7hRkAdPrXP2t3cafepcW8hhnU8Op6+xFEcwd9VoE8jhy2hJ3Poi2IC5BqyvIrkfCXiFNa07dwl1HxKnv6j2rpY5sgLXpwkprmifP1KcqUnCas0X4cHjvUq4zjvVaJwpBqysiMQV61TJTFY7pBgYAooLjfjNFIq5xXmbiScA5pruUUsKWdQ2SvBFUmlwhEgPNaHmokjlc+/NPlJ3KAOaZCVI+U1Yt9iguxz/SgcXqcd491GRZI9Nt3IkkXMpH8K1y0ax7RCgAQcAetP1nUUuNRurljkyudo747Cqnn7EBXqen+NfO4mo6tRvofoWAwyw1CMOu79SvfRbSQmfXitvwDZpNrcKzO6w7hwveqEiv5IOOT37muh8D29wmt28ywSyRKwLBR2+tc0mktT0IJyZD8QIZbHxBd+ZkMXxzXLl1nPzYye3rXa/Er7V/ac7XkLruY4YjqO31+tebLP5M2Vzsz37UQd0Kd4vU6Pw3q8vh/WYpWYmAnBPqvcfUV7jbssm2VHyjKGBHcGvAIJIrxNrDIPUf3T61698Pr37T4bhinOZrUmBvcDofyxXrZdV1dNnzee4dcsa8fRnYqR5YJqeBlHJOTVCM5GAeKsxDBxXqWPnEy5EA7nmimwDLjFFSzaKujip1YOXyQmaYPLkJHUdqsM6hPLbmoo7fEoZfu1Z5noFtCo6jGKz/EN4um6PeTg87Nq/U8VsuuCR0rzr4q3xgsra1B5ctIfoOB+tY4mfs6Tkehl1D22JhB7X/I4MP5sxdifKXrV63ld2V2QvJI2yKP1P+FZ0C/u4ojx/E5Pr2/IVq+GNRSPVmvi04eMiO2jhhWQk9sg185J2Wh+hRV3qe4+Avhabq3ivNclZnYAiIHCrXrWm+HbDTbdY7WJBt74rxrwR458X6he20d3pzLYGXymkNsyHgcnqcfyr1PxbcX1rpIGmTbryYYjGzIz6158207S3PShZq8dil4z8O6frFm8F2ieu4HG0+ue1fNHxG8A3/hp/tMOLmwY5WSPkj6iu+1GLxda39vc6tpEmrifJQXU+1IsdjECBk9hzXVaVZf2xpjfb9Km02KRMSW2MID/AHh6H6VcOak79GS4xxHu9UfL1letBKCp5r1f4aasj3rQbsLcLuA9GH/1v5Vyet+Eo7TXb1HV2tklKx7Dhm571naFdtpGvlY5M/Zp8hvUA4YflzXpUKyjUUl0PHxmEdSjKnLr+Z9GxsVIHaraZHNZ9rKsihhzuGRWrAV2nd1r6RnwMV0J7NueaKfEAOg4oqGbx0R5+9wHlxGCQasW88qtyvFBiClflwKFOHxH+NUedbXQmE++fBryj4oyef4pEQ5WKFFx7nJr1GZStwCoxmvIfiLNt1i6nU/M77R9AAP8a4cwlamo92e/w/TbrSm+iOYvbjagijPzycfgf8a+m/g54Ksrbw7F9qt0a4lXc7kc89q+WtPR3v7aWUExmVSSe43CvsbT9SGk6dwDsiTPHpivnMVLlsj73ARU+Zs6mS1trGIW1sMEL93OcCn6pHuitWHLqRt5/OuStIk1bTJZtWvTZy3LbgVuPLaNR0GQevqKy9StneZIb7xNaS2Kn5GWYh+PUiuZLm1Ozls9D0W0Sw1CEnZDI6H5gQCQao63MkEJjG0KBgAVyc9/a2McT6Xf2rSxjb5fmjMq9cfX0pby7lulikYMAw3YNK9tDWCijmbnTbWW0v769T5bRZbjeOu1eT+Hb8a+brppIdUkZvldn3H6nk/zr0nx146mlu9V8O2ttEsRlMTzliWwGBO0DpkjBzniuQ1zTi18swI2yAKPfArvpLlV31PIxE+eVlsj2vwBff2joVvITmaMBGH4cH8q7O1jDRkt1rxb4daq9heGMkmHG2VR6dmH05r2u2ZdwwQR/Ovo8LW9rST6o+EzLDfV8Q7bPVE4cJwaKZcjIyKK3RxttHNTQCM7X6isxmZbkhcYrTvpGeT5Rg981Ujjw26TFM47IW+IitfNY8qM14P4nuxqV9KV5yxC++P8a9T8daixtjaWucMwjZvwyR+QryLSbeW41aNP9rJPpzzmvHx1Tmnboj7HJMP7Ok5PeX5GpcaaLXQ7NHXbIQA3qMsxr3j4Z69B4g0aJbjBuYP9GuE9GA4b6EYNeJa7fJcoqxn5VckH1Cjr+JxVLS/E1z4R8YyXdnl4TtWeLOBIMDP4g8g15dWn7WNup9DRq+xlfofS7+F9P0nUIryz0+CQhAr+Ym/POcnPBOa27rVxJaeRa6VbKxAXcLVQOBj6DrVTwD4w0zxJYLPbTo4IGVbhlPoR2Nds89kIwVCcdworkjOUdGel7SLS91M4TRPDdqLu4v720tzdSg5fyhkVU8U3sWl6beX8uNsMbFF+g4H410eq36ZxEQEXqeledeNI5tdsZ7C0VnkmHlxqO7HgVFnKV2OUtGz5qQyXl9LNcMPOmkMjZOMknJ/nWtO2oWyqZfMaBeUJ5GPwra8UeE5NI1p7Xp5Wzlu+R1+mc1Fd6de20am0nJBB+92/GvR5k2eQou1yt4Z1NV1qLzzsWVtjN6Z4zX0Xpzj7OnIJ6cGvmKSGcSCZ0VXBzvjxx7nFev8AgHxYl3arHcHBiH74D+D/AGh/s+vpXp4CsoNwfU8HOcLKrFVI9D0gyEZB6UVWkkBk+U5U0V658vcoXKFphxgVBcQusi9MdaZNPIW3KcpnjNP+1bzgGkc90eT69rNw00VksAG0tcNI3VmJIJHr6VzF1fFFKWyrEH+V9v3v/rV3PjjTc2T7It8sLtNER1wSMr+Zrz+8aW3jG21VEZyEBZgT7nBFfPYhNTsz9AwElKipRVkSWkLOHubkGK0gAyW43egFc9ezG6vJpm6u5bFdXIgntIbKYkSmNnbAwAf4RXOfZCxSRBkA7JB/dYf0I/rWUX1OuotkXPCN/d6drMZs55ImfghWwD3wfyr2qy8YalGirLI0ikd2xXkWiacW1y0iVT5obzn/ANlQOPzr1u00Z5rdSACMcVy4hxudmEUkmjoYtce9gQFss3YV6F8KtIW71Ke9lXclqm0E95GH9F/nXnWl2ItLbMiZYdB619B+ANEOi+GLaGYYuZczzn/bbnH4DA/Cow0ead+xpi6jhSt1ZyPjz4bQ67a+bbmKK+TKq0g+WRDyVb09j2rz7TPgdPLcqNW1EwQkcx2zeZIR9SAB+tfRUq7zuflR90etUJR50hWLgNy7evtXoezi3dnle1klZHmJ+DXgl7MW0lhdykDHm/a2DfpgfpXPS/AWysdQjvvDOt3VtNGf9TeRCVHXupZcHBHHQ17csYOAg+XOB/tGrwg2qAgGfXtWiSWqM5e8mn1Pnu60LVfDUr21/bM1n1t7lDvj2/3C3Yjtnt9KK95nt4JopYZmjlRwQ6HkUV6FPG2VpI8Kvk/PPmpysvM+amkLHHQLWTqmpx6bC088m1AcD3PpRRXViJuFNyW54WX0o1sRCnPZs47Utfk1YhYlZYf7wGeO+PU1iPHHf3MZjBdIiNpYbVX2HqaKK+blJybk3qfotOEYRUIqyRFrCx2ayzHiRjgZPJOKoaPb+beOc4QRhm989B+eKKKS+Et/FY9Y+HPhZZba71OVcy3EhKn0UDAr0PQdN2adtdfmUkCiivLqScpO56lOKilY7PwR4cjv79buZN1rbMCMj/WP2H0HWvT3bJVex6+9FFerhYKNNNdTyMZNyqtPoZup3u1/Itx5ly3CoP4f9pvQfzp8MAVUgU5Cgb29faiiuo4yVUzeY6LGuAPc9T+WBUUhe9YhWaO0Bx8pwZT9ey/zoooAJo1WIQxIFDcHaMYWiiimB//Z" alt="Dr. Clever"></td>
 <td><div class="prov-name">Dr. Lauren Clever, MD</div><div class="prov-role">OB/GYN</div></td>
 <td class="prov-barwrap"><div class="prov-bartrack"><div class="prov-barfill" id="prov-clever-bar" style="width:86.7%"></div></div></td>
-<td><div class="prov-num" id="prov-clever">9</div><div class="prov-num-label">requests</div></td>
+<td class="prov-num-cell"><div class="prov-num" id="prov-clever">9</div><div class="prov-num-label">requests</div></td>
 </tr>
 <tr>
 <td><img class="prov-photo" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAB4AHgDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDiV468DFL0wTUUTlipPSrKqG61iWOVu9OZi1PEYA5zQy4FLlK5hjJvFQFAh6ipwxbnIUCsrXtYttNhyxV5j0jB5+p9BTcOwlLua0Dr/EM1cjVFOVQAd815VceL798+U8cQ9VX+tNtfE2ppJuF6X9m5FP2bE5dj1R4FlABPyg5xTfsx35Bz9a5TSPG8bYTVIwnYzRjI/Ef1FdlBNHPEssEiyRsMhlOQah011GpvoV5YWJ6HFUJlKykHrWuZFUgA1m6gA7qyjDZ5NHJ2H7TuRuu1Q35VGJi33uBVpDvj2kDioJrcoM9qLajvdDAseMjrRUDSbSR1HY0UNhGOhOhUY/nU6MMVV8rIyGPH61NEuCDVMlal6DJ69Md6lZF6dz2FRxHpnpRdXMVrbSTzuFiQZLGiLFJGB4q1mHR4gqgSXTjKoP4R6mvNp1ku5fmdnlkJZsHLMau6jcTazrDSL964kwi+i9s1674P8K2unW65jV5m5eRxkmnUqKmjShQdVniFxZTQNhkfGO64qtIhHOMEd6+pY/D9i4Ym0iYsMFsc15t4/wDCcNujvbwqjJ8yMBj8DiohiFJ2NqmDcVdM8ttJRJgH7/8AOt3w7rEmkXOQW8nOJYu2PUDsawXtCJ22qVGM/Q1JalvMZXBP8Jro3OI9jgmS5jSaNgyuMqw9KfPAWAI6iuS+H2o7pJNOlbJALR8/yrvAhYjFJITZStojswQeanv4N0ZjBBOKuqgBHHNRyJySfwrORcTmrhBCUXjrzRV6+jjjcu3XpRWLN0yMRYHXvUsKAk54qsgZsbzgD1NaFmEcbV+Y1otWZPQVkIGVOR7Vxnjy+zNbWAYhNpkkHr2A/nXfMmCAMn1FeSeJrxL3xHeyLjahEajPUDr/AFq4x1JvoL4Kg8/xFADzsXcfY9K+g9KtXeMY4+teEfD5YBqN5cXM7R2sS73ZThto7Z7fXrXoNvr1rDfxrpF7qGnzsA4iulcxSKeR97OMisa0ednfhp+zj6nqMVpIsQ+Xk1j+ItFlvLCRZFGQMjNX9N1b7TpfnFsEHDjocjr+tcjrfiWWO5LanrTWln1WC0jzJjPBY4JFc8IJuyOuc2o3PE/EQNnqNxCVCsrAn3HrVS2ClmkPGWxz9K6L4jW9jdyDVNGvpbuNSElWUfOmeQeg4Nc1ZsHVlb+JQwr0IO6PHqx5ZDzcvp2oW99BlWjYFgO//wCuvbNPu4ryxhuYCDHIgZT9a8Vuo/Phx/Hjp611Xw11KSS3l06RyBCd6D/Z7j86b0M9z0hRvBYelZkk8hY5HGanhuBAMHkGlli3MHHT0rKSuXB23KTIkowwzjmip8DewyBkcUVm4mvMVpJLeRuVC59BVi2KxnamCp6GsqdwkhwPl7YqWG8ygKY471abe5m0lsa7yYjY98GvDdRhKXMkquGJY559etevXF8Vt52PTy2z+VeQaoxCOCQW3HNawIZ6L8K9Et77QLqSZFkNzIVw3TavH+Nd4PD1paTG/eaWSYQ+T8zFiVxjaSe2OPpXMfBe4jGgQq+Btd1/XP8AWu11u8EqCK3Hyn77Ac/SuOc5KbSPXo04ummV9OJh0oqvyoXJwB1FQzeH7a+hmQzSRw3G3zoxxvwcg5HNXrfUon0QQxWrNdY2Fc84z19OlXtOE8FsG2koMYikweO/41ndxd0b8sZqzMafwXpUljNG6BlaMR7uSwA6deeOw6V4XrekXHh/UpLS4wzw/OjL0kTPX/63rX01d38DWuVULkc14X8XQftNndoDuQlfqDWtCo+ez6nLi6MfZ8y6HJXcwXDIeOGU+o7f1q74IuPK8UQlPuyhlI+orFlOYAUOYh90/wB32NWPCcpi8TWG7/nqFP48V2SPLR7EzdzzUqzM0eenpVZ2wCPSkikyCD0rFstRH7jncxyRRTc7gefaisnI1UTPMb9F78j0pfL5OIwM9gKnLqrLsHyilFwc8jitzHUzNVBj06Y4wQMfSvMbj9757Hpgt+uK9Y1Y+dp8wK8bT0+hryyCMyQODwwjx+PJq4iZ6P8ACGWGTTpYFBDxMJCCeWB6kfiK7nXhe6fLHLpqQ3NspBMbkq2DzkHofoa8E0bV7nw/qUN5anO35Xjbo6+n/wBevcPD2u2uuWsM1tJujPBU/eQ/3T71y1YOMuboejhqqlHk6nT6ZK09vHKLjSE4P+sMqMPYjb/Wql/qF/Lctb2MdndMDgujOiD1ySv8q1LOySVdwjYc9iBmn3bLAh24AHUnis5ONtEdlvP8jLltmESC4dWnkO1tvTjGTXk/xeu4Df21spB2fOwH6V6Frutw6fDLMPmk24RR6eteA63ezalqU1zPncxzj0HpTw8G5cxy4uolDlK1jOY2ZfqMGpYdlveW9xG2GRw2PTB6VVZWVhIBkZwfepJIRInmRk5J/Gu88s9pjkjnVZkYlGUMPfNPUDIwOtZ3hwr/AGHZbWDDyxyOme4rQLVzNGqdh2RjGPpRTRnbn1oqbF3M8eYMZzj6VYiiDLg8Gpp02HBx+FNUkY4qlIlx0JngRoGhI+VlIJ+orgr3RfsrTEth+mMcPnjI/wAK75JCRjNYfiIeekUSctLKiLjrnJ6e/FbRMup5rqUZiOHALRnDehx/iK6XwRI9nrt4ttvSEhWwOn0/U/lVTxZp8tlrBtZlImwoKnG4EjgHHfpxXoul+EX0rw5Dqoi8uG6uEhQHlh1GSfUkVTV07lU3aSsdjFfXqQRmBBOoHGDg1DPDqmpEiceRGf4RyateHjthVGHTjkV0EEbO4yDtHc8CuGWmx6kW2tWcJrnh/wD4lky85YfMx6mvD7+AJflY1Iiy2w/39pw2PxB/KvrhdHOq3CWSZAcZYgfdUdT/ACH1NeBfETQmstP0e7ULGbaxhGP7x3urY9Tu6/WujDQbTbOPFySaijgZbZTsxzG/GfeozAYIpN330OGx3HrS+eQj4xs3dPT/ACc/nVi5kEs8IK8thXx1I6VucjNHwfr4srtbScgWsz8HsjHuPY16OcAZzzXil4sSzHyN2wHgk5/WvRfDOtfbrRI76RIblMLhztMgx1xWU1bVFx10Z0krgYC9MUVWZ180gHIHvRWHObKBNMMvz0py5XC4z9KahaZlSJWZ2IVVAyST0AFereFfAi6fILnVys9ymCIx9yNvr3I9enpWtKk5vQxnVSRx3/CJ3y6ctzIVhnfmO2cEM/1wCQT24PvXnniS41XTtWaSGzNnNYr9ocuUYoWG0NnJHPb37V7/AHutW2nxXFrfhba6DYWcg7HU9Mn+FuxB69QSDXjPxE8Nzaz4gin0Oc6q16qr9ngBbZIOFHH3hjJHOc5zXY6ajHQ51Nt6nI+DbFte8RxPeThVVvPlklfkknjk9TxX1F4+sk034Wv5aBPKNufu52gyoCfyNU/g58KV8MWUV9r8cMmqs3mrCMMITjA3HozAenAJPU9Or+K0SyeAdXjb+ONFB9zImP1qZK0GaQd6kV5nkujyt5hAHzLgke1dAtzhgZPlAGTms7So1gSW6uV++MBe/rXUeE9NN5KNWvkCWcXMMbf8tCD94+w7etebCLqSsj2KklSjzM6vwvYNp2mS3t8BHNNhyG48tAPlX8OSfc+1fKfxT1238T+ILq20Bml0u1lkkiQDOS2PMcY52bskfU+1epfG3U7zTfCckdjPPGdZvBbO5c8IwJb6Zxj6E1yfh/wTPb+HpYNOkslnB/fsF3TA56spI6dh0HbnmvUUOVKETxXPmbnI8evrWGNYIoUcS9XLHqfp6Vo6H4b1PxFqP2XSbSS5kBAOBhV/3mPArqh4FOp61badpmopqF9M5NyYm8z7MucfvX+6GPOFBPTJOK+pPBHhOw8LaTFbWkShlUbmxyTiko33ByseOeHfgFOVtbrWtVitniO/yoLdZOfcvwfxFdpqXwusb+ya3vta1S5jYceYITtPqP3eR+Br0hi91LheIlPJ9TUxhUDpk1pZIz5mz5o8V/D/AFLwpm5t7iTVNFQfMzIPOtx6tj7ye46dwOtFfR91aGWJiijcOhorCWHjJ3RrGvJKx8//AAcsBqPi+3mdSyWKNcHPTd0X9Tn8K9y2mRkQD7xyaKK2oq0TFu5k+JtJtdWYR6jZRS8YDlRuA9M9ag8E+HbHQ/Ea3FjEsayRtCeMnnnqeeooorRpWFdno2K4r4tzLB4QfecB7mBP/Hwf6UUVhU+BnRQ/iR9TjfCekSeILpXlB/s6HCydvMPZR/X2r0PVoMWawQrjp8qjA9gPaiipw0FGCa6mmMqSlUaeyOY8a+FbbxT4SfSbtvJkyskUgGTHIvQ47jkg+xrh9D0GC1caP8QNPN0yEJaXjjMc69AocdD7EjP1ooroa6nLHser+HPDtho8KCxsre0QHKxQIFVeMdu/vWpeyMSsMZwznGfQdzRRSJJoFUbUXhFH5DtVgBVG5+nYetFFA0RTv+6ckYGOlFFFAH//2Q==" alt="J. Smiley"></td>
 <td><div class="prov-name">Jacqueline Smiley, NP</div><div class="prov-role">Nurse Practitioner</div></td>
 <td class="prov-barwrap"><div class="prov-bartrack"><div class="prov-barfill" id="prov-smiley-bar" style="width:33.3%"></div></div></td>
-<td><div class="prov-num" id="prov-smiley">5</div><div class="prov-num-label">requests</div></td>
+<td class="prov-num-cell"><div class="prov-num" id="prov-smiley">5</div><div class="prov-num-label">requests</div></td>
 </tr>
 <tr>
 <td><div class="prov-photo" style="width:44px;height:44px;border-radius:50%;background:#e3e8ee;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:#697386;border:2px solid #dde2e9">—</div></td>
 <td><div class="prov-name">No Preference</div><div class="prov-role">Open to any provider</div></td>
 <td class="prov-barwrap"><div class="prov-bartrack"><div class="prov-barfill" id="prov-nopref-bar" style="width:100%"></div></div></td>
-<td><div class="prov-num" id="prov-nopref">15</div><div class="prov-num-label">requests</div></td>
+<td class="prov-num-cell"><div class="prov-num" id="prov-nopref">15</div><div class="prov-num-label">requests</div></td>
 </tr>
 <tr>
 <td><img class="prov-photo" src="data:image/jpeg;base64,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" alt="Dr. Pyatt"></td>
 <td><div class="prov-name">Dr. David Pyatt, DO</div><div class="prov-role">OB/GYN</div></td>
 <td class="prov-barwrap"><div class="prov-bartrack"><div class="prov-barfill" id="prov-pyatt-bar" style="width:26.7%"></div></div></td>
-<td><div class="prov-num" id="prov-pyatt">4</div><div class="prov-num-label">requests</div></td>
+<td class="prov-num-cell"><div class="prov-num" id="prov-pyatt">4</div><div class="prov-num-label">requests</div></td>
 </tr>
 <tr>
 <td><img class="prov-photo" src="data:image/jpeg;base64,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" alt="Dr. Wiggins"></td>
 <td><div class="prov-name">Dr. Shawn Wiggins, MD</div><div class="prov-role">OB/GYN</div></td>
 <td class="prov-barwrap"><div class="prov-bartrack"><div class="prov-barfill" id="prov-wiggins-bar" style="width:20%"></div></div></td>
-<td><div class="prov-num" id="prov-wiggins">3</div><div class="prov-num-label">requests</div></td>
+<td class="prov-num-cell"><div class="prov-num" id="prov-wiggins">3</div><div class="prov-num-label">requests</div></td>
 </tr>
 </table>
-<div style="font-size:11px;color:#7a8794;margin-top:8px;padding:0 4px">Live counts from the appointment form. "No Preference" patients are routed to the next available provider.</div>
-</div>
-
-<div class="box">
-<div class="box-title">Service Type Mix</div>
-<div class="ch" style="height:240px"><canvas id="ch-services"></canvas></div>
-<div style="font-size:11px;color:#7a8794;margin-top:8px">Top reasons patients are contacting the clinic — categorised from the appointment log.</div>
-</div>
+<div style="font-size:11px;color:#7a8794;margin-top:10px">Live counts from the appointment form. "No Preference" patients are routed to the next available provider.</div>
 </div>
 
 <div class="sh">Healthgrades Provider Profiles</div>
@@ -285,6 +275,7 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 <svg viewBox="0 0 24 24" style="width:18px;height:18px;flex-shrink:0"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
 <span>Google Business Profile — reviews and listing activity by clinic location.</span>
 </div>
+<div id="gbp-stale-banner" style="background:#fff5e6;border:1px solid #f59e0b;border-left:4px solid #f59e0b;border-radius:6px;padding:10px 14px;margin-bottom:12px;font-size:12px;color:#7c4a03;line-height:1.45"><strong>Hand-pasted snapshot from May 18.</strong> Awaiting nightly GBP_Daily sync — Steve needs to finish OAuth scope grant + publish the GBP_Daily tab + paste its gid into <code>CAMPAIGN.sheet.gids.gbpDaily</code>. Banner disappears automatically once live data flows.</div>
 
 <div class="g2">
 <div class="box">
@@ -411,11 +402,10 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 <tr><td><strong>hmc.gg/pyatt</strong></td><td>Healthgrades — Dr. Pyatt</td><td class="r">1</td></tr>
 <tr><td><strong>hmc.gg/smiley</strong></td><td>Healthgrades — J. Smiley</td><td class="r">1</td></tr>
 <tr><td><strong>hmc.gg/wiggins</strong></td><td>Healthgrades — Dr. Wiggins</td><td class="r">1</td></tr>
-<tr><td><strong>hmc.gg/obgynhca-hurley-nfc</strong> <span style="font-size:10px;font-weight:700;color:#11A88A;background:#e8f7f2;padding:2px 6px;border-radius:4px;margin-left:4px">NFC</span></td><td>Google Review — Hurley · TrustHero NFC stand</td><td class="r">0</td></tr>
-<tr><td><strong>hmc.gg/obgynhca-dort-nfc</strong> <span style="font-size:10px;font-weight:700;color:#11A88A;background:#e8f7f2;padding:2px 6px;border-radius:4px;margin-left:4px">NFC</span></td><td>Google Review — Dort Hwy · TrustHero NFC stand</td><td class="r">0</td></tr>
+<tr><td><strong>hmc.gg/obgynhca-hurley-nfc</strong></td><td>Google Review — Hurley counter</td><td class="r">0</td></tr>
+<tr><td><strong>hmc.gg/obgynhca-dort-nfc</strong></td><td>Google Review — Dort Hwy counter</td><td class="r">0</td></tr>
 </tbody>
 </table>
-<div style="padding:12px;text-align:center;font-size:12px;color:#3c4257">TrustHero NFC stands now live at both clinic counters · counts update nightly from Short.io</div>
 </div>
 
 <div class="acc">
@@ -434,25 +424,37 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 
 <script>
 // ─── DATA REFRESH TIMESTAMP ─────────────────────────────────────────
-// Fallback timestamp displayed if Sync_Log isn't reachable yet. Once
-// the Apps Script's `safeReplaceSheet` is running and Sync_Log is
-// published, `applySyncStatus` overwrites this from real sync data.
-var DATA_REFRESHED_AT = '2026-05-18T15:10:00-04:00'; // Eastern Time (Steve / Flint, MI)
-function renderSyncPillFromTimestamp(iso, status) {
-  // status: 'ok' | 'stale' | 'failed'. Updates pill text + colour.
+// The pill shows TWO timestamps:
+//   - "Synced X" = when the underlying data was last written to the sheet
+//     (from Sync_Log if published, otherwise newest date seen in GA4_Daily).
+//   - "Loaded X" = when this browser tab pulled the CSVs (always now).
+// Never a hardcoded constant. Updates every time data flows in.
+function renderSyncPill(opts) {
+  // opts: { syncedIso, loadedIso, status: 'ok'|'stale'|'failed', source: string }
   var el = document.getElementById('data-refresh-ts');
   var pill = document.getElementById('sync-pill');
   if (!el || !pill) return;
   pill.classList.remove('stale', 'failed');
-  if (status === 'stale')  pill.classList.add('stale');
-  if (status === 'failed') pill.classList.add('failed');
-  if (!iso) { el.textContent = 'No sync data'; return; }
-  var d = new Date(iso);
-  var dateStr = d.toLocaleDateString('en-US', {month:'short', day:'numeric', timeZone: 'America/Detroit'});
-  var timeStr = d.toLocaleTimeString('en-US', {hour:'numeric', minute:'2-digit', timeZone: 'America/Detroit', timeZoneName: 'short'});
-  el.textContent = 'Synced ' + dateStr + ' · ' + timeStr;
+  if (opts.status === 'stale')  pill.classList.add('stale');
+  if (opts.status === 'failed') pill.classList.add('failed');
+  function fmt(iso) {
+    if (!iso) return null;
+    var d = new Date(iso);
+    if (isNaN(d.getTime())) return null;
+    var dateStr = d.toLocaleDateString('en-US', {month:'short', day:'numeric', timeZone:'America/Detroit'});
+    var timeStr = d.toLocaleTimeString('en-US', {hour:'numeric', minute:'2-digit', timeZone:'America/Detroit'});
+    return dateStr + ' · ' + timeStr;
+  }
+  var synced = fmt(opts.syncedIso);
+  var loaded = fmt(opts.loadedIso);
+  var pieces = [];
+  if (synced) pieces.push('Synced ' + synced);
+  if (loaded && loaded !== synced) pieces.push('loaded ' + loaded);
+  el.textContent = pieces.length ? pieces.join(' · ') : 'Awaiting sync';
+  pill.title = (opts.source || 'data source') + (synced ? ' — last sync ' + synced : ' — no sync recorded') + (loaded ? ' — browser loaded ' + loaded : '');
 }
-renderSyncPillFromTimestamp(DATA_REFRESHED_AT, 'ok'); // initial paint before Sync_Log loads
+// Initial paint: show "Loading…" until the first CSV completes.
+renderSyncPill({ status: 'stale', source: 'loading' });
 
 // ─── CAMPAIGN CONFIG ────────────────────────────────────────────────
 // Per-campaign settings. To stand up a new service-line dashboard,
@@ -646,24 +648,35 @@ window.trendChart = new Chart(document.getElementById('ch-trend'), {
 
 window.paidChart = new Chart(document.getElementById('ch-paid'), {
   type: 'bar',
-  data: { labels: [], datasets: [{ data: [], backgroundColor: [T70, N70], borderRadius: 5, barPercentage: .65 }] },
+  data: {
+    labels: ['Paid', 'Organic / Direct'],
+    datasets: [
+      { label: 'Appointment Requests', data: [0, 0], backgroundColor: T70, barPercentage: .55 },
+      { label: 'Phone Calls',          data: [0, 0], backgroundColor: N70, barPercentage: .55 }
+    ]
+  },
   options: {
-    indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+    responsive: true, maintainAspectRatio: false,
     plugins: {
-      legend: { display: false },
-      datalabels: { color: '#fff', font: { weight: '800', size: 14 }, anchor: 'end', align: 'start', offset: 10, formatter: function(v){ return v; } }
+      legend: { position: 'top' },
+      datalabels: { color: '#fff', font: { weight: '800', size: 12 }, display: function(ctx){ return ctx.dataset.data[ctx.dataIndex] > 1; }, anchor: 'center' }
     },
-    scales: { x: { grid: { color: '#e8ecf1' }, beginAtZero: true }, y: { grid: { display: false }, ticks: { font: { weight: '700', size: 13 } } } }
+    scales: {
+      x: { stacked: true, grid: { display: false }, ticks: { font: { weight: '700', size: 13 } } },
+      y: { stacked: true, grid: { color: '#e8ecf1' }, beginAtZero: true }
+    }
   }
 });
 
+// Initialise EMPTY so a sync gap is loud (no stale hardcoded labels).
+// applyGa4(range) populates this from GA4_Daily on every render.
 window.sessionsChart = new Chart(document.getElementById('ch-sessions'), {
   type: 'line',
-  data: { labels: ['Apr 7','Apr 14','Apr 21','Apr 28','May 5'], datasets: [{ label: 'Sessions', data: [146,171,190,814,82], borderColor: T, backgroundColor: T+'20', fill: true, pointRadius: 4, pointBackgroundColor: T, tension: .3 }] },
+  data: { labels: [], datasets: [{ label: 'Sessions', data: [], borderColor: T, backgroundColor: T+'20', fill: true, pointRadius: 3, pointBackgroundColor: T, tension: .25 }] },
   options: {
     responsive: true, maintainAspectRatio: false,
     plugins: { legend: { display: false }, datalabels: { display: false } },
-    scales: { x: { grid: { display: false } }, y: { grid: { color: '#e8ecf1' }, beginAtZero: true } }
+    scales: { x: { grid: { display: false }, ticks: { maxTicksLimit: 10 } }, y: { grid: { color: '#e8ecf1' }, beginAtZero: true } }
   }
 });
 
@@ -677,26 +690,6 @@ window.sourcesChart = new Chart(document.getElementById('ch-sources'), {
   }
 });
 
-// Service Type Mix donut — fills the right side of the Provider Demand row
-// on Overview. Categorises the visible service-type text from each appt-log
-// row into ~5 buckets. Data feed: same #appt-log rows that drive Provider
-// Demand, so the donut respects the date filter automatically.
-window.servicesChart = new Chart(document.getElementById('ch-services'), {
-  type: 'doughnut',
-  data: { labels: [], datasets: [{ data: [], backgroundColor: [T70, N70, T40, N40, LN, '#cbd5e0'], borderWidth: 0 }] },
-  options: {
-    responsive: true, maintainAspectRatio: false, cutout: '60%',
-    plugins: {
-      legend: { position: 'right', labels: { boxWidth: 10, padding: 8, font: { size: 11, weight: '600' } } },
-      datalabels: {
-        color: '#fff', font: { weight: '800', size: 12 },
-        display: function(ctx){ return ctx.dataset.data[ctx.dataIndex] > 1; },
-        formatter: function(v){ return v; }
-      }
-    }
-  }
-});
-
 // ─── RENDER PIPELINE: SINGLE SOURCE OF TRUTH ────────────────────────
 // Every card/chart/table that depends on the selected date range gets
 // updated from here. To add a new visualization, wire it in this fn.
@@ -705,7 +698,6 @@ function applyDateRange() {
   var inquiries = applyInquiries(range);
   applyPaidVsOrganic(range, inquiries.apptSum + inquiries.phoneSum);
   applyProviderDemand(range, inquiries.apptSum);
-  applyServiceMix(range);
   applyGa4(range);
   applyGbp(range);
   applyChannels(range);
@@ -763,32 +755,6 @@ function applyLandingPages(range) {
   });
 }
 
-// Service Type Mix: categorise the appointment-log rows visible in the
-// selected range and feed the donut chart. Buckets are deliberately broad
-// — execs scanning Overview don't need 12 categories. Anything not in the
-// named buckets falls into "Other".
-function applyServiceMix(range) {
-  var buckets = { 'Pregnancy & OB': 0, 'Gynecology': 0, 'Fibroid': 0, 'Hormone / Menopause': 0, 'General / Other': 0 };
-  var rows = document.querySelectorAll('#appt-log tr[data-date]');
-  rows.forEach(function(r) {
-    var d = parseLocalDate(r.getAttribute('data-date'));
-    if (d < range.start || d > range.end) return;
-    var cells = r.querySelectorAll('td');
-    var text = (cells[cells.length - 1].textContent || '').toLowerCase();
-    if (/pregnan|ob|vbac/.test(text)) buckets['Pregnancy & OB'] += 1;
-    else if (/fibroid/.test(text)) buckets['Fibroid'] += 1;
-    else if (/menopaus|hormone/.test(text)) buckets['Hormone / Menopause'] += 1;
-    else if (/gynecolog|gyn/.test(text)) buckets['Gynecology'] += 1;
-    else buckets['General / Other'] += 1;
-  });
-  var labels = [], data = [];
-  Object.keys(buckets).forEach(function(k) {
-    if (buckets[k] > 0) { labels.push(k); data.push(buckets[k]); }
-  });
-  window.servicesChart.data.labels = labels;
-  window.servicesChart.data.datasets[0].data = data;
-  window.servicesChart.update();
-}
 
 // "Showing data from [plain-English range]" — execs need to read what they're seeing.
 function applyDateSummary(range) {
@@ -890,27 +856,34 @@ function applyInquiries(range) {
   return { apptSum: apptSum, phoneSum: phoneSum };
 }
 
-// ── Paid vs Organic inquiries ──
-// Preferred source: GA4_Events × channel (filtered exactly). Until that
-// tab is online we scale the filtered total inquiries by the static
-// paid/organic ratio. Result moves with the date range either way.
+// ── Paid vs Organic inquiries — stacked by inquiry type ──
+// Two vertical bars (Paid / Organic), each stacked with appointment_request
+// + phone_call_click event counts from GA4_Events. Falls back to a rough
+// total split when GA4_Events isn't loaded (no appt/phone breakdown then).
 function applyPaidVsOrganic(range, totalInquiries) {
   var events = window._eventsData;
-  var paid = 0, organic = 0;
+  var paidAppt = 0, paidPhone = 0, organicAppt = 0, organicPhone = 0;
   if (events && events.length) {
     events.forEach(function(e){
       var d = parseLocalDate(e.date);
       if (d < range.start || d > range.end) return;
-      if (e.channel === 'Paid Search' || e.channel === 'Cross-network' || e.channel === 'Display' || e.channel === 'Paid Social') paid += e.count;
-      else organic += e.count;
+      var ch = (e.channel || '').toLowerCase();
+      var isPaid = /paid|cross-network|display/i.test(ch);
+      if (e.eventName === 'appointment_request') {
+        if (isPaid) paidAppt += e.count; else organicAppt += e.count;
+      } else if (e.eventName === 'phone_call_click') {
+        if (isPaid) paidPhone += e.count; else organicPhone += e.count;
+      }
     });
   } else {
-    var paidRatio = DATA.paidVsOrganic.paid / (DATA.paidVsOrganic.paid + DATA.paidVsOrganic.organic);
-    paid = Math.round(totalInquiries * paidRatio);
-    organic = Math.max(0, totalInquiries - paid);
+    // Coarse fallback: split totals 70/30 paid/organic (rough campaign average);
+    // can't break out appt vs phone without events tab.
+    var paid = Math.round(totalInquiries * 0.7);
+    var organic = totalInquiries - paid;
+    paidAppt = paid; organicAppt = organic;
   }
-  window.paidChart.data.labels = ['From Paid Campaigns', 'From Organic / Direct'];
-  window.paidChart.data.datasets[0].data = [paid, organic];
+  window.paidChart.data.datasets[0].data = [paidAppt, organicAppt];
+  window.paidChart.data.datasets[1].data = [paidPhone, organicPhone];
   window.paidChart.update();
 }
 
@@ -1055,12 +1028,27 @@ function applyGa4(range) {
   var mobilePct = all > 0 ? Math.round(mobile / all * 100) : 0;
   if ((el = document.getElementById('live-mobile'))) el.textContent = mobilePct + '%';
 
-  // Sessions Over Time: real daily data inside the range
-  if (filtered.length > 0) {
+  // Sessions Over Time: real daily data inside the range.
+  // ALWAYS update — never leave stale points on the chart. Bucket to weeks
+  // when the range spans >21 days so the line stays readable.
+  if (filtered.length > 21) {
+    var weekBuckets = {};
+    filtered.forEach(function(d){
+      var dt = parseLocalDate(d.date);
+      var monday = new Date(dt);
+      monday.setDate(dt.getDate() - ((dt.getDay() + 6) % 7));
+      var key = monday.toISOString().substring(0, 10);
+      if (!weekBuckets[key]) weekBuckets[key] = { label: weekLabelFromMonday(monday), sessions: 0 };
+      weekBuckets[key].sessions += d.sessions;
+    });
+    var keys = Object.keys(weekBuckets).sort();
+    window.sessionsChart.data.labels = keys.map(function(k){ return weekBuckets[k].label; });
+    window.sessionsChart.data.datasets[0].data = keys.map(function(k){ return weekBuckets[k].sessions; });
+  } else {
     window.sessionsChart.data.labels = filtered.map(function(d){ return fmtMD(d.date); });
     window.sessionsChart.data.datasets[0].data = filtered.map(function(d){ return d.sessions; });
-    window.sessionsChart.update();
   }
+  window.sessionsChart.update();
 
   // Traffic Sources: if per-day channel data is in the sheet, sum it
   // exactly within the range. Otherwise fall back to ratio-scaling the
@@ -1093,7 +1081,15 @@ function applyGa4(range) {
 // ── GBP per-location stat-row: filter to range when per-day data is loaded ──
 function applyGbp(range) {
   var gbp = window._gbpData;
-  if (!gbp || !gbp.length) return; // keep the static "Dec 2025 – May 2026" snapshot
+  var banner = document.getElementById('gbp-stale-banner');
+  if (!gbp || !gbp.length) {
+    // No live data yet. Leave the hardcoded snapshot AND keep the "Awaiting
+    // sync" banner visible so staleness is obvious. Don't silently look fine.
+    if (banner) banner.style.display = '';
+    return;
+  }
+  // Live data flowed — hide the stale banner.
+  if (banner) banner.style.display = 'none';
 
   var byLoc = {}; // loc_id → { views, calls, directions, clicks }
   gbp.forEach(function(r){
@@ -1321,6 +1317,7 @@ Promise.all([
   fetchOptional(SHEET.gids.syncLog)
 ]).then(function(results) {
   var dailyCsv = results[0], aggCsv = results[1], chanCsv = results[2], evtCsv = results[3], gbpCsv = results[4], syncCsv = results[5];
+  var nowIso = new Date().toISOString();
 
   if (dailyCsv && aggCsv) {
     var ga4 = parseGA4(parseCSV(aggCsv));
@@ -1330,14 +1327,31 @@ Promise.all([
   if (chanCsv) window._channelsData = parseDailyChannels(parseCSV(chanCsv));
   if (evtCsv)  window._eventsData   = parseEvents(parseCSV(evtCsv));
   if (gbpCsv)  window._gbpData      = parseGbp(parseCSV(gbpCsv));
+
+  // Sync-pill source-of-truth, in priority order:
+  //   1. Sync_Log tab (most-recent OK timestamp) — set by Apps Script
+  //   2. Newest date seen in GA4_Daily — proxy for "last nightly run"
+  //   3. Now (browser load time) — proves we DID fetch something
+  var syncedIso = null, status = 'ok', source = 'GA4_Daily';
   if (syncCsv) {
     var sync = parseSyncLog(parseCSV(syncCsv));
-    renderSyncPillFromTimestamp(sync.lastOkIso || DATA_REFRESHED_AT, sync.status);
+    if (sync.lastOkIso) { syncedIso = sync.lastOkIso; status = sync.status; source = 'Sync_Log'; }
   }
+  if (!syncedIso && window._ga4data && window._ga4data.daily && window._ga4data.daily.length) {
+    var lastRow = window._ga4data.daily[window._ga4data.daily.length - 1];
+    if (lastRow && lastRow.date) {
+      syncedIso = new Date(lastRow.date + 'T04:00:00-04:00').toISOString();
+      // Stale if newest GA4_Daily date is older than 48h (nightly should have caught up)
+      if (Date.now() - new Date(syncedIso).getTime() > 48 * 3600 * 1000) status = 'stale';
+    }
+  }
+  if (!syncedIso) { syncedIso = nowIso; status = 'failed'; source = 'no data'; }
+  renderSyncPill({ syncedIso: syncedIso, loadedIso: nowIso, status: status, source: source });
 
   applyDateRange();
 }).catch(function(e){
   console.log('Data fetch error:', e);
+  renderSyncPill({ syncedIso: null, loadedIso: new Date().toISOString(), status: 'failed', source: 'fetch error: ' + e.message });
   applyDateRange();
 });
 
