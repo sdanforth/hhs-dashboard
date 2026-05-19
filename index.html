@@ -204,7 +204,6 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 </div>
 
 <div class="sh">Provider Demand</div>
-<div class="sh-desc">Which providers patients are asking for on the appointment form. Updates with the date filter.</div>
 
 <div class="box" style="padding:12px 16px;margin-bottom:20px;max-width:680px">
 <table class="prov-table" style="width:100%;max-width:none">
@@ -239,11 +238,9 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 <td class="prov-num-cell"><div class="prov-num" id="prov-wiggins">3</div><div class="prov-num-label">requests</div></td>
 </tr>
 </table>
-<div style="font-size:11px;color:#7a8794;margin-top:10px">Live counts from the appointment form. "No Preference" patients are routed to the next available provider.</div>
 </div>
 
 <div class="sh">Healthgrades Provider Profiles</div>
-<div class="sh-desc">Overall reputation and engagement metrics.</div>
 <div class="box" style="margin-bottom:20px;overflow-x:auto">
 <table class="tbl">
 <thead><tr><th>Provider</th><th class="r">Profile Views</th><th class="r">Calls</th><th class="r">Rating</th><th class="r">Reviews</th></tr></thead>
@@ -271,11 +268,6 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 </div>
 
 <div class="sh">Google Business Profiles</div>
-<div class="sh-desc" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:14px">
-<svg viewBox="0 0 24 24" style="width:18px;height:18px;flex-shrink:0"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
-<span>Google Business Profile — reviews and listing activity by clinic location.</span>
-</div>
-<div id="gbp-stale-banner" style="background:#fff5e6;border:1px solid #f59e0b;border-left:4px solid #f59e0b;border-radius:6px;padding:10px 14px;margin-bottom:12px;font-size:12px;color:#7c4a03;line-height:1.45"><strong>Hand-pasted snapshot from May 18.</strong> Awaiting nightly GBP_Daily sync — Steve needs to finish OAuth scope grant + publish the GBP_Daily tab + paste its gid into <code>CAMPAIGN.sheet.gids.gbpDaily</code>. Banner disappears automatically once live data flows.</div>
 
 <div class="g2">
 <div class="box">
@@ -320,7 +312,6 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 <div class="stat-item"><div class="stat-item-label">Conv. Rate</div><div class="stat-item-val" id="ads-convrate">2.1%</div></div>
 </div>
 <div class="sh">Landing Pages</div>
-<div class="sh-desc">Per-LP event attribution since launch. Auto-refreshed nightly via GA4_Events sheet tab.</div>
 <div class="box" style="margin-bottom:20px;overflow-x:auto">
 <table class="tbl">
 <thead><tr><th>Landing Page</th><th class="r">Sessions</th><th class="r">Appt Click Events</th><th class="r">Phone Click Events</th></tr></thead>
@@ -334,7 +325,6 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 </tbody>
 </table>
 </div>
-<div style="font-size:11px;color:#7a8794;margin:-12px 0 20px">Source: GA4_Events sheet tab (Extensions.gs / nightly). "Appt Click Events" is the raw <code>appointment_request</code> event count from GA4 — this is HIGHER than the 36 actual booked appointments in the Detail-tab log (retries, double-clicks, etc) so use the appointment log for the real bookings figure. "Phone Click Events" is the <code>phone_call_click</code> count — 210 events from ~76 unique callers. Genetic Counseling drives the highest session volume (49.6%) but converted zero appointment clicks; copy/CTA needs reevaluation.</div>
 <div class="sh">Budget Allocation</div>
 <div class="sh-desc">Spend weighting across service lines.</div>
 <div class="stat-row">
@@ -421,17 +411,6 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 </table>
 </div>
 
-<div class="acc">
-<button class="acc-toggle" onclick="this.parentElement.classList.toggle('open')">Data Notes &amp; Methodology <span class="acc-arrow">&#9660;</span></button>
-<div class="acc-body" style="padding:16px 20px">
-<div style="font-size:12px;color:#3c4257;line-height:1.6">
-<strong style="color:#1a1f36">Data Sources</strong><br>
-<strong>Verified from platforms:</strong> Appointment requests (37, Alchemer), Google Ads clicks/conversions/cost (GA4/Ads), traffic sources (GA4), short link clicks (Short.io), provider request breakdown (Alchemer).<br>
-<strong>Estimated:</strong> GBP profile activity (searches/views/calls/directions — awaiting Supermetrics connection), phone call count (12 — from GA4 conversion tracking, verify in Google Ads), sessions-over-time weekly breakdown, paid vs organic inquiry split.<br>
-<strong>Date controls:</strong> Working — filters GA4 daily data by selected date range. Sessions, charts, and traffic sources recalculate on date change.
-</div>
-</div>
-</div>
 <div class="ftr">HHS Obstetrics &amp; Gynecology Associates &middot; Clinic &amp; Provider Campaigns &middot; Connected Technologies</div>
 </div>
 
@@ -585,12 +564,14 @@ applyHashTab();
 // Date-range preset handler. Called by the <select id="dr-preset"> on change.
 // 'custom' opens flatpickr inline; everything else jumps to a fixed range.
 // Old qbtn buttons removed 2026-05-19 — preset list now lives in the <select>.
+// Flag set when applyPreset programmatically calls fp.setDate, so the
+// flatpickr onChange handler knows not to flip the dropdown to "Custom".
+var _programmaticDateSet = false;
 function applyPreset(k) {
   var custom = document.getElementById('dr');
   if (k === 'custom') {
     if (custom) {
       custom.style.display = '';
-      // Open flatpickr now so the user gets a calendar without a second click
       if (custom._flatpickr) custom._flatpickr.open();
     }
     return;
@@ -608,22 +589,23 @@ function applyPreset(k) {
   else if (k === '90d') { s = new Date(); s.setDate(today.getDate() - 90); }
   else                  { s = parseLocalDate(CAMPAIGN.launchDate); } // 'all'
   if (s) s.setHours(0, 0, 0, 0);
-  // Never let the range start before the campaign launched.
   var launchD = parseLocalDate(CAMPAIGN.launchDate);
   if (s < launchD) s = launchD;
+  _programmaticDateSet = true;
   fp.setDate([s, e]);
+  _programmaticDateSet = false;
   applyDateRange();
 }
 
 var fp = flatpickr('#dr', {
   mode: 'range',
   dateFormat: 'M j, Y',
-  minDate: CAMPAIGN.launchDate, // block manual selection of pre-launch dates
-  defaultDate: [ parseLocalDate(CAMPAIGN.launchDate), new Date() ], // Since Launch = the default range
+  minDate: CAMPAIGN.launchDate,
+  defaultDate: [ parseLocalDate(CAMPAIGN.launchDate), new Date() ],
   onChange: function(selected){
-    // When the user picks a real custom range, flip the preset select to
-    // "Custom range…" so the UI reflects what's actually showing.
-    if (selected && selected.length === 2) {
+    // Only flip the dropdown to "Custom range…" when the USER picked dates
+    // via the calendar — not when applyPreset set them programmatically.
+    if (!_programmaticDateSet && selected && selected.length === 2) {
       var sel = document.getElementById('dr-preset');
       if (sel) sel.value = 'custom';
     }
@@ -664,19 +646,19 @@ window.paidChart = new Chart(document.getElementById('ch-paid'), {
   data: {
     labels: ['Paid', 'Organic / Direct'],
     datasets: [
-      { label: 'Appointment Requests', data: [0, 0], backgroundColor: T70, barPercentage: .55 },
-      { label: 'Phone Calls',          data: [0, 0], backgroundColor: N70, barPercentage: .55 }
+      { label: 'Appointment Requests', data: [0, 0], backgroundColor: T70, barPercentage: .65 },
+      { label: 'Phone Calls',          data: [0, 0], backgroundColor: N70, barPercentage: .65 }
     ]
   },
   options: {
-    responsive: true, maintainAspectRatio: false,
+    indexAxis: 'y', responsive: true, maintainAspectRatio: false,
     plugins: {
       legend: { position: 'top' },
       datalabels: { color: '#fff', font: { weight: '800', size: 12 }, display: function(ctx){ return ctx.dataset.data[ctx.dataIndex] > 1; }, anchor: 'center' }
     },
     scales: {
-      x: { stacked: true, grid: { display: false }, ticks: { font: { weight: '700', size: 13 } } },
-      y: { stacked: true, grid: { color: '#e8ecf1' }, beginAtZero: true }
+      x: { stacked: true, grid: { color: '#e8ecf1' }, beginAtZero: true },
+      y: { stacked: true, grid: { display: false }, ticks: { font: { weight: '700', size: 13 } } }
     }
   }
 });
