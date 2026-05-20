@@ -286,7 +286,7 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 <div class="box">
 <div class="box-title">HHS Obstetrics &amp; Gynecology Associates – Dort Hwy</div>
 <div style="font-size:11px;font-weight:700;color:#3c4257;margin-bottom:4px">GOOGLE REVIEWS</div>
-<div style="display:flex;align-items:baseline;gap:8px;margin-bottom:8px"><span style="font-size:28px;font-weight:900">1.0</span><span class="stars">&#9733;&#9734;&#9734;&#9734;&#9734;</span><span style="font-size:12px;color:#3c4257">1 review</span></div>
+<div style="display:flex;align-items:baseline;gap:8px;margin-bottom:8px"><span style="font-size:28px;font-weight:900">3.0</span><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span><span style="font-size:12px;color:#3c4257">2 reviews</span></div>
 <div style="font-size:12px;margin-bottom:12px"><a href="https://www.google.com/search?kgmid=/g/11m_6dp3vz&hl=en-US&q=Obstetrics+%26+Gynecology+Healthcare+Associates&shem=epsd1,rimspwouoe&shndl=30&source=sh/x/loc/osrp/m5/1&kgs=9ef54a61b1781f09&utm_source=epsd1,rimspwouoe,sh/x/loc/osrp/m5/1" target="_blank">View on Google</a> · <a href="https://www.google.com/search?kgmid=/g/11m_6dp3vz&hl=en-US&q=Obstetrics+%26+Gynecology+Healthcare+Associates&shem=epsd1,rimspwouoe&shndl=30&source=sh/x/loc/osrp/m5/1&kgs=9ef54a61b1781f09&utm_source=epsd1,rimspwouoe,sh/x/loc/osrp/m5/1#lrd=0x88237fae8b51c6b5:0x7c54a0c25ad3724d,1" target="_blank">Read reviews</a></div>
 <div class="stat-row" style="margin-bottom:8px">
 <div class="stat-item"><div class="stat-item-label">Views</div><div class="stat-item-val" id="gbp-dort-views">226</div></div>
@@ -303,7 +303,6 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 <!-- FULL REPORT — merged Channels + Detail (2026-05-19) -->
 <div id="p-full" class="pane">
 <div class="sh">Google Ads</div>
-<div class="sh-desc">PMax: HHS Women's Clinics campaign performance.</div>
 <div class="stat-row">
 <div class="stat-item"><div class="stat-item-label">Impressions</div><div class="stat-item-val" id="ads-impressions">18,200</div></div>
 <div class="stat-item"><div class="stat-item-label">Clicks</div><div class="stat-item-val" id="ads-clicks">1,940</div></div>
@@ -314,7 +313,7 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 <div class="sh">Landing Pages</div>
 <div class="box" style="margin-bottom:20px;overflow-x:auto">
 <table class="tbl">
-<thead><tr><th>Landing Page</th><th class="r">Sessions</th><th class="r">Appt Click Events</th><th class="r">Phone Click Events</th></tr></thead>
+<thead><tr><th>Landing Page</th><th class="r">Sessions <span style="font-weight:400;color:#7a8794;font-size:10px">(thru May 18)</span></th><th class="r">Appt Click Events</th><th class="r">Phone Click Events</th></tr></thead>
 <tbody>
 <tr data-lp="/lp/womens-health"><td><strong>Women's Health &amp; OB/GYN</strong> <span style="font-weight:400;color:#7a8794">/lp/womens-health</span></td><td class="r em lp-sessions">1,184</td><td class="r em lp-appt">30</td><td class="r em lp-phone">83</td></tr>
 <tr data-lp="/lp/genetic-counseling"><td><strong>Genetic Counseling</strong> <span style="font-weight:400;color:#7a8794">/lp/genetic-counseling</span></td><td class="r lp-sessions">2,192</td><td class="r lp-appt">0</td><td class="r lp-phone">41</td></tr>
@@ -416,37 +415,47 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 
 <script>
 // ─── DATA REFRESH TIMESTAMP ─────────────────────────────────────────
-// The pill shows TWO timestamps:
-//   - "Synced X" = when the underlying data was last written to the sheet
-//     (from Sync_Log if published, otherwise newest date seen in GA4_Daily).
-//   - "Loaded X" = when this browser tab pulled the CSVs (always now).
-// Never a hardcoded constant. Updates every time data flows in.
+// Pill shows "Synced X ago" with colour-coded freshness.
+//   green (<24h)   = current
+//   amber (24-72h) = getting stale, click Refresh
+//   red   (>72h or failed) = something's wrong, investigate
+function relTime(ms) {
+  if (ms < 0) return 'just now';
+  var s = Math.floor(ms / 1000);
+  if (s < 90) return 'just now';
+  var m = Math.floor(s / 60);
+  if (m < 60) return m + ' minute' + (m === 1 ? '' : 's') + ' ago';
+  var h = Math.floor(m / 60);
+  if (h < 24) return h + ' hour' + (h === 1 ? '' : 's') + ' ago';
+  var d = Math.floor(h / 24);
+  return d + ' day' + (d === 1 ? '' : 's') + ' ago';
+}
 function renderSyncPill(opts) {
-  // opts: { syncedIso, loadedIso, status: 'ok'|'stale'|'failed', source: string }
   var el = document.getElementById('data-refresh-ts');
   var pill = document.getElementById('sync-pill');
   if (!el || !pill) return;
   pill.classList.remove('stale', 'failed');
-  if (opts.status === 'stale')  pill.classList.add('stale');
-  if (opts.status === 'failed') pill.classList.add('failed');
-  function fmt(iso) {
-    if (!iso) return null;
-    var d = new Date(iso);
-    if (isNaN(d.getTime())) return null;
-    var dateStr = d.toLocaleDateString('en-US', {month:'short', day:'numeric', timeZone:'America/Detroit'});
-    var timeStr = d.toLocaleTimeString('en-US', {hour:'numeric', minute:'2-digit', timeZone:'America/Detroit'});
-    return dateStr + ' · ' + timeStr;
+  if (!opts || !opts.syncedIso) {
+    el.textContent = 'Awaiting sync';
+    pill.classList.add('failed');
+    pill.title = (opts && opts.source) || 'No sync recorded';
+    return;
   }
-  var synced = fmt(opts.syncedIso);
-  var loaded = fmt(opts.loadedIso);
-  var pieces = [];
-  if (synced) pieces.push('Synced ' + synced);
-  if (loaded && loaded !== synced) pieces.push('loaded ' + loaded);
-  el.textContent = pieces.length ? pieces.join(' · ') : 'Awaiting sync';
-  pill.title = (opts.source || 'data source') + (synced ? ' — last sync ' + synced : ' — no sync recorded') + (loaded ? ' — browser loaded ' + loaded : '');
+  var ageMs = Date.now() - new Date(opts.syncedIso).getTime();
+  var H = 3600 * 1000;
+  if (opts.status === 'failed' || ageMs > 72 * H) {
+    pill.classList.add('failed');
+  } else if (ageMs > 24 * H) {
+    pill.classList.add('stale');
+  }
+  el.textContent = 'Synced ' + relTime(ageMs);
+  var d = new Date(opts.syncedIso);
+  pill.title = (opts.source || 'sync') + ' — ' +
+    d.toLocaleDateString('en-US', {month:'short', day:'numeric', timeZone:'America/Detroit'}) + ' · ' +
+    d.toLocaleTimeString('en-US', {hour:'numeric', minute:'2-digit', timeZone:'America/Detroit', timeZoneName:'short'});
 }
-// Initial paint: show "Loading…" until the first CSV completes.
-renderSyncPill({ status: 'stale', source: 'loading' });
+// Initial paint until first CSV completes
+renderSyncPill({ syncedIso: null, source: 'loading' });
 
 // ─── CAMPAIGN CONFIG ────────────────────────────────────────────────
 // Per-campaign settings. To stand up a new service-line dashboard,
@@ -628,17 +637,58 @@ var T70 = 'rgba(17,168,138,0.82)', N70 = 'rgba(30,62,114,0.82)';
 var T40 = 'rgba(17,168,138,0.55)', N40 = 'rgba(30,62,114,0.55)';
 
 // ─── CHART INITIALIZATION (empty; applyDateRange fills them) ────────
+// Plugin: draw a "Total: N" label above each grouped pair on the trend chart.
+var weekTotalLabelsPlugin = {
+  id: 'weekTotalLabels',
+  afterDatasetsDraw: function(chart) {
+    if (chart.canvas.id !== 'ch-trend') return;
+    var ctx = chart.ctx;
+    var xScale = chart.scales.x;
+    var ds0 = chart.getDatasetMeta(0);
+    var ds1 = chart.getDatasetMeta(1);
+    if (!ds0 || !ds1) return;
+    var data0 = chart.data.datasets[0].data;
+    var data1 = chart.data.datasets[1].data;
+    ctx.save();
+    ctx.font = "700 11px 'Inter', sans-serif";
+    ctx.fillStyle = '#1E3E72';
+    ctx.textAlign = 'center';
+    chart.data.labels.forEach(function(_, i) {
+      var total = (data0[i] || 0) + (data1[i] || 0);
+      if (total <= 0) return;
+      var bar0 = ds0.data[i], bar1 = ds1.data[i];
+      if (!bar0 || !bar1) return;
+      var midX = (bar0.x + bar1.x) / 2;
+      var topY = Math.min(bar0.y, bar1.y) - 6;
+      ctx.fillText('Total: ' + total, midX, topY);
+    });
+    ctx.restore();
+  }
+};
+
 window.trendChart = new Chart(document.getElementById('ch-trend'), {
   type: 'bar',
   data: { labels: [], datasets: [
-    { label: 'Appointment Requests', data: [], backgroundColor: T70, barPercentage: .6 },
-    { label: 'Phone Calls',          data: [], backgroundColor: N70, barPercentage: .6 }
+    { label: 'Appointment Requests', data: [], backgroundColor: T70, barPercentage: .85, categoryPercentage: .7, borderRadius: 4 },
+    { label: 'Phone Calls',          data: [], backgroundColor: N70, barPercentage: .85, categoryPercentage: .7, borderRadius: 4 }
   ]},
   options: {
     responsive: true, maintainAspectRatio: false,
-    plugins: { legend: { position: 'top' }, datalabels: { color: '#fff', font: { weight: '700', size: 11 }, display: function(ctx){ return ctx.dataset.data[ctx.dataIndex] > 2; }, anchor: 'center' } },
-    scales: { x: { stacked: true, grid: { display: false } }, y: { stacked: true, grid: { color: '#e8ecf1' }, beginAtZero: true } }
-  }
+    layout: { padding: { top: 22 } }, // headroom for the "Total: N" label
+    plugins: {
+      legend: { position: 'top' },
+      datalabels: {
+        color: '#fff', font: { weight: '800', size: 13 },
+        anchor: 'center', align: 'center',
+        display: function(ctx){ return ctx.dataset.data[ctx.dataIndex] > 0; }
+      }
+    },
+    scales: {
+      x: { grid: { display: false }, ticks: { font: { weight: '700', size: 11 } } },
+      y: { grid: { color: '#e8ecf1' }, beginAtZero: true }
+    }
+  },
+  plugins: [weekTotalLabelsPlugin]
 });
 
 window.paidChart = new Chart(document.getElementById('ch-paid'), {
@@ -676,12 +726,21 @@ window.sessionsChart = new Chart(document.getElementById('ch-sessions'), {
 });
 
 window.sourcesChart = new Chart(document.getElementById('ch-sources'), {
-  type: 'bar',
-  data: { labels: ['Paid Search','Organic Search','Direct','Referral','Cross-network'], datasets: [{ data: [904,299,152,22,16], backgroundColor: [T70, N70, T40, N40, LN], borderRadius: 5 }] },
+  type: 'doughnut',
+  data: { labels: [], datasets: [{ data: [], backgroundColor: [T70, N70, T40, N40, LN, '#cbd5e0'], borderWidth: 0 }] },
   options: {
-    indexAxis: 'y', responsive: true, maintainAspectRatio: false,
-    plugins: { legend: { display: false }, datalabels: { color: '#fff', font: { weight: '700', size: 12 }, anchor: 'end', align: 'start', offset: 8, display: function(ctx){ return ctx.dataset.data[ctx.dataIndex] > 20; } } },
-    scales: { x: { grid: { color: '#e8ecf1' }, beginAtZero: true }, y: { grid: { display: false } } }
+    responsive: true, maintainAspectRatio: false, cutout: '55%',
+    plugins: {
+      legend: { position: 'right', labels: { boxWidth: 10, padding: 10, font: { size: 12, weight: '600' } } },
+      datalabels: {
+        color: '#fff', font: { weight: '800', size: 12 },
+        formatter: function(value, ctx) {
+          var total = ctx.dataset.data.reduce(function(a,b){ return a+b; }, 0);
+          if (!total || value/total < 0.04) return ''; // hide labels for sub-4% slices
+          return Math.round(value/total * 100) + '%';
+        }
+      }
+    }
   }
 });
 
@@ -852,30 +911,48 @@ function applyInquiries(range) {
 }
 
 // ── Paid vs Organic inquiries — stacked by inquiry type ──
-// Two vertical bars (Paid / Organic), each stacked with appointment_request
-// + phone_call_click event counts from GA4_Events. Falls back to a rough
-// total split when GA4_Events isn't loaded (no appt/phone breakdown then).
+// PRORATE appointment requests by GA4 channel share applied to the REAL
+// Alchemer count (DOM rows). GA4's appointment_request event fires per
+// click — including retries and double-submits — so raw event counts
+// over-state the real bookings. Alchemer = source of truth for appts.
+// Phone calls keep using raw GA4 events (no parallel source of truth).
 function applyPaidVsOrganic(range, totalInquiries) {
   var events = window._eventsData;
   var paidAppt = 0, paidPhone = 0, organicAppt = 0, organicPhone = 0;
+
+  // Real appt count = appointment-log rows visible in range
+  var realApptCount = 0;
+  document.querySelectorAll('#appt-log tr[data-date]').forEach(function(r){
+    var d = parseLocalDate(r.getAttribute('data-date'));
+    if (d >= range.start && d <= range.end) realApptCount++;
+  });
+
   if (events && events.length) {
+    var paidApptEvents = 0, orgApptEvents = 0;
     events.forEach(function(e){
       var d = parseLocalDate(e.date);
       if (d < range.start || d > range.end) return;
       var ch = (e.channel || '').toLowerCase();
       var isPaid = /paid|cross-network|display/i.test(ch);
       if (e.eventName === 'appointment_request') {
-        if (isPaid) paidAppt += e.count; else organicAppt += e.count;
+        if (isPaid) paidApptEvents += e.count; else orgApptEvents += e.count;
       } else if (e.eventName === 'phone_call_click') {
         if (isPaid) paidPhone += e.count; else organicPhone += e.count;
       }
     });
+    var totalApptEvents = paidApptEvents + orgApptEvents;
+    if (totalApptEvents > 0 && realApptCount > 0) {
+      paidAppt = Math.round(realApptCount * (paidApptEvents / totalApptEvents));
+      organicAppt = realApptCount - paidAppt; // exact match guaranteed
+    } else {
+      // No GA4 appt events — drop the entire real count into Organic as a
+      // safe default (most likely path for direct/unattributed).
+      organicAppt = realApptCount;
+    }
   } else {
-    // Coarse fallback: split totals 70/30 paid/organic (rough campaign average);
-    // can't break out appt vs phone without events tab.
-    var paid = Math.round(totalInquiries * 0.7);
-    var organic = totalInquiries - paid;
-    paidAppt = paid; organicAppt = organic;
+    // No GA4_Events at all — coarse 70/30 split on appt count only.
+    paidAppt = Math.round(realApptCount * 0.7);
+    organicAppt = realApptCount - paidAppt;
   }
   window.paidChart.data.datasets[0].data = [paidAppt, organicAppt];
   window.paidChart.data.datasets[1].data = [paidPhone, organicPhone];
@@ -1023,26 +1100,10 @@ function applyGa4(range) {
   var mobilePct = all > 0 ? Math.round(mobile / all * 100) : 0;
   if ((el = document.getElementById('live-mobile'))) el.textContent = mobilePct + '%';
 
-  // Sessions Over Time: real daily data inside the range.
-  // ALWAYS update — never leave stale points on the chart. Bucket to weeks
-  // when the range spans >21 days so the line stays readable.
-  if (filtered.length > 21) {
-    var weekBuckets = {};
-    filtered.forEach(function(d){
-      var dt = parseLocalDate(d.date);
-      var monday = new Date(dt);
-      monday.setDate(dt.getDate() - ((dt.getDay() + 6) % 7));
-      var key = monday.toISOString().substring(0, 10);
-      if (!weekBuckets[key]) weekBuckets[key] = { label: weekLabelFromMonday(monday), sessions: 0 };
-      weekBuckets[key].sessions += d.sessions;
-    });
-    var keys = Object.keys(weekBuckets).sort();
-    window.sessionsChart.data.labels = keys.map(function(k){ return weekBuckets[k].label; });
-    window.sessionsChart.data.datasets[0].data = keys.map(function(k){ return weekBuckets[k].sessions; });
-  } else {
-    window.sessionsChart.data.labels = filtered.map(function(d){ return fmtMD(d.date); });
-    window.sessionsChart.data.datasets[0].data = filtered.map(function(d){ return d.sessions; });
-  }
+  // Sessions Over Time: daily points always (Steve preference 2026-05-20).
+  // maxTicksLimit on x-axis keeps the labels readable even with 90 days.
+  window.sessionsChart.data.labels = filtered.map(function(d){ return fmtMD(d.date); });
+  window.sessionsChart.data.datasets[0].data = filtered.map(function(d){ return d.sessions; });
   window.sessionsChart.update();
 
   // Traffic Sources: if per-day channel data is in the sheet, sum it

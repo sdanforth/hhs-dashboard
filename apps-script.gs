@@ -101,12 +101,17 @@ function doGet(e) {
     if (params.token !== expected) {
       return jsonResponse({ ok: false, error: 'unauthorized' });
     }
+    // Self-heal: make sure the nightly trigger is installed before we sync.
+    // Idempotent — if fetchAll trigger exists, this is a no-op. Also clears
+    // out the legacy failing triggers so they stop polluting the log.
+    var triggerInstalled = ensureNightlyTrigger();
     var startMs = Date.now();
     var summary = fetchAll();
     return jsonResponse({
       ok: true,
       durationMs: Date.now() - startMs,
       timestamp: new Date().toISOString(),
+      triggerInstalled: triggerInstalled, // true if we just installed it; false if already there
       summary: summary
     });
   }
@@ -115,16 +120,39 @@ function doGet(e) {
 }
 
 /**
- * One-time setup. Installs the 4am ET nightly trigger AND runs a fetch once
- * so all tabs populate immediately.
+ * Make sure exactly one nightly fetchAll trigger exists. Clean up legacy
+ * triggers (fetchAllData, fetchExtensions) that have been failing.
+ * Returns true if a NEW trigger was installed, false if one already existed.
+ */
+function ensureNightlyTrigger() {
+  var existing = ScriptApp.getProjectTriggers();
+  var fetchAllExists = false;
+  existing.forEach(function(t) {
+    var name = t.getHandlerFunction();
+    if (name === 'fetchAll') {
+      // If multiple, keep only the first
+      if (fetchAllExists) { ScriptApp.deleteTrigger(t); }
+      else fetchAllExists = true;
+    } else if (name === 'fetchAllData' || name === 'fetchExtensions') {
+      // Legacy / broken — remove
+      ScriptApp.deleteTrigger(t);
+    }
+  });
+  if (!fetchAllExists) {
+    ScriptApp.newTrigger('fetchAll').timeBased().atHour(4).everyDays(1).create();
+    return true;
+  }
+  return false;
+}
+
+/**
+ * One-time setup. Now mostly redundant since /update self-heals the trigger,
+ * but kept around so you can install + immediately run from the editor.
  */
 function setupTriggers() {
-  ScriptApp.getProjectTriggers().forEach(function(t) {
-    if (t.getHandlerFunction() === 'fetchAll') ScriptApp.deleteTrigger(t);
-  });
-  ScriptApp.newTrigger('fetchAll').timeBased().atHour(4).everyDays(1).create();
+  ensureNightlyTrigger();
   fetchAll();
-  Logger.log('setupTriggers done. Nightly 4am trigger installed; initial fetch ran.');
+  Logger.log('setupTriggers done. Nightly 4am trigger ensured; initial fetch ran.');
 }
 
 /**
