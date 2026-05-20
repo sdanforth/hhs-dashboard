@@ -1385,9 +1385,11 @@ Promise.all([
   if (gbpCsv)  window._gbpData      = parseGbp(parseCSV(gbpCsv));
 
   // Sync-pill source-of-truth, in priority order:
-  //   1. Sync_Log tab (most-recent OK timestamp) — set by Apps Script
-  //   2. Newest date seen in GA4_Daily — proxy for "last nightly run"
-  //   3. Now (browser load time) — proves we DID fetch something
+  //   1. /exec?action=lastsync — most accurate (Apps Script's actual last fetchAll time)
+  //   2. Sync_Log tab if published — same data via published CSV
+  //   3. Newest date seen in GA4_Daily — last-resort proxy (GA4 has 24h lag so this UNDER-reports freshness)
+  //   4. Now — proves we DID fetch something
+  // The /exec call is fired-and-forgotten in parallel; if it lands, it overrides the pill.
   var syncedIso = null, status = 'ok', source = 'GA4_Daily';
   if (syncCsv) {
     var sync = parseSyncLog(parseCSV(syncCsv));
@@ -1397,19 +1399,31 @@ Promise.all([
     var lastRow = window._ga4data.daily[window._ga4data.daily.length - 1];
     if (lastRow && lastRow.date) {
       syncedIso = new Date(lastRow.date + 'T04:00:00-04:00').toISOString();
-      // Stale if newest GA4_Daily date is older than 48h (nightly should have caught up)
       if (Date.now() - new Date(syncedIso).getTime() > 48 * 3600 * 1000) status = 'stale';
     }
   }
   if (!syncedIso) { syncedIso = nowIso; status = 'failed'; source = 'no data'; }
-  renderSyncPill({ syncedIso: syncedIso, loadedIso: nowIso, status: status, source: source });
+  renderSyncPill({ syncedIso: syncedIso, status: status, source: source });
 
   applyDateRange();
 }).catch(function(e){
   console.log('Data fetch error:', e);
-  renderSyncPill({ syncedIso: null, loadedIso: new Date().toISOString(), status: 'failed', source: 'fetch error: ' + e.message });
+  renderSyncPill({ syncedIso: null, status: 'failed', source: 'fetch error: ' + e.message });
   applyDateRange();
 });
+
+// Ask Apps Script for the real last-sync timestamp (most accurate).
+// Runs in parallel with the CSV fetches; if it lands, it overrides the pill.
+if (CAMPAIGN.updateEndpoint) {
+  fetch(CAMPAIGN.updateEndpoint + (CAMPAIGN.updateEndpoint.indexOf('?') > -1 ? '&' : '?') + 'action=lastsync')
+    .then(function(r){ return r.json(); })
+    .then(function(j){
+      if (j && j.ok && j.lastSyncIso) {
+        renderSyncPill({ syncedIso: j.lastSyncIso, source: 'Apps Script /lastsync' });
+      }
+    })
+    .catch(function(){ /* silent — fall back to whatever the CSV path produced */ });
+}
 
 // First render with inline data while fetches are in flight
 applyDateRange();
