@@ -21,6 +21,11 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 .hdr{background:#1E3E72;border-radius:10px;padding:24px 28px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
 .hdr h1{font-size:26px;font-weight:900;color:#fff;letter-spacing:-.5px}
 .hdr-sub{font-size:14px;color:#b8d4ed;margin-top:2px}
+/* Clickable header — returns to Overview, like clicking a site logo. */
+.hdr-home{display:block;text-decoration:none;color:inherit;border-radius:6px;padding:2px 4px;margin:-2px -4px;transition:background-color .15s}
+.hdr-home:hover{background:rgba(255,255,255,0.06);text-decoration:none}
+.hdr-home:hover h1{color:#11A88A}
+.hdr-home:focus-visible{outline:2px solid #11A88A;outline-offset:2px}
 .hdr-ts{font-size:12px;color:#b8d4ed;display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
 .sync-pill{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.20);border-radius:999px;padding:4px 10px;font-size:11px;font-weight:600;color:#dbe9f7}
 .sync-pill .sync-dot{width:6px;height:6px;border-radius:50%;background:#5ABA4A}
@@ -159,7 +164,7 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 <body>
 <div class="wrap">
 <div class="hdr">
-<div><h1>HHS Obstetrics &amp; Gynecology Associates</h1><div class="hdr-sub">Clinic &amp; Provider Campaigns</div></div>
+<a href="#" class="hdr-home" onclick="goHome(event)" aria-label="Return to Overview"><h1>HHS Obstetrics &amp; Gynecology Associates</h1><div class="hdr-sub">Clinic &amp; Provider Campaigns</div></a>
 <div class="hdr-ts">
 <span class="sync-pill" id="sync-pill" title="When the underlying data was last refreshed from GA4 / GBP / Alchemer."><span class="sync-dot"></span><span id="data-refresh-ts">Loading…</span></span>
 <button class="refresh-btn" id="refresh-btn" onclick="refreshNow()" type="button" aria-label="Force a data refresh now"><span id="refresh-icon">⟳</span> <span id="refresh-label">Refresh now</span></button>
@@ -571,6 +576,14 @@ function applyHashTab() {
 }
 window.addEventListener('hashchange', applyHashTab);
 applyHashTab();
+
+// Clicking the header title returns to Overview + scrolls to top — same UX
+// convention as clicking a site logo.
+function goHome(e) {
+  if (e) e.preventDefault();
+  go('exec');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
 // Date-range preset handler. Called by the <select id="dr-preset"> on change.
 // 'custom' opens flatpickr inline; everything else jumps to a fixed range.
