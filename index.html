@@ -303,6 +303,14 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 
 <!-- FULL REPORT — merged Channels + Detail (2026-05-19) -->
 <div id="p-full" class="pane">
+<div class="sh">Budget Allocation</div>
+<div class="sh-desc">Spend weighting across service lines.</div>
+<div class="stat-row">
+<div class="stat-item"><div class="stat-item-label">Women's Health</div><div class="stat-item-val">60%</div></div>
+<div class="stat-item"><div class="stat-item-label">Menopause</div><div class="stat-item-val">30%</div></div>
+<div class="stat-item"><div class="stat-item-label">Genetic Counseling</div><div class="stat-item-val">10%</div></div>
+</div>
+
 <div class="sh">Google Ads</div>
 <div class="stat-row">
 <div class="stat-item"><div class="stat-item-label">Impressions</div><div class="stat-item-val" id="ads-impressions">18,200</div></div>
@@ -325,12 +333,23 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 </tbody>
 </table>
 </div>
-<div class="sh">Budget Allocation</div>
-<div class="sh-desc">Spend weighting across service lines.</div>
-<div class="stat-row">
-<div class="stat-item"><div class="stat-item-label">Women's Health</div><div class="stat-item-val">60%</div></div>
-<div class="stat-item"><div class="stat-item-label">Menopause</div><div class="stat-item-val">30%</div></div>
-<div class="stat-item"><div class="stat-item-label">Genetic Counseling</div><div class="stat-item-val">10%</div></div>
+
+<div class="sh">Review Link Clicks</div>
+<div class="sh-desc">hmc.gg short links distributed via QR codes in clinics.</div>
+<div class="box" style="margin-bottom:20px;overflow-x:auto">
+<table class="tbl">
+<thead><tr><th>Link</th><th>Goes To</th><th class="r">Clicks</th></tr></thead>
+<tbody>
+<tr><td><strong>hmc.gg/clever</strong></td><td>Healthgrades — Dr. Clever</td><td class="r em">3</td></tr>
+<tr><td><strong>hmc.gg/obgynhca-hurley</strong></td><td>Google Review — Hurley</td><td class="r">1</td></tr>
+<tr><td><strong>hmc.gg/obgynhca-dort</strong></td><td>Google Review — Dort Hwy</td><td class="r">1</td></tr>
+<tr><td><strong>hmc.gg/pyatt</strong></td><td>Healthgrades — Dr. Pyatt</td><td class="r">1</td></tr>
+<tr><td><strong>hmc.gg/smiley</strong></td><td>Healthgrades — J. Smiley</td><td class="r">1</td></tr>
+<tr><td><strong>hmc.gg/wiggins</strong></td><td>Healthgrades — Dr. Wiggins</td><td class="r">1</td></tr>
+<tr><td><strong>hmc.gg/obgynhca-hurley-nfc</strong></td><td>Google Review — Hurley counter</td><td class="r">0</td></tr>
+<tr><td><strong>hmc.gg/obgynhca-dort-nfc</strong></td><td>Google Review — Dort Hwy counter</td><td class="r">0</td></tr>
+</tbody>
+</table>
 </div>
 
 <div class="sh">Appointment Request Log</div>
@@ -391,24 +410,6 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 </tbody>
 </table>
 <div id="appt-log-footer" style="padding:12px;text-align:center;font-size:12px;color:#3c4257">Showing all requests in the selected range.</div>
-</div>
-
-<div class="sh">Review Link Clicks</div>
-<div class="sh-desc">hmc.gg short links distributed via QR codes in clinics.</div>
-<div class="box" style="margin-bottom:20px;overflow-x:auto">
-<table class="tbl">
-<thead><tr><th>Link</th><th>Goes To</th><th class="r">Clicks</th></tr></thead>
-<tbody>
-<tr><td><strong>hmc.gg/clever</strong></td><td>Healthgrades — Dr. Clever</td><td class="r em">3</td></tr>
-<tr><td><strong>hmc.gg/obgynhca-hurley</strong></td><td>Google Review — Hurley</td><td class="r">1</td></tr>
-<tr><td><strong>hmc.gg/obgynhca-dort</strong></td><td>Google Review — Dort Hwy</td><td class="r">1</td></tr>
-<tr><td><strong>hmc.gg/pyatt</strong></td><td>Healthgrades — Dr. Pyatt</td><td class="r">1</td></tr>
-<tr><td><strong>hmc.gg/smiley</strong></td><td>Healthgrades — J. Smiley</td><td class="r">1</td></tr>
-<tr><td><strong>hmc.gg/wiggins</strong></td><td>Healthgrades — Dr. Wiggins</td><td class="r">1</td></tr>
-<tr><td><strong>hmc.gg/obgynhca-hurley-nfc</strong></td><td>Google Review — Hurley counter</td><td class="r">0</td></tr>
-<tr><td><strong>hmc.gg/obgynhca-dort-nfc</strong></td><td>Google Review — Dort Hwy counter</td><td class="r">0</td></tr>
-</tbody>
-</table>
 </div>
 
 <div class="ftr">HHS Obstetrics &amp; Gynecology Associates &middot; Clinic &amp; Provider Campaigns &middot; Connected Technologies</div>
@@ -691,9 +692,14 @@ var weekTotalLabelsPlugin = {
 
 window.trendChart = new Chart(document.getElementById('ch-trend'), {
   type: 'bar',
+  // Stack order: Phone first (left), Appointments on the right.
+  // Two reasons: (1) Appt is the smaller segment most weeks, so it's more visible
+  // when anchored next to the "Total: N" annotation on the right edge.
+  // (2) Appt is the higher-value metric — putting it next to the total emphasises it.
+  // minBarLength keeps tiny appt counts (1-3) wide enough for the label to fit.
   data: { labels: [], datasets: [
-    { label: 'Appointment Requests', data: [], backgroundColor: BAR_FILL_APPT,  borderColor: BAR_BORDER_APPT,  borderWidth: 1.5, borderRadius: 3 },
-    { label: 'Phone Calls',          data: [], backgroundColor: BAR_FILL_PHONE, borderColor: BAR_BORDER_PHONE, borderWidth: 1.5, borderRadius: 3 }
+    { label: 'Phone Calls',          data: [], backgroundColor: BAR_FILL_PHONE, borderColor: BAR_BORDER_PHONE, borderWidth: 1.5, borderRadius: 3, minBarLength: 4 },
+    { label: 'Appointment Requests', data: [], backgroundColor: BAR_FILL_APPT,  borderColor: BAR_BORDER_APPT,  borderWidth: 1.5, borderRadius: 3, minBarLength: 32 }
   ]},
   options: {
     indexAxis: 'y', responsive: true, maintainAspectRatio: false,
@@ -701,7 +707,7 @@ window.trendChart = new Chart(document.getElementById('ch-trend'), {
     plugins: {
       legend: { position: 'top' },
       datalabels: {
-        color: function(ctx){ return ctx.datasetIndex === 0 ? BAR_BORDER_APPT : BAR_BORDER_PHONE; },
+        color: function(ctx){ return ctx.datasetIndex === 0 ? BAR_BORDER_PHONE : BAR_BORDER_APPT; },
         font: { weight: '800', size: 13 },
         anchor: 'center', align: 'center',
         display: function(ctx){ return ctx.dataset.data[ctx.dataIndex] > 1; }
@@ -717,11 +723,13 @@ window.trendChart = new Chart(document.getElementById('ch-trend'), {
 
 window.paidChart = new Chart(document.getElementById('ch-paid'), {
   type: 'bar',
+  // Stack order matches trendChart: Phone (left), Appt (right) — keeps appts
+  // visible next to their natural focus point and gives small counts breathing room.
   data: {
     labels: ['Paid', 'Organic / Direct'],
     datasets: [
-      { label: 'Appointment Requests', data: [0, 0], backgroundColor: BAR_FILL_APPT,  borderColor: BAR_BORDER_APPT,  borderWidth: 1.5, barPercentage: .65 },
-      { label: 'Phone Calls',          data: [0, 0], backgroundColor: BAR_FILL_PHONE, borderColor: BAR_BORDER_PHONE, borderWidth: 1.5, barPercentage: .65 }
+      { label: 'Phone Calls',          data: [0, 0], backgroundColor: BAR_FILL_PHONE, borderColor: BAR_BORDER_PHONE, borderWidth: 1.5, barPercentage: .65, minBarLength: 4 },
+      { label: 'Appointment Requests', data: [0, 0], backgroundColor: BAR_FILL_APPT,  borderColor: BAR_BORDER_APPT,  borderWidth: 1.5, barPercentage: .65, minBarLength: 32 }
     ]
   },
   options: {
@@ -729,7 +737,7 @@ window.paidChart = new Chart(document.getElementById('ch-paid'), {
     plugins: {
       legend: { position: 'top' },
       datalabels: {
-        color: function(ctx){ return ctx.datasetIndex === 0 ? BAR_BORDER_APPT : BAR_BORDER_PHONE; },
+        color: function(ctx){ return ctx.datasetIndex === 0 ? BAR_BORDER_PHONE : BAR_BORDER_APPT; },
         font: { weight: '800', size: 12 },
         display: function(ctx){ return ctx.dataset.data[ctx.dataIndex] > 1; },
         anchor: 'center'
@@ -933,8 +941,10 @@ function applyInquiries(range) {
   if ((el = document.getElementById('m-phone')))        el.textContent = phoneSum;
 
   window.trendChart.data.labels = chartLabels;
-  window.trendChart.data.datasets[0].data = chartAppt;
-  window.trendChart.data.datasets[1].data = chartPhone;
+  // Dataset slot order is intentional: [0] = Phone (left), [1] = Appt (right).
+  // Matches the chart-init dataset order so appts sit next to the Total label.
+  window.trendChart.data.datasets[0].data = chartPhone;
+  window.trendChart.data.datasets[1].data = chartAppt;
   // Horizontal chart grows with row count: ~46px per week + headroom for legend.
   var wrap = document.getElementById('ch-trend-wrap');
   if (wrap) wrap.style.height = Math.max(240, chartLabels.length * 46 + 70) + 'px';
@@ -988,8 +998,9 @@ function applyPaidVsOrganic(range, totalInquiries) {
     paidAppt = Math.round(realApptCount * 0.7);
     organicAppt = realApptCount - paidAppt;
   }
-  window.paidChart.data.datasets[0].data = [paidAppt, organicAppt];
-  window.paidChart.data.datasets[1].data = [paidPhone, organicPhone];
+  // Dataset slot order matches trendChart: [0] = Phone, [1] = Appt (rightmost).
+  window.paidChart.data.datasets[0].data = [paidPhone, organicPhone];
+  window.paidChart.data.datasets[1].data = [paidAppt, organicAppt];
   window.paidChart.update();
 }
 
