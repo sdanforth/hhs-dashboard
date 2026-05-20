@@ -735,11 +735,11 @@ window.trendChart = new Chart(document.getElementById('ch-trend'), {
   // minBarLength keeps tiny appt counts (1-3) wide enough for the label to fit.
   data: { labels: [], datasets: [
     { label: 'Phone Calls',          data: [], backgroundColor: BAR_FILL_PHONE, borderWidth: 0, borderRadius: 3, minBarLength: 4 },
-    { label: 'Appointment Requests', data: [], backgroundColor: BAR_FILL_APPT,  borderWidth: 0, borderRadius: 3, minBarLength: 32 }
+    { label: 'Appointments', data: [], backgroundColor: BAR_FILL_APPT,  borderWidth: 0, borderRadius: 3, minBarLength: 32 }
   ]},
   options: {
     indexAxis: 'y', responsive: true, maintainAspectRatio: false,
-    layout: { padding: { right: 48 } }, // room for the "Total: N" label at the end
+    layout: { padding: { right: 38 } }, // room for the "(Total)" label at the end
     plugins: {
       legend: { position: 'top' },
       datalabels: {
@@ -765,7 +765,7 @@ window.paidChart = new Chart(document.getElementById('ch-paid'), {
     labels: ['Paid', 'Organic / Direct'],
     datasets: [
       { label: 'Phone Calls',          data: [0, 0], backgroundColor: BAR_FILL_PHONE, borderWidth: 0, barPercentage: .65, minBarLength: 4 },
-      { label: 'Appointment Requests', data: [0, 0], backgroundColor: BAR_FILL_APPT,  borderWidth: 0, barPercentage: .65, minBarLength: 32 }
+      { label: 'Appointments', data: [0, 0], backgroundColor: BAR_FILL_APPT,  borderWidth: 0, barPercentage: .65, minBarLength: 32 }
     ]
   },
   options: {
