@@ -318,11 +318,13 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 
 <div class="sh">Google Ads</div>
 <div class="stat-row">
-<div class="stat-item"><div class="stat-item-label">Impressions</div><div class="stat-item-val" id="ads-impressions">18,200</div></div>
-<div class="stat-item"><div class="stat-item-label">Clicks</div><div class="stat-item-val" id="ads-clicks">1,940</div></div>
-<div class="stat-item"><div class="stat-item-label">CTR</div><div class="stat-item-val" id="ads-ctr">10.7%</div></div>
-<div class="stat-item"><div class="stat-item-label">Conversions</div><div class="stat-item-val" id="ads-conversions">41.7</div></div>
-<div class="stat-item"><div class="stat-item-label">Conv. Rate</div><div class="stat-item-val" id="ads-convrate">2.1%</div></div>
+<div class="stat-item"><div class="stat-item-label">Spend</div><div class="stat-item-val" id="ads-spend">$2,497</div></div>
+<div class="stat-item"><div class="stat-item-label">Impressions</div><div class="stat-item-val" id="ads-impressions">198,655</div></div>
+<div class="stat-item"><div class="stat-item-label">Clicks</div><div class="stat-item-val" id="ads-clicks">4,528</div></div>
+<div class="stat-item"><div class="stat-item-label">CTR</div><div class="stat-item-val" id="ads-ctr">2.28%</div></div>
+<div class="stat-item"><div class="stat-item-label">Avg CPC</div><div class="stat-item-val" id="ads-cpc">$0.55</div></div>
+<div class="stat-item"><div class="stat-item-label">Conversions</div><div class="stat-item-val" id="ads-conversions">67</div></div>
+<div class="stat-item"><div class="stat-item-label">Conv. Rate</div><div class="stat-item-val" id="ads-convrate">1.48%</div></div>
 </div>
 <div class="sh">Landing Pages</div>
 <div class="box" style="margin-bottom:20px;overflow-x:auto">
@@ -527,7 +529,11 @@ var DATA = {
   // Google Ads campaign totals since launch. Scaled by date-range
   // proportion until a Google Ads Script feeds per-day rows into the
   // sheet (next phase).
-  googleAds: { impressions: 18200, clicks: 1940, conversions: 41.7, ctrPct: 10.7, convRatePct: 2.1 }
+  // Verified against Google Ads UI on 2026-05-20 (since-launch totals for
+  // PMax: HHS Women's Clinics, campaign ID 23727484755).
+  // CTR + Conv Rate are constants; the scalable fields (impressions, clicks,
+  // conversions, spend) get prorated by date-range share in applyChannels.
+  googleAds: { impressions: 198655, clicks: 4528, conversions: 67, spend: 2496.95, ctrPct: 2.28, convRatePct: 1.48, avgCpc: 0.55 }
 };
 
 // ─── HELPERS ────────────────────────────────────────────────────────
@@ -1067,10 +1073,11 @@ function applyChannels(range) {
   var scale = Math.min(1, Math.max(0, rangeDays / totalDays));
 
   var el;
+  if ((el = document.getElementById('ads-spend')))       el.textContent = '$' + Math.round(ga.spend * scale).toLocaleString();
   if ((el = document.getElementById('ads-impressions'))) el.textContent = Math.round(ga.impressions * scale).toLocaleString();
   if ((el = document.getElementById('ads-clicks')))      el.textContent = Math.round(ga.clicks * scale).toLocaleString();
-  if ((el = document.getElementById('ads-conversions'))) el.textContent = (ga.conversions * scale).toFixed(1);
-  // CTR and Conv. Rate are ratios — unchanged by date range.
+  if ((el = document.getElementById('ads-conversions'))) el.textContent = Math.round(ga.conversions * scale).toString();
+  // CTR, Avg CPC, and Conv. Rate are ratios — unchanged by date range.
 }
 
 // ── Detail tab: appointment-request log is the COMPLETE record of every
