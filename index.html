@@ -672,21 +672,29 @@ var T40 = 'rgba(17,168,138,0.55)', N40 = 'rgba(30,62,114,0.55)';
 //   amber    #F59E0B  Warm accent (only warm in the set)
 //   lime     #84CC16  Fresh green, distinct from teal's blue-green
 //   slate    #64748B  Neutral, for "other" buckets
-// Chart palette: ink-color text/data labels + a more substantial fill so the
-// shape reads without a border. Bumped fill alpha from 7-8% → 22-24% — strong
-// enough that bars and donut slices are clearly visible on their own.
-var C_TEAL   = '#0E8B73', C_TEAL_BG   = 'rgba(14,139,115,0.22)';
-var C_SKY    = '#0891B2', C_SKY_BG    = 'rgba(8,145,178,0.22)';
-var C_INDIGO = '#4F46E5', C_INDIGO_BG = 'rgba(79,70,229,0.22)';
-var C_AMBER  = '#D97706', C_AMBER_BG  = 'rgba(217,119,6,0.24)';
-var C_LIME   = '#65A30D', C_LIME_BG   = 'rgba(101,163,13,0.24)';
-var C_SLATE  = '#475569', C_SLATE_BG  = 'rgba(71,85,105,0.22)';
-// Bar-chart pair (Appt + Phone): teal + sky — both vibrant, clearly distinct.
-var BAR_FILL_APPT = C_TEAL_BG, BAR_BORDER_APPT = C_TEAL;
-var BAR_FILL_PHONE = C_SKY_BG, BAR_BORDER_PHONE = C_SKY;
-// Donut palette: 6 clearly distinct hues in same genre.
-var DONUT_FILLS   = [C_TEAL_BG, C_SKY_BG, C_INDIGO_BG, C_AMBER_BG, C_LIME_BG, C_SLATE_BG];
-var DONUT_BORDERS = [C_TEAL,    C_SKY,    C_INDIGO,    C_AMBER,    C_LIME,    C_SLATE];
+// Chart palette: vibrant Tailwind-500 base + strong alpha for backgrounds
+// (no borders, so the fill carries the shape). Dark ink-700 text overlays
+// give crisp contrast on each fill.
+// LABEL / "ink" colors (Tailwind ~700 — for data label text)
+var C_TEAL   = '#0E8B73';
+var C_INDIGO = '#4338CA';
+var C_AMBER  = '#B45309';
+var C_ROSE   = '#BE123C';
+var C_LIME   = '#4D7C0F';
+var C_SLATE  = '#334155';
+// BACKGROUND fills (Tailwind ~500 base @ ~30% alpha — vibrant but not loud)
+var C_TEAL_BG   = 'rgba(20,184,166,0.30)';
+var C_INDIGO_BG = 'rgba(99,102,241,0.30)';
+var C_AMBER_BG  = 'rgba(245,158,11,0.32)';
+var C_ROSE_BG   = 'rgba(244,63,94,0.28)';
+var C_LIME_BG   = 'rgba(132,204,22,0.32)';
+var C_SLATE_BG  = 'rgba(100,116,139,0.28)';
+// Bar pair: teal + indigo (clearly distinct — teal/sky was too close).
+var BAR_FILL_APPT  = C_TEAL_BG,   BAR_BORDER_APPT  = C_TEAL;
+var BAR_FILL_PHONE = C_INDIGO_BG, BAR_BORDER_PHONE = C_INDIGO;
+// Donut: 6 maximally-distinct hues (no two-blues problem).
+var DONUT_FILLS   = [C_TEAL_BG, C_INDIGO_BG, C_AMBER_BG, C_ROSE_BG, C_LIME_BG, C_SLATE_BG];
+var DONUT_BORDERS = [C_TEAL,    C_INDIGO,    C_AMBER,    C_ROSE,    C_LIME,    C_SLATE];
 
 // ─── CHART INITIALIZATION (empty; applyDateRange fills them) ────────
 // Plugin: draw "Total: N" at the end of each horizontal bar on the trend chart.
