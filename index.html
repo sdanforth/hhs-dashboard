@@ -636,16 +636,30 @@ var T = CAMPAIGN.theme.primary, N = CAMPAIGN.theme.secondary;
 var LT = CAMPAIGN.theme.accent, LN = CAMPAIGN.theme.success;
 var T70 = 'rgba(17,168,138,0.82)', N70 = 'rgba(30,62,114,0.82)';
 var T40 = 'rgba(17,168,138,0.55)', N40 = 'rgba(30,62,114,0.55)';
-// Light-fill palette: matches the Sessions Over Time + provider-pill aesthetic.
-// Use these for bar/donut fills so charts feel airy, not heavy.
-var T_LIGHT = 'rgba(17,168,138,0.14)';  // very light teal
-var N_LIGHT = 'rgba(30,62,114,0.14)';   // very light navy
-var LT_LIGHT = 'rgba(79,204,176,0.14)'; // light accent
-var LN_LIGHT = 'rgba(90,186,74,0.14)';  // light green
-var GREY_LIGHT = 'rgba(151,163,178,0.14)';
-var GREY = '#7a8794';
-var DONUT_FILLS   = [T_LIGHT, N_LIGHT, LT_LIGHT, LN_LIGHT, GREY_LIGHT, 'rgba(245,158,11,0.14)'];
-var DONUT_BORDERS = [T,        N,        LT,        LN,        GREY,       '#f59e0b'];
+
+// CHART PALETTE — "modern clinical" genre, all similar saturation/vibrance.
+// Brand teal stays as primary; the dusty navy is OUT of chart use (it still
+// lives in the header bg, just not in chart fills). Every hue obviously
+// distinct, all feel like they belong together.
+//
+//   teal     #11A88A  Primary, brand
+//   sky      #06B6D4  Cool secondary — replaces navy in chart usage
+//   indigo   #6366F1  Cool tertiary
+//   amber    #F59E0B  Warm accent (only warm in the set)
+//   lime     #84CC16  Fresh green, distinct from teal's blue-green
+//   slate    #64748B  Neutral, for "other" buckets
+var C_TEAL   = '#11A88A', C_TEAL_BG   = 'rgba(17,168,138,0.14)';
+var C_SKY    = '#06B6D4', C_SKY_BG    = 'rgba(6,182,212,0.14)';
+var C_INDIGO = '#6366F1', C_INDIGO_BG = 'rgba(99,102,241,0.14)';
+var C_AMBER  = '#F59E0B', C_AMBER_BG  = 'rgba(245,158,11,0.14)';
+var C_LIME   = '#84CC16', C_LIME_BG   = 'rgba(132,204,22,0.14)';
+var C_SLATE  = '#64748B', C_SLATE_BG  = 'rgba(100,116,139,0.14)';
+// Bar-chart pair (Appt + Phone): teal + sky — both vibrant, clearly distinct.
+var BAR_FILL_APPT = C_TEAL_BG, BAR_BORDER_APPT = C_TEAL;
+var BAR_FILL_PHONE = C_SKY_BG, BAR_BORDER_PHONE = C_SKY;
+// Donut palette: 6 clearly distinct hues in same genre.
+var DONUT_FILLS   = [C_TEAL_BG, C_SKY_BG, C_INDIGO_BG, C_AMBER_BG, C_LIME_BG, C_SLATE_BG];
+var DONUT_BORDERS = [C_TEAL,    C_SKY,    C_INDIGO,    C_AMBER,    C_LIME,    C_SLATE];
 
 // ─── CHART INITIALIZATION (empty; applyDateRange fills them) ────────
 // Plugin: draw "Total: N" at the end of each horizontal bar on the trend chart.
@@ -678,8 +692,8 @@ var weekTotalLabelsPlugin = {
 window.trendChart = new Chart(document.getElementById('ch-trend'), {
   type: 'bar',
   data: { labels: [], datasets: [
-    { label: 'Appointment Requests', data: [], backgroundColor: T_LIGHT, borderColor: T, borderWidth: 1.5, borderRadius: 3 },
-    { label: 'Phone Calls',          data: [], backgroundColor: N_LIGHT, borderColor: N, borderWidth: 1.5, borderRadius: 3 }
+    { label: 'Appointment Requests', data: [], backgroundColor: BAR_FILL_APPT,  borderColor: BAR_BORDER_APPT,  borderWidth: 1.5, borderRadius: 3 },
+    { label: 'Phone Calls',          data: [], backgroundColor: BAR_FILL_PHONE, borderColor: BAR_BORDER_PHONE, borderWidth: 1.5, borderRadius: 3 }
   ]},
   options: {
     indexAxis: 'y', responsive: true, maintainAspectRatio: false,
@@ -687,7 +701,7 @@ window.trendChart = new Chart(document.getElementById('ch-trend'), {
     plugins: {
       legend: { position: 'top' },
       datalabels: {
-        color: function(ctx){ return ctx.datasetIndex === 0 ? T : N; },
+        color: function(ctx){ return ctx.datasetIndex === 0 ? BAR_BORDER_APPT : BAR_BORDER_PHONE; },
         font: { weight: '800', size: 13 },
         anchor: 'center', align: 'center',
         display: function(ctx){ return ctx.dataset.data[ctx.dataIndex] > 1; }
@@ -706,8 +720,8 @@ window.paidChart = new Chart(document.getElementById('ch-paid'), {
   data: {
     labels: ['Paid', 'Organic / Direct'],
     datasets: [
-      { label: 'Appointment Requests', data: [0, 0], backgroundColor: T_LIGHT, borderColor: T, borderWidth: 1.5, barPercentage: .65 },
-      { label: 'Phone Calls',          data: [0, 0], backgroundColor: N_LIGHT, borderColor: N, borderWidth: 1.5, barPercentage: .65 }
+      { label: 'Appointment Requests', data: [0, 0], backgroundColor: BAR_FILL_APPT,  borderColor: BAR_BORDER_APPT,  borderWidth: 1.5, barPercentage: .65 },
+      { label: 'Phone Calls',          data: [0, 0], backgroundColor: BAR_FILL_PHONE, borderColor: BAR_BORDER_PHONE, borderWidth: 1.5, barPercentage: .65 }
     ]
   },
   options: {
@@ -715,7 +729,7 @@ window.paidChart = new Chart(document.getElementById('ch-paid'), {
     plugins: {
       legend: { position: 'top' },
       datalabels: {
-        color: function(ctx){ return ctx.datasetIndex === 0 ? T : N; },
+        color: function(ctx){ return ctx.datasetIndex === 0 ? BAR_BORDER_APPT : BAR_BORDER_PHONE; },
         font: { weight: '800', size: 12 },
         display: function(ctx){ return ctx.dataset.data[ctx.dataIndex] > 1; },
         anchor: 'center'
