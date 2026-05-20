@@ -694,8 +694,10 @@ var weekTotalLabelsPlugin = {
     var data0 = chart.data.datasets[0].data;
     var data1 = chart.data.datasets[1].data;
     ctx.save();
-    ctx.font = "800 12px 'Inter', sans-serif";
-    ctx.fillStyle = '#1E3E72';
+    // Parentheses + slate-gray weight reads as "aside / summary" — clear at a
+    // glance that this number is a total of the two segments, not a third one.
+    ctx.font = "700 12px 'Inter', sans-serif";
+    ctx.fillStyle = '#64748B';
     ctx.textAlign = 'left';
     ctx.textBaseline = 'middle';
     chart.data.labels.forEach(function(_, i) {
@@ -703,7 +705,7 @@ var weekTotalLabelsPlugin = {
       if (total <= 0) return;
       var bar1 = ds1.data[i]; // last (rightmost) segment in stack
       if (!bar1) return;
-      ctx.fillText(' ' + total, bar1.x + 4, bar1.y);
+      ctx.fillText(' (' + total + ')', bar1.x + 4, bar1.y);
     });
     ctx.restore();
   }
