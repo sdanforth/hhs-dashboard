@@ -128,9 +128,10 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 .tbl td{padding:10px;border-bottom:1px solid #e8ecf1;color:#0d1b2a}
 .tbl tr:last-child td{border-bottom:none}
 .tbl tr:hover td{background:#f8fafc}
-/* Pull a count column hard against the adjacent label column. width:1% + nowrap
-   collapses the column to its content; padding-left:0 removes the gap. */
-.tbl .tight-left{width:1%;padding-left:0;white-space:nowrap}
+/* Compact count column: shrinks to content width, centered. Reads cleanly
+   on both desktop (sits between Goes To and Link) and mobile (centered
+   balance instead of left-shoved). */
+.tbl .tight-left{width:1%;text-align:center;white-space:nowrap}
 .tbl .r{text-align:right;font-variant-numeric:tabular-nums}
 .tbl .em{font-weight:800}
 .badge{display:inline-block;padding:3px 9px;border-radius:10px;font-size:11px;font-weight:700;white-space:nowrap}
