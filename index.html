@@ -467,7 +467,21 @@ function renderSyncPill(opts) {
     d.toLocaleTimeString('en-US', {hour:'numeric', minute:'2-digit', timeZone:'America/Detroit', timeZoneName:'short'});
 }
 // Initial paint until first CSV completes
-renderSyncPill({ syncedIso: null, source: 'loading' });
+// Initial paint uses cached last-sync time from a previous /lastsync response
+// so repeat visitors don't see "Awaiting sync" flicker. The real value is
+// confirmed (or overwritten) when /lastsync responds below.
+(function() {
+  try {
+    var cached = localStorage.getItem('hhs_lastSyncIso');
+    if (cached) {
+      renderSyncPill({ syncedIso: cached, source: 'cached' });
+    } else {
+      renderSyncPill({ syncedIso: null, source: 'loading' });
+    }
+  } catch (_) {
+    renderSyncPill({ syncedIso: null, source: 'loading' });
+  }
+})();
 
 // ─── CAMPAIGN CONFIG ────────────────────────────────────────────────
 // Per-campaign settings. To stand up a new service-line dashboard,
@@ -799,9 +813,9 @@ window.sessionsChart = new Chart(document.getElementById('ch-sessions'), {
     fill: true,
     borderWidth: 1,
     pointRadius: 3,
-    pointBackgroundColor: '#fff',
+    pointBackgroundColor: C_TEAL,
     pointBorderColor: C_TEAL,
-    pointBorderWidth: 1.25,
+    pointBorderWidth: 0,
     pointHoverRadius: 5,
     tension: .25
   }] },
@@ -1500,7 +1514,14 @@ Promise.all([
     }
   }
   if (!syncedIso) { syncedIso = nowIso; status = 'failed'; source = 'no data'; }
-  renderSyncPill({ syncedIso: syncedIso, status: status, source: source });
+  // Only repaint pill from this path if we don't already have a cached value
+  // (which is shown on initial paint and refined by /lastsync below).
+  // Avoids the GA4_Daily-fallback flicker between cached → /lastsync arrival.
+  var hasCached = false;
+  try { hasCached = !!localStorage.getItem('hhs_lastSyncIso'); } catch (_) {}
+  if (!hasCached || source === 'Sync_Log') {
+    renderSyncPill({ syncedIso: syncedIso, status: status, source: source });
+  }
 
   applyDateRange();
 }).catch(function(e){
@@ -1516,6 +1537,7 @@ if (CAMPAIGN.updateEndpoint) {
     .then(function(r){ return r.json(); })
     .then(function(j){
       if (j && j.ok && j.lastSyncIso) {
+        try { localStorage.setItem('hhs_lastSyncIso', j.lastSyncIso); } catch (_) {}
         renderSyncPill({ syncedIso: j.lastSyncIso, source: 'Apps Script /lastsync' });
       }
     })
