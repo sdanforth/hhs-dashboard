@@ -128,6 +128,9 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 .tbl td{padding:10px;border-bottom:1px solid #e8ecf1;color:#0d1b2a}
 .tbl tr:last-child td{border-bottom:none}
 .tbl tr:hover td{background:#f8fafc}
+/* Pull a count column hard against the adjacent label column. width:1% + nowrap
+   collapses the column to its content; padding-left:0 removes the gap. */
+.tbl .tight-left{width:1%;padding-left:0;white-space:nowrap;font-weight:700}
 .tbl .r{text-align:right;font-variant-numeric:tabular-nums}
 .tbl .em{font-weight:800}
 .badge{display:inline-block;padding:3px 9px;border-radius:10px;font-size:11px;font-weight:700;white-space:nowrap}
@@ -345,17 +348,17 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 <div class="sh-desc">hmc.gg short links distributed via QR codes in clinics.</div>
 <div class="box" style="margin-bottom:20px;overflow-x:auto">
 <table class="tbl">
-<thead><tr><th>Goes To</th><th>Clicks</th><th>Link</th></tr></thead>
+<thead><tr><th>Goes To</th><th class="tight-left">Clicks</th><th>Link</th></tr></thead>
 <tbody>
-<tr><td>Google Review — Dort Hwy NFC stand</td><td>5</td><td><strong>hmc.gg/obgynhca-dort-nfc</strong></td></tr>
-<tr><td>Google Review — Dort Hwy</td><td>3</td><td><strong>hmc.gg/obgynhca-dort</strong></td></tr>
-<tr><td>Google Review — HMC</td><td>2</td><td><strong>hmc.gg/obgynhca-hurley</strong></td></tr>
-<tr><td>Google Review — HMC NFC stand</td><td>2</td><td><strong>hmc.gg/obgynhca-hurley-nfc</strong></td></tr>
-<tr><td>Healthgrades — Dr. Clever</td><td>5</td><td><strong>hmc.gg/clever</strong></td></tr>
-<tr><td>Healthgrades — J. Smiley</td><td>3</td><td><strong>hmc.gg/smiley</strong></td></tr>
-<tr><td>Healthgrades — Dr. Pyatt</td><td>2</td><td><strong>hmc.gg/pyatt</strong></td></tr>
-<tr><td>Healthgrades — Dr. Wiggins</td><td>2</td><td><strong>hmc.gg/wiggins</strong></td></tr>
-<tr><td>HHS website — homepage</td><td>5</td><td><strong>hmc.gg/itjpjs</strong></td></tr>
+<tr><td>Google Review — Dort Hwy NFC stand</td><td class="tight-left">5</td><td><strong>hmc.gg/obgynhca-dort-nfc</strong></td></tr>
+<tr><td>Google Review — Dort Hwy</td><td class="tight-left">3</td><td><strong>hmc.gg/obgynhca-dort</strong></td></tr>
+<tr><td>Google Review — HMC</td><td class="tight-left">2</td><td><strong>hmc.gg/obgynhca-hurley</strong></td></tr>
+<tr><td>Google Review — HMC NFC stand</td><td class="tight-left">2</td><td><strong>hmc.gg/obgynhca-hurley-nfc</strong></td></tr>
+<tr><td>Healthgrades — Dr. Clever</td><td class="tight-left">5</td><td><strong>hmc.gg/clever</strong></td></tr>
+<tr><td>Healthgrades — J. Smiley</td><td class="tight-left">3</td><td><strong>hmc.gg/smiley</strong></td></tr>
+<tr><td>Healthgrades — Dr. Pyatt</td><td class="tight-left">2</td><td><strong>hmc.gg/pyatt</strong></td></tr>
+<tr><td>Healthgrades — Dr. Wiggins</td><td class="tight-left">2</td><td><strong>hmc.gg/wiggins</strong></td></tr>
+<tr><td>HHS website — homepage</td><td class="tight-left">5</td><td><strong>hmc.gg/itjpjs</strong></td></tr>
 </tbody>
 </table>
 </div>
