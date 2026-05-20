@@ -951,7 +951,7 @@ function applyInquiries(range) {
       weekBuckets[key].phone += e.count;
       phoneSum += e.count;
     });
-    var weekKeys = Object.keys(weekBuckets).sort();
+    var weekKeys = Object.keys(weekBuckets).sort().reverse(); // newest week at top of horizontal chart
     chartLabels = weekKeys.map(function(k){ return weekBuckets[k].label; });
     chartAppt   = weekKeys.map(function(k){ return weekBuckets[k].appt; });
     chartPhone  = weekKeys.map(function(k){ return weekBuckets[k].phone; });
@@ -967,7 +967,7 @@ function applyInquiries(range) {
       weekBuckets[key].phone += w.phoneCalls;
       phoneSum += w.phoneCalls;
     });
-    var weekKeys = Object.keys(weekBuckets).sort();
+    var weekKeys = Object.keys(weekBuckets).sort().reverse(); // newest week at top of horizontal chart
     chartLabels = weekKeys.map(function(k){ return weekBuckets[k].label; });
     chartAppt   = weekKeys.map(function(k){ return weekBuckets[k].appt; });
     chartPhone  = weekKeys.map(function(k){ return weekBuckets[k].phone; });
