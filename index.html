@@ -199,7 +199,7 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 </div>
 
 <div class="g2">
-<div class="box"><div class="box-title">Inquiries by Week</div><div class="ch"><canvas id="ch-trend"></canvas></div></div>
+<div class="box"><div class="box-title">Inquiries by Week</div><div class="ch" id="ch-trend-wrap" style="height:auto;min-height:240px"><canvas id="ch-trend"></canvas></div></div>
 <div class="box"><div class="box-title">Paid vs Organic Inquiries <span style="font-weight:500;color:#7a8794;font-size:11px">(stacked by inquiry type — filters to selected range)</span></div><div class="ch"><canvas id="ch-paid"></canvas></div></div>
 </div>
 
@@ -281,7 +281,6 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 <div class="stat-item"><div class="stat-item-label">Directions</div><div class="stat-item-val" id="gbp-hmc-directions">33</div></div>
 <div class="stat-item"><div class="stat-item-label">Site Clicks</div><div class="stat-item-val" id="gbp-hmc-clicks">148</div></div>
 </div>
-<div style="font-size:11px;color:#7a8794" id="gbp-hmc-period">Google Business Profile · Apr 7 – May 18, 2026 (since launch)</div>
 </div>
 <div class="box">
 <div class="box-title">HHS Obstetrics &amp; Gynecology Associates – Dort Hwy</div>
@@ -294,7 +293,6 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 <div class="stat-item"><div class="stat-item-label">Directions</div><div class="stat-item-val" id="gbp-dort-directions">61</div></div>
 <div class="stat-item"><div class="stat-item-label">Site Clicks</div><div class="stat-item-val" id="gbp-dort-clicks">13</div></div>
 </div>
-<div style="font-size:11px;color:#7a8794" id="gbp-dort-period">Google Business Profile · Apr 7 – May 18, 2026 (since launch)</div>
 </div>
 </div>
 
@@ -637,30 +635,28 @@ var T70 = 'rgba(17,168,138,0.82)', N70 = 'rgba(30,62,114,0.82)';
 var T40 = 'rgba(17,168,138,0.55)', N40 = 'rgba(30,62,114,0.55)';
 
 // ─── CHART INITIALIZATION (empty; applyDateRange fills them) ────────
-// Plugin: draw a "Total: N" label above each grouped pair on the trend chart.
+// Plugin: draw "Total: N" at the end of each horizontal bar on the trend chart.
 var weekTotalLabelsPlugin = {
   id: 'weekTotalLabels',
   afterDatasetsDraw: function(chart) {
     if (chart.canvas.id !== 'ch-trend') return;
     var ctx = chart.ctx;
-    var xScale = chart.scales.x;
     var ds0 = chart.getDatasetMeta(0);
     var ds1 = chart.getDatasetMeta(1);
     if (!ds0 || !ds1) return;
     var data0 = chart.data.datasets[0].data;
     var data1 = chart.data.datasets[1].data;
     ctx.save();
-    ctx.font = "700 11px 'Inter', sans-serif";
+    ctx.font = "800 12px 'Inter', sans-serif";
     ctx.fillStyle = '#1E3E72';
-    ctx.textAlign = 'center';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
     chart.data.labels.forEach(function(_, i) {
       var total = (data0[i] || 0) + (data1[i] || 0);
       if (total <= 0) return;
-      var bar0 = ds0.data[i], bar1 = ds1.data[i];
-      if (!bar0 || !bar1) return;
-      var midX = (bar0.x + bar1.x) / 2;
-      var topY = Math.min(bar0.y, bar1.y) - 6;
-      ctx.fillText('Total: ' + total, midX, topY);
+      var bar1 = ds1.data[i]; // last (rightmost) segment in stack
+      if (!bar1) return;
+      ctx.fillText(' ' + total, bar1.x + 4, bar1.y);
     });
     ctx.restore();
   }
@@ -669,23 +665,23 @@ var weekTotalLabelsPlugin = {
 window.trendChart = new Chart(document.getElementById('ch-trend'), {
   type: 'bar',
   data: { labels: [], datasets: [
-    { label: 'Appointment Requests', data: [], backgroundColor: T70, barPercentage: .85, categoryPercentage: .7, borderRadius: 4 },
-    { label: 'Phone Calls',          data: [], backgroundColor: N70, barPercentage: .85, categoryPercentage: .7, borderRadius: 4 }
+    { label: 'Appointment Requests', data: [], backgroundColor: T70, borderRadius: 3 },
+    { label: 'Phone Calls',          data: [], backgroundColor: N70, borderRadius: 3 }
   ]},
   options: {
-    responsive: true, maintainAspectRatio: false,
-    layout: { padding: { top: 22 } }, // headroom for the "Total: N" label
+    indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+    layout: { padding: { right: 48 } }, // room for the "Total: N" label at the end
     plugins: {
       legend: { position: 'top' },
       datalabels: {
         color: '#fff', font: { weight: '800', size: 13 },
         anchor: 'center', align: 'center',
-        display: function(ctx){ return ctx.dataset.data[ctx.dataIndex] > 0; }
+        display: function(ctx){ return ctx.dataset.data[ctx.dataIndex] > 1; }
       }
     },
     scales: {
-      x: { grid: { display: false }, ticks: { font: { weight: '700', size: 11 } } },
-      y: { grid: { color: '#e8ecf1' }, beginAtZero: true }
+      x: { stacked: true, grid: { color: '#e8ecf1' }, beginAtZero: true },
+      y: { stacked: true, grid: { display: false }, ticks: { font: { weight: '700', size: 12 } } }
     }
   },
   plugins: [weekTotalLabelsPlugin]
@@ -905,6 +901,10 @@ function applyInquiries(range) {
   window.trendChart.data.labels = chartLabels;
   window.trendChart.data.datasets[0].data = chartAppt;
   window.trendChart.data.datasets[1].data = chartPhone;
+  // Horizontal chart grows with row count: ~46px per week + headroom for legend.
+  var wrap = document.getElementById('ch-trend-wrap');
+  if (wrap) wrap.style.height = Math.max(240, chartLabels.length * 46 + 70) + 'px';
+  window.trendChart.resize();
   window.trendChart.update();
 
   return { apptSum: apptSum, phoneSum: phoneSum };
