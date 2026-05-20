@@ -42,12 +42,14 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 /* Tabs — filled-pill style (unambiguously "buttons" for non-dashboard folks) */
 .tabs-group{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .tabs-group-label{font-size:11px;font-weight:800;color:#7a8794;text-transform:uppercase;letter-spacing:.6px;white-space:nowrap}
-.tabs{display:inline-flex;gap:6px;flex-wrap:wrap}
-.tab{padding:10px 18px;font-size:14px;font-weight:700;color:#1E3E72;background:#fff;border:2px solid #cbd5e0;border-radius:999px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:all .12s;line-height:1}
-.tab svg{width:16px;height:16px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
-.tab:hover{border-color:#11A88A;color:#11A88A;transform:translateY(-1px)}
-.tab.on{background:#11A88A;color:#fff;border-color:#11A88A;box-shadow:0 2px 8px rgba(17,168,138,.32)}
-.tab.on:hover{background:#0f9078;border-color:#0f9078;color:#fff}
+/* Segmented control — both tabs in a single bordered pill, active fills white.
+   Makes the switching affordance obvious: "you can flip between these two." */
+.tabs{display:inline-flex;gap:0;background:#f3f5f7;border:1px solid #e3e8ee;border-radius:10px;padding:4px}
+.tab{padding:8px 16px;font-size:13px;font-weight:700;color:#697386;background:transparent;border:none;border-radius:7px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:all .15s;line-height:1}
+.tab svg{width:14px;height:14px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.tab:hover{color:#1E3E72}
+.tab.on{background:#fff;color:#11A88A;box-shadow:0 1px 3px rgba(13,27,42,0.10);font-weight:800}
+.tab.on:hover{color:#0f9078}
 
 /* Date filter — clearly labeled, soft container, plain-English caption */
 .date-ctrl-wrap{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
@@ -166,6 +168,7 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 
 <div class="ctrl">
 <div class="tabs-group">
+<span class="tabs-group-label">View</span>
 <nav class="tabs" role="tablist" aria-label="Dashboard sections">
 <button class="tab on" role="tab" onclick="go('exec')"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>Overview</button>
 <button class="tab" role="tab" onclick="go('full')"><svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>Full Report</button>
@@ -633,6 +636,16 @@ var T = CAMPAIGN.theme.primary, N = CAMPAIGN.theme.secondary;
 var LT = CAMPAIGN.theme.accent, LN = CAMPAIGN.theme.success;
 var T70 = 'rgba(17,168,138,0.82)', N70 = 'rgba(30,62,114,0.82)';
 var T40 = 'rgba(17,168,138,0.55)', N40 = 'rgba(30,62,114,0.55)';
+// Light-fill palette: matches the Sessions Over Time + provider-pill aesthetic.
+// Use these for bar/donut fills so charts feel airy, not heavy.
+var T_LIGHT = 'rgba(17,168,138,0.14)';  // very light teal
+var N_LIGHT = 'rgba(30,62,114,0.14)';   // very light navy
+var LT_LIGHT = 'rgba(79,204,176,0.14)'; // light accent
+var LN_LIGHT = 'rgba(90,186,74,0.14)';  // light green
+var GREY_LIGHT = 'rgba(151,163,178,0.14)';
+var GREY = '#7a8794';
+var DONUT_FILLS   = [T_LIGHT, N_LIGHT, LT_LIGHT, LN_LIGHT, GREY_LIGHT, 'rgba(245,158,11,0.14)'];
+var DONUT_BORDERS = [T,        N,        LT,        LN,        GREY,       '#f59e0b'];
 
 // ─── CHART INITIALIZATION (empty; applyDateRange fills them) ────────
 // Plugin: draw "Total: N" at the end of each horizontal bar on the trend chart.
@@ -665,8 +678,8 @@ var weekTotalLabelsPlugin = {
 window.trendChart = new Chart(document.getElementById('ch-trend'), {
   type: 'bar',
   data: { labels: [], datasets: [
-    { label: 'Appointment Requests', data: [], backgroundColor: T70, borderRadius: 3 },
-    { label: 'Phone Calls',          data: [], backgroundColor: N70, borderRadius: 3 }
+    { label: 'Appointment Requests', data: [], backgroundColor: T_LIGHT, borderColor: T, borderWidth: 1.5, borderRadius: 3 },
+    { label: 'Phone Calls',          data: [], backgroundColor: N_LIGHT, borderColor: N, borderWidth: 1.5, borderRadius: 3 }
   ]},
   options: {
     indexAxis: 'y', responsive: true, maintainAspectRatio: false,
@@ -674,7 +687,8 @@ window.trendChart = new Chart(document.getElementById('ch-trend'), {
     plugins: {
       legend: { position: 'top' },
       datalabels: {
-        color: '#fff', font: { weight: '800', size: 13 },
+        color: function(ctx){ return ctx.datasetIndex === 0 ? T : N; },
+        font: { weight: '800', size: 13 },
         anchor: 'center', align: 'center',
         display: function(ctx){ return ctx.dataset.data[ctx.dataIndex] > 1; }
       }
@@ -692,15 +706,20 @@ window.paidChart = new Chart(document.getElementById('ch-paid'), {
   data: {
     labels: ['Paid', 'Organic / Direct'],
     datasets: [
-      { label: 'Appointment Requests', data: [0, 0], backgroundColor: T70, barPercentage: .65 },
-      { label: 'Phone Calls',          data: [0, 0], backgroundColor: N70, barPercentage: .65 }
+      { label: 'Appointment Requests', data: [0, 0], backgroundColor: T_LIGHT, borderColor: T, borderWidth: 1.5, barPercentage: .65 },
+      { label: 'Phone Calls',          data: [0, 0], backgroundColor: N_LIGHT, borderColor: N, borderWidth: 1.5, barPercentage: .65 }
     ]
   },
   options: {
     indexAxis: 'y', responsive: true, maintainAspectRatio: false,
     plugins: {
       legend: { position: 'top' },
-      datalabels: { color: '#fff', font: { weight: '800', size: 12 }, display: function(ctx){ return ctx.dataset.data[ctx.dataIndex] > 1; }, anchor: 'center' }
+      datalabels: {
+        color: function(ctx){ return ctx.datasetIndex === 0 ? T : N; },
+        font: { weight: '800', size: 12 },
+        display: function(ctx){ return ctx.dataset.data[ctx.dataIndex] > 1; },
+        anchor: 'center'
+      }
     },
     scales: {
       x: { stacked: true, grid: { color: '#e8ecf1' }, beginAtZero: true },
@@ -723,13 +742,14 @@ window.sessionsChart = new Chart(document.getElementById('ch-sessions'), {
 
 window.sourcesChart = new Chart(document.getElementById('ch-sources'), {
   type: 'doughnut',
-  data: { labels: [], datasets: [{ data: [], backgroundColor: [T70, N70, T40, N40, LN, '#cbd5e0'], borderWidth: 0 }] },
+  data: { labels: [], datasets: [{ data: [], backgroundColor: DONUT_FILLS, borderColor: DONUT_BORDERS, borderWidth: 1.5 }] },
   options: {
     responsive: true, maintainAspectRatio: false, cutout: '55%',
     plugins: {
       legend: { position: 'right', labels: { boxWidth: 10, padding: 10, font: { size: 12, weight: '600' } } },
       datalabels: {
-        color: '#fff', font: { weight: '800', size: 12 },
+        color: function(ctx){ return DONUT_BORDERS[ctx.dataIndex % DONUT_BORDERS.length]; },
+        font: { weight: '800', size: 12 },
         formatter: function(value, ctx) {
           var total = ctx.dataset.data.reduce(function(a,b){ return a+b; }, 0);
           if (!total || value/total < 0.04) return ''; // hide labels for sub-4% slices
