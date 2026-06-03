@@ -466,6 +466,12 @@ function renderSyncPill(opts) {
     pill.title = (opts && opts.source) || 'No sync recorded';
     return;
   }
+  // Monotonic: never regress to an older sync time. The cached initial paint,
+  // the CSV path, and the /lastsync handler all resolve in parallel and in any
+  // order — the freshest evidence of a sync should win regardless of arrival.
+  var thisMs = new Date(opts.syncedIso).getTime();
+  if (window._pillBestMs && thisMs < window._pillBestMs) return;
+  window._pillBestMs = thisMs;
   var ageMs = Date.now() - new Date(opts.syncedIso).getTime();
   var H = 3600 * 1000;
   if (opts.status === 'failed' || ageMs > 72 * H) {
@@ -1522,19 +1528,25 @@ Promise.all([
   if (!syncedIso && window._ga4data && window._ga4data.daily && window._ga4data.daily.length) {
     var lastRow = window._ga4data.daily[window._ga4data.daily.length - 1];
     if (lastRow && lastRow.date) {
-      syncedIso = new Date(lastRow.date + 'T04:00:00-04:00').toISOString();
-      if (Date.now() - new Date(syncedIso).getTime() > 48 * 3600 * 1000) status = 'stale';
+      // GA4 finalises a day's data overnight, so the nightly fetch that produced
+      // "newest row = D" actually ran ~D+1 early morning. Model the fetch time as
+      // the row date 04:00 ET + 24h, clamped to never exceed now. Healthy nightly
+      // operation → "hours ago" (green); a dead fetcher → row date falls behind →
+      // age crosses the stale/failed thresholds in renderSyncPill and alarms.
+      var rowMs = new Date(lastRow.date + 'T04:00:00-04:00').getTime();
+      var fetchMs = Math.min(rowMs + 24 * 3600 * 1000, Date.now());
+      syncedIso = new Date(fetchMs).toISOString();
     }
   }
   if (!syncedIso) { syncedIso = nowIso; status = 'failed'; source = 'no data'; }
-  // Only repaint pill from this path if we don't already have a cached value
-  // (which is shown on initial paint and refined by /lastsync below).
-  // Avoids the GA4_Daily-fallback flicker between cached → /lastsync arrival.
-  var hasCached = false;
-  try { hasCached = !!localStorage.getItem('hhs_lastSyncIso'); } catch (_) {}
-  if (!hasCached || source === 'Sync_Log') {
-    renderSyncPill({ syncedIso: syncedIso, status: status, source: source });
-  }
+  // Freshest evidence of a real sync derived from the sheet data itself. The
+  // /lastsync server stamp below only overrides this if it is NEWER — guarding
+  // against a stuck stamp (nightly fetch updates the GA4 tabs but not the
+  // lastSyncIso property) making fresh data read as weeks old. renderSyncPill is
+  // monotonic, so these parallel paths settle on the newest value either way.
+  window._ga4FreshIso = (source === 'no data') ? null : syncedIso;
+  if (window._ga4FreshIso) { try { localStorage.setItem('hhs_lastSyncIso', window._ga4FreshIso); } catch (_) {} }
+  renderSyncPill({ syncedIso: syncedIso, status: status, source: source });
 
   applyDateRange();
 }).catch(function(e){
@@ -1550,8 +1562,13 @@ if (CAMPAIGN.updateEndpoint) {
     .then(function(r){ return r.json(); })
     .then(function(j){
       if (j && j.ok && j.lastSyncIso) {
-        try { localStorage.setItem('hhs_lastSyncIso', j.lastSyncIso); } catch (_) {}
-        renderSyncPill({ syncedIso: j.lastSyncIso, source: 'Apps Script /lastsync' });
+        // Trust the server stamp only when it's newer than the freshest sheet
+        // evidence. A real on-demand/nightly fetchAll bumps it past GA4_Daily and
+        // wins; a stuck stamp loses to the live data. renderSyncPill is monotonic.
+        var fresh = window._ga4FreshIso;
+        var best = (fresh && new Date(fresh).getTime() > new Date(j.lastSyncIso).getTime()) ? fresh : j.lastSyncIso;
+        try { localStorage.setItem('hhs_lastSyncIso', best); } catch (_) {}
+        renderSyncPill({ syncedIso: best, source: best === j.lastSyncIso ? 'Apps Script /lastsync' : 'GA4_Daily (server stamp stale)' });
       }
     })
     .catch(function(){ /* silent — fall back to whatever the CSV path produced */ });
