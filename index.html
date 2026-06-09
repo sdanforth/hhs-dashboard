@@ -448,21 +448,11 @@ a{color:#11A88A;font-weight:700;text-decoration:none}a:hover{text-decoration:und
 
 <script>
 // ─── DATA REFRESH TIMESTAMP ─────────────────────────────────────────
-// Pill shows "Synced X ago" with colour-coded freshness.
+// Pill shows the absolute date + time of the last sync (never relative —
+// no "X minutes/hours/days ago"). Colour-coded freshness:
 //   green (<24h)   = current
 //   amber (24-72h) = getting stale, click Refresh
 //   red   (>72h or failed) = something's wrong, investigate
-function relTime(ms) {
-  if (ms < 0) return 'just now';
-  var s = Math.floor(ms / 1000);
-  if (s < 90) return 'just now';
-  var m = Math.floor(s / 60);
-  if (m < 60) return m + ' minute' + (m === 1 ? '' : 's') + ' ago';
-  var h = Math.floor(m / 60);
-  if (h < 24) return h + ' hour' + (h === 1 ? '' : 's') + ' ago';
-  var d = Math.floor(h / 24);
-  return d + ' day' + (d === 1 ? '' : 's') + ' ago';
-}
 function renderSyncPill(opts) {
   var el = document.getElementById('data-refresh-ts');
   var pill = document.getElementById('sync-pill');
@@ -480,18 +470,18 @@ function renderSyncPill(opts) {
   var thisMs = new Date(opts.syncedIso).getTime();
   if (window._pillBestMs && thisMs < window._pillBestMs) return;
   window._pillBestMs = thisMs;
-  var ageMs = Date.now() - new Date(opts.syncedIso).getTime();
+  var ageMs = Date.now() - thisMs;
   var H = 3600 * 1000;
   if (opts.status === 'failed' || ageMs > 72 * H) {
     pill.classList.add('failed');
   } else if (ageMs > 24 * H) {
     pill.classList.add('stale');
   }
-  el.textContent = 'Synced ' + relTime(ageMs);
   var d = new Date(opts.syncedIso);
-  pill.title = (opts.source || 'sync') + ' — ' +
-    d.toLocaleDateString('en-US', {month:'short', day:'numeric', timeZone:'America/Detroit'}) + ' · ' +
-    d.toLocaleTimeString('en-US', {hour:'numeric', minute:'2-digit', timeZone:'America/Detroit', timeZoneName:'short'});
+  var datePart = d.toLocaleDateString('en-US', {month:'short', day:'numeric', timeZone:'America/Detroit'});
+  var timePart = d.toLocaleTimeString('en-US', {hour:'numeric', minute:'2-digit', timeZone:'America/Detroit', timeZoneName:'short'});
+  el.textContent = 'Synced ' + datePart + ' · ' + timePart;
+  pill.title = (opts.source || 'sync') + ' — last successful refresh of GA4 / GBP / Alchemer';
 }
 // Initial paint until first CSV completes
 // Initial paint uses cached last-sync time from a previous /lastsync response
