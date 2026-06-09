@@ -366,56 +366,16 @@ function fetchGA4Events() {
 }
 
 /**
- * Diagnostic: list every Business Profile account + location this token can
- * see, with the canonical `locations/<id>` name the Performance API expects.
- * Run this from the editor when GBP_LOCATIONS is suspected wrong. Paste the
- * `name` value (e.g. `locations/123456789`) — NOT the place_id / CID — into
- * GBP_LOCATIONS in place of the current ids. Check the Execution log for
- * output. Requires the My Business Account Management API AND My Business
- * Business Information API to be enabled in the linked GCP project; if you
- * see 403 here, enable whichever is missing in Cloud Console → APIs &
- * Services → Library.
- */
-function listGBPAccountsAndLocations() {
-  var token = ScriptApp.getOAuthToken();
-
-  // 1) Accounts
-  var accResp = UrlFetchApp.fetch(
-    'https://mybusinessaccountmanagement.googleapis.com/v1/accounts',
-    { headers: { Authorization: 'Bearer ' + token }, muteHttpExceptions: true }
-  );
-  Logger.log('=== ACCOUNTS ===');
-  Logger.log('HTTP ' + accResp.getResponseCode());
-  Logger.log(accResp.getContentText());
-  if (accResp.getResponseCode() !== 200) {
-    Logger.log('STOP: enable "My Business Account Management API" first.');
-    return;
-  }
-  var accounts = (JSON.parse(accResp.getContentText()).accounts) || [];
-
-  // 2) For each account, list locations with the readMask the Business
-  // Information API requires (no default — must be explicit).
-  var readMask = 'name,title,storefrontAddress,phoneNumbers';
-  accounts.forEach(function(acc) {
-    var url = 'https://mybusinessbusinessinformation.googleapis.com/v1/' +
-              acc.name + '/locations?readMask=' + encodeURIComponent(readMask) +
-              '&pageSize=100';
-    var resp = UrlFetchApp.fetch(url, {
-      headers: { Authorization: 'Bearer ' + token },
-      muteHttpExceptions: true
-    });
-    Logger.log('=== LOCATIONS for ' + acc.name + ' (' + (acc.accountName || acc.name) + ') ===');
-    Logger.log('HTTP ' + resp.getResponseCode());
-    Logger.log(resp.getContentText());
-  });
-  Logger.log('=== DONE ===');
-  Logger.log('Take the `name` field of each HMC / Dort location (format: ' +
-             '"locations/12345…") and paste the digits into GBP_LOCATIONS.id.');
-}
-
-/**
  * Per-day per-location GBP Performance metrics.
  * Requires `business.manage` scope (in manifest).
+ *
+ * GATED on Google's My Business API quota approval — see CLAUDE.md Rule J.
+ * Even with the API enabled in Cloud Console, every project starts with
+ * quota_limit_value=0. Until the approval form at
+ * https://support.google.com/business/contact/api_default is processed
+ * (days to weeks), this fetcher will keep 403/429-ing and the GBP boxes
+ * on the dashboard stay on their manual snapshot. Don't chase this in a
+ * normal session — it's blocked on Google support, not on our code.
  */
 function fetchGBPDaily() {
   var headers = ['date', 'location_id', 'location_name',

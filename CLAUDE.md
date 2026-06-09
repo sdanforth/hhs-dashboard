@@ -106,6 +106,28 @@ the td so width is consistent across rows.
 Old slugs `#channels` and `#detail` still route to `#full` via `SLUG_TAB`
 for bookmark compatibility, but the UI is two tabs.
 
+### Rule J — Google Business Profile API is blocked on quota approval, not on code.
+
+`fetchGBPDaily` keeps 403/429-ing. Don't chase it in a normal session.
+The full chain Google requires is:
+
+1. Enable My Business Account Management API, My Business Business
+   Information API, AND Business Profile Performance API — **in the
+   GCP project the Apps Script is linked to**, NOT some other Hurley
+   project. (Apps Script auto-creates a hidden GCP project per script;
+   either enable APIs in that hidden project OR switch the Apps Script
+   to a standard GCP project you own via Project Settings → GCP project
+   → Change project + paste the project number.)
+2. Then file the My Business API access request form at
+   <https://support.google.com/business/contact/api_default>. Until
+   Google approves it, `quota_limit_value=0` and every call 429s.
+   Approval is days to weeks.
+
+Until that's granted, the GBP boxes on the dashboard live on a manual
+snapshot. That's the accepted state, not a regression. Confirmed
+2026-06-09 — Account Management API is enabled in linked GCP project
+hurley-youtube-manager (370782201109), and still 429s with quota 0.
+
 ---
 
 ## On-demand refresh
